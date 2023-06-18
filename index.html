@@ -62,7 +62,7 @@
 
       const outputContainer = document.getElementById(`output-container-${type}`);
       const displayPrice = price === 0 ? 'N/A' : price.toFixed(7).replace(/\.?0+$/, "");
-      const displayPricePerInputToken = price === 0 ? 'N/A' : (pricePerInputToken/1000).toFixed(7).replace(/\.?0+$/, "");
+      const displayPricePerInputToken = pricePerInputToken === '0' ? 'N/A' : (pricePerInputToken/1000).toFixed(7).replace(/\.?0+$/, "");
       outputContainer.innerHTML = `<div>
       <div class="flex items-center pt-2 text-base text-gray-900 rounded-lg bg-gray-50 group ">
         ${type} token count:
