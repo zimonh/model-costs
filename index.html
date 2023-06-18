@@ -1,40 +1,50 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Model Dropdown Menu</title>
-  <script src="https://cdn.jsdelivr.net/npm/gpt-3-encoder/dist/gpt-3-encoder.min.js"></script>
- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@0.7.4/dist/preflight.min.css" rel="stylesheet">
+    <head>
+        <title>Model Costs calculator</title>
+        <script src="https://cdn.jsdelivr.net/npm/gpt-3-encoder/dist/gpt-3-encoder.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@0.7.4/dist/preflight.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@0.7.4/dist/utilities.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="inline-block w-full grid text-center">
+            <div style="max-width: 40rem; " class="w-full place-self-center p-12 inline-block">
+                <div class="text-left">
+                    <h1 class="mb-8">Calculator for <br>ChatGPT API costs</h1>
+                    <label for="input-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2" for="menu-container" >model:</label>
+                    <div id="menu-container"></div>
+                    
+                    <label for="input-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2" >input:</label>
+                    <textarea class=" rounded p-3 w-full" id="input-textarea" rows="3" ></textarea>
+                    <div id="output-container-input" class="mt-3 p-2 pl-4 shadow" style="background-color: #dfdfdf; color:#404040;"></div>
+                    
+                    <label for="output-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2" >output:</label>
+                    <textarea class=" rounded p-3 w-full" id="output-textarea" rows="3" ></textarea>
+                    <div id="output-container-output" class="mt-3 p-2 pl-4 shadow" style="background-color: #dfdfdf; color:#404040;"></div>
+                    
+                    <label for="training-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2" >training:</label>
+                    <textarea class=" rounded p-3 w-full" id="training-textarea" rows="3" ></textarea>
+                    <div id="output-container-training" class="mt-3 p-2 pl-4 shadow" style="background-color: #dfdfdf; color:#404040;"></div>
+                    
+                    <button  class="mt-6 bg-black hover:bg-white hover:text-black text-white font-bold py-2 px-4 rounded" onclick="calculateTotalPrice()">Calculate Price</button>
+                    <div id="output-container-total" class="mt-6 text-4xl"></div>
+                </div>
+            </div>
+        </div>
 
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@0.7.4/dist/utilities.min.css" rel="stylesheet">
-
-</head>
-<body>
-	<div class="inline-block w-full grid text-center">
-	<div style="width: 40rem; " class="place-self-center p-12 inline-block">
-  <div id="menu-container"></div>
-  <label class=" mt-6 inline-block text-sm float-left">input:</label><br><textarea id="input-textarea" rows="3" style="width:100%"></textarea><br>
-  <div id="output-container-input"></div>
-  <label class=" mt-6 inline-block text-sm float-left">output:</label><br><textarea id="output-textarea" rows="3" style="width:100%"></textarea><br>
-  <div id="output-container-output"></div>
-  <label class=" mt-6 inline-block text-sm float-left">training:</label><br><textarea id="training-textarea" rows="3" style="width:100%"></textarea><br>
-  <div id="output-container-training"></div>
-
-  <button  class="mt-6 bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded" onclick="calculateTotalPrice()">Calculate Price</button>
-  <div id="output-container-total" class="mt-6 text-xl"></div></div>
-<div>
-  <script src="https://cdn.jsdelivr.net/npm/@syonfox/gpt-3-encoder@1.4.0-rc5/browser.min.js"></script>
-  <script>
+        <script src="https://cdn.jsdelivr.net/npm/@syonfox/gpt-3-encoder@1.4.0-rc5/browser.min.js"></script>
+        <script>
     const { encode, decode } = gpt3encoder;
 
     const dropdown = document.createElement("select");
 
     dropdown.classList.add('bg-gray-50','border','border-gray-300','text-gray-900','text-sm','rounded-lg','focus:ring-blue-500','focus:border-blue-500','block','w-full','p-5','dark:bg-gray-700','dark:border-gray-600','dark:placeholder-gray-400','dark:text-white','dark:focus:ring-blue-500','dark:focus:border-blue-500')
 
-  function calculateTotalPrice(){
-    	let total = 0;
-    	total += calculatePrice('input');
-    	total += calculatePrice('output');
-    	total += calculatePrice('training');
+    function calculateTotalPrice(){
+        let total = 0;
+        total += calculatePrice('input');
+        total += calculatePrice('output');
+        total += calculatePrice('training');
 
 
       const outputContainer = document.getElementById(`output-container-total`);
@@ -51,7 +61,24 @@
       const price = (pricePerInputToken * inputTokenCount) / 1000;
 
       const outputContainer = document.getElementById(`output-container-${type}`);
-      outputContainer.innerHTML = `${type} Token count: ${inputTokenCount}<br>Price: $${price.toFixed(7).replace(/\.?0+$/, "")}`;
+      const displayPrice = price === 0 ? 'N/A' : price.toFixed(7).replace(/\.?0+$/, "");
+      const displayPricePerInputToken = price === 0 ? 'N/A' : (pricePerInputToken/1000).toFixed(7).replace(/\.?0+$/, "");
+      outputContainer.innerHTML = `<div>
+      <div class="flex items-center pt-2 text-base text-gray-900 rounded-lg bg-gray-50 group ">
+        ${type} token count:
+        <span class="flex-1 ml-3 whitespace-nowrap font-bold ">${ price === 0 ? 'N/A' : inputTokenCount }</span>
+      </div>
+      <div class="flex items-center pt-2 text-base text-gray-900 rounded-lg bg-gray-50 group ">
+        $ per token:
+        <span class="flex-1 ml-3 whitespace-nowrap font-bold ">${displayPricePerInputToken}</span>
+      </div>
+      <div class="flex items-center pt-2 text-base text-gray-900 rounded-lg bg-gray-50 group ">
+        $ total:
+        <span class="flex-1 ml-3 whitespace-nowrap font-bold ">${displayPrice}</span>
+      </div>
+
+
+      <div>`;
       return price;
     }
 
@@ -73,7 +100,11 @@
           dropdown.appendChild(option);
         }
       });
+      // dropdown.placeHolder = "select a model";
+      dropdown.onchange = () =>{
+calculateTotalPrice();
 
+      }
       const container = document.getElementById("menu-container");
       container.appendChild(dropdown);
     }
@@ -169,11 +200,5 @@ const jsonData = {
 
     generateMenuFromJSON(jsonData);
   </script>
-</body>
+    </body>
 </html>
-
-
-
-
-
-
