@@ -102,9 +102,20 @@
       });
       // dropdown.placeHolder = "select a model";
       dropdown.onchange = () =>{
-calculateTotalPrice();
+        calculateTotalPrice();
 
       }
+      // const inputTextarea  = document.getElementById(`input-textarea`);
+    document.getElementById(`input-textarea`).oninput = () => {
+        calculateTotalPrice();
+    };
+    document.getElementById(`output-textarea`).oninput = () => {
+        calculateTotalPrice();
+    };
+    document.getElementById(`training-textarea`).oninput = () => {
+        calculateTotalPrice();
+    };
+
       const container = document.getElementById("menu-container");
       container.appendChild(dropdown);
     }
@@ -197,8 +208,9 @@ const jsonData = {
         }
     ]
 };
-
+document.addEventListener("DOMContentLoaded", function() {
     generateMenuFromJSON(jsonData);
+});
   </script>
     </body>
 </html>
