@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Model Dropdown Menu</title>
+  <script src="https://cdn.jsdelivr.net/npm/gpt-3-encoder/dist/gpt-3-encoder.min.js"></script>
+ <link href="https://cdn.jsdelivr.net/npm/tailwindcss@0.7.4/dist/preflight.min.css" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@0.7.4/dist/utilities.min.css" rel="stylesheet">
+
+</head>
+<body>
+	<div class="inline-block w-full grid text-center">
+	<div style="width: 40rem; " class="place-self-center p-12 inline-block">
+  <div id="menu-container"></div>
+  <label class=" mt-6 inline-block text-sm float-left">input:</label><br><textarea id="input-textarea" rows="3" style="width:100%"></textarea><br>
+  <div id="output-container-input"></div>
+  <label class=" mt-6 inline-block text-sm float-left">output:</label><br><textarea id="output-textarea" rows="3" style="width:100%"></textarea><br>
+  <div id="output-container-output"></div>
+  <label class=" mt-6 inline-block text-sm float-left">training:</label><br><textarea id="training-textarea" rows="3" style="width:100%"></textarea><br>
+  <div id="output-container-training"></div>
+
+  <button  class="mt-6 bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded" onclick="calculateTotalPrice()">Calculate Price</button>
+  <div id="output-container-total" class="mt-6 text-xl"></div></div>
+<div>
+  <script src="https://cdn.jsdelivr.net/npm/@syonfox/gpt-3-encoder@1.4.0-rc5/browser.min.js"></script>
+  <script>
+    const { encode, decode } = gpt3encoder;
+
+    const dropdown = document.createElement("select");
+
+    dropdown.classList.add('bg-gray-50','border','border-gray-300','text-gray-900','text-sm','rounded-lg','focus:ring-blue-500','focus:border-blue-500','block','w-full','p-5','dark:bg-gray-700','dark:border-gray-600','dark:placeholder-gray-400','dark:text-white','dark:focus:ring-blue-500','dark:focus:border-blue-500')
+
+  function calculateTotalPrice(){
+    	let total = 0;
+    	total += calculatePrice('input');
+    	total += calculatePrice('output');
+    	total += calculatePrice('training');
+
+
+      const outputContainer = document.getElementById(`output-container-total`);
+      outputContainer.innerHTML = `Total Price: $${total.toFixed(7).replace(/\.?0+$/, "")}`;
+    }
+
+    function calculatePrice(type) {
+      const selectedOption = dropdown.options[dropdown.selectedIndex];
+      const pricePerInputToken = selectedOption.getAttribute(`data-price-per-${type}-token`);
+      const input = document.getElementById(`${type}-textarea`);
+      const encodedInput = encode(input.value);
+      const inputTokenCount = encodedInput.length;
+      // Price per 1K tokens (adjust as needed)
+      const price = (pricePerInputToken * inputTokenCount) / 1000;
+
+      const outputContainer = document.getElementById(`output-container-${type}`);
+      outputContainer.innerHTML = `${type} Token count: ${inputTokenCount}<br>Price: $${price.toFixed(7).replace(/\.?0+$/, "")}`;
+      return price;
+    }
+
+    // Paste the JavaScript function here
+    function generateMenuFromJSON(jsonData) {
+      const models = jsonData.models;
+
+      models.forEach((model) => {
+        const modelName = model.name;
+        const contexts = model.contexts;
+
+        for (const context in contexts) {
+          const optionText = `${modelName} ${context}`;
+          const option = document.createElement("option");
+          option.text = optionText;
+          option.dataset.pricePerOutputToken = contexts[context].output;
+          option.dataset.pricePerInputToken = contexts[context].input === undefined ? contexts[context].output : contexts[context].input;
+          option.dataset.pricePerTrainingToken = contexts[context].training === undefined ? 0 : contexts[context].training;
+          dropdown.appendChild(option);
+        }
+      });
+
+      const container = document.getElementById("menu-container");
+      container.appendChild(dropdown);
+    }
+
+
+const jsonData = {
+    "models":
+    [
+        {
+            "name": "GPT-4",
+            "description": "With broad general knowledge and domain expertise, GPT-4 can follow complex instructions in natural language and solve difficult problems with accuracy.",
+            "contexts":
+            {
+                "8K":
+                {
+                    "input": 0.03,
+                    "output": 0.06
+                },
+                "32K":
+                {
+                    "input": 0.06,
+                    "output": 0.12
+                }
+            }
+        },
+        {
+            "name": "ChatGPT",
+            "description": "ChatGPT models are optimized for dialogue. The performance of gpt-3.5-turbo is on par with Instruct Davinci.",
+            "contexts":
+            {
+                "4K":
+                {
+                    "input": 0.0015,
+                    "output": 0.002
+                },
+                "16K":
+                {
+                    "input": 0.003,
+                    "output": 0.004
+                }
+            }
+        },
+        {
+            "name": "Fine-tune Ada",
+            "description": "Capable of very simple tasks, usually the fastest model in the GPT-3 series, and lowest cost.",
+            "contexts":
+            {
+                "2K":
+                {
+                    "training": 0.0004,
+                    "output": 0.0016
+                }
+            }
+        },
+        {
+            "name": "Fine-tune Babbage",
+            "description": "Capable of straightforward tasks, very fast, and lower cost.",
+            "contexts":
+            {
+                "2K":
+                {
+                    "training": 0.0006,
+                    "output": 0.0024
+                }
+            }
+        },
+        {
+            "name": "Fine-tune Curie",
+            "description": "Very capable, but faster and lower cost than Davinci.",
+            "contexts":
+            {
+                "2K":
+                {
+                    "training": 0.003,
+                    "output": 0.012
+                }
+            }
+        },
+        {
+            "name": "Fine-tune Davinci",
+            "description": "Most capable GPT-3 model. Can do any task the other models can do, often with higher quality.",
+            "contexts":
+            {
+                "2K":
+                {
+                    "training": 0.03,
+                    "output": 0.12
+                }
+            }
+        }
+    ]
+};
+
+    generateMenuFromJSON(jsonData);
+  </script>
+</body>
+</html>
+
+
+
+
+
+
