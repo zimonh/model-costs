@@ -126,44 +126,90 @@ Users are advised to exercise caution and verify the results obtained from the c
     }
 
 
-const jsonData = {
-    "models":
-    [
+  const jsonData = {
+    "models": [
         {
-            "name": "GPT-4",
-            "description": "With broad general knowledge and domain expertise, GPT-4 can follow complex instructions in natural language and solve difficult problems with accuracy.",
-            "contexts":
-            {
-                "8K":
-                {
+            "name": "gpt-4o",
+            "description": "GPT-4o is optimized for large context sizes with a balanced performance in natural language understanding.",
+            "contexts": {
+                "128K": {
+                    "input": 0.005,
+                    "output": 0.015
+                }
+            }
+        },
+        {
+            "name": "gpt-4o-2024-08-06",
+            "description": "A specific version of GPT-4o with discounted pricing for input and output tokens.",
+            "contexts": {
+                "128K": {
+                    "input": 0.0025,
+                    "output": 0.01
+                }
+            }
+        },
+        {
+            "name": "chatgpt-4o-latest",
+            "description": "Latest version of ChatGPT-4o optimized for large-scale tasks.",
+            "contexts": {
+                "128K": {
+                    "input": 0.005,
+                    "output": 0.015
+                }
+            }
+        },
+        {
+            "name": "gpt-4-turbo",
+            "description": "GPT-4 Turbo provides faster and cheaper alternatives for processing with large context sizes.",
+            "contexts": {
+                "128K": {
+                    "input": 0.01,
+                    "output": 0.03
+                }
+            }
+        },
+        {
+            "name": "gpt-4",
+            "description": "GPT-4 provides extensive language capabilities with a smaller context size.",
+            "contexts": {
+                "8K": {
                     "input": 0.03,
                     "output": 0.06
-                },
-                "32K":
-                {
-                    "input": 0.06,
-                    "output": 0.12
                 }
             }
         },
         {
-            "name": "ChatGPT",
-            "description": "ChatGPT models are optimized for dialogue. The performance of gpt-3.5-turbo is on par with Instruct Davinci.",
-            "contexts":
-            {
-                "4K":
-                {
-                    "input": 0.0015,
-                    "output": 0.002
-                },
-                "16K":
-                {
-                    "input": 0.003,
-                    "output": 0.004
+            "name": "gpt-3.5-turbo",
+            "description": "GPT-3.5 Turbo is a cost-effective model optimized for dialogue-based applications.",
+            "contexts": {
+                "16K": {
+                    "input": 0.0005,
+                    "output": 0.0015
                 }
             }
         },
+        {
+            "name": "gpt-3.5-turbo-instruct",
+            "description": "GPT-3.5 Turbo Instruct is designed for following complex instructions with a smaller context window.",
+            "contexts": {
+                "4K": {
+                    "input": 0.0015,
+                    "output": 0.002
+                }
+            }
+        },
+        {
+            "name": "gpt-3.5-turbo-1106",
+            "description": "A specific version of GPT-3.5 Turbo optimized for a larger context size.",
+            "contexts": {
+                "16K": {
+                    "input": 0.001,
+                    "output": 0.002
+                }
+            }
+        }
     ]
+
 };
 document.addEventListener("DOMContentLoaded", function() {
     generateMenuFromJSON(jsonData);
