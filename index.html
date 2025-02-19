@@ -1,219 +1,308 @@
 <!DOCTYPE html>
-<html>
-    <head>
-      <title>ChatGPT API Cost Calculator</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">
-        <link href="preflight.min.css" rel="stylesheet">
-        <link href="utilities.min.css" rel="stylesheet">
-    </head>
-    <body>
-        <div class="inline-block w-full grid text-center">
-            <div style="max-width: 40rem; " class="w-full place-self-center p-12 inline-block">
-                <div class="text-left">
-                   <h1 class="mb-2">Calculate OpenAI API Costs 💸 with Your Actual Text</h1>
-                   <p class="text-xs mb-1">Secure, Ad-Free, and <a href="https://github.com/zimonh/model-costs">Open Source</a> using OpenAI's Tokenizer. Accurately calculate costs for the GPT-3 4K, GPT-3 16K, GPT-4 8K, and GPT-4 32K models.</p>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Calculate OpenAI API Costs accurately for models such as gpt-4o, gpt-4o-mini, o1, o3-mini, and o1-mini using real text. Toggle pricing contexts, cached pricing, and batch multipliers."
+    />
+    <title>ChatGPT API Cost Calculator</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
+    <link href="preflight.min.css" rel="stylesheet" />
+    <link href="utilities.min.css" rel="stylesheet" />
+  </head>
+  <body class="bg-zinc-900 text-gray-900 leading-relaxed">
+    <header class="p-4 bg-gray-100 mt-12">
+      <h1 class="text-3xl font-bold text-center">ChatGPT API Cost Calculator</h1>
+    </header>
 
-                    
-                   
-                    <label for="input-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2" for="menu-container" >Choose Model</label>
-                    <div id="menu-container" class="mb-6 "></div>
-                    
-                    <label for="input-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2" >Add Your Input prompt</label>
-                    <textarea placeholder="Hey AI assistant, can you extract all relevant topics fro…" class=" rounded p-3 w-full" id="input-textarea" rows="3" ></textarea>
-                    <div id="output-container-input" class="ml-auto mt-3 p-2 pl-4 pb-3 shadow" style="background-color: #dfdfdf; color:#404040; max-width:220px;"></div>
-                   
+    <main class="p-4">
+      <div class="inline-block w-full grid text-center">
+        <div style="max-width: 40rem;" class="w-full place-self-center p-12 inline-block">
+          <div class="text-left">
+            <p class="text-xs mb-1">
+              Secure, Ad-Free, and
+              <a href="https://github.com/zimonh/model-costs" class="underline text-blue-600">Open Source</a>
+              using OpenAI's Tokenizer. Accurately calculate costs for the gpt-4o, gpt-4o-mini, o1, o3-mini, and o1-mini models.
+            </p>
 
+            <label for="menu-container" class="block pt-6 text-gray-700 text-sm font-bold mt-12 mb-2">Choose Model</label>
+            <div id="menu-container" class="mb-6" aria-live="polite"></div>
+              <label for="multiplier" class="block text-gray-700 text-sm font-bold mb-2">Settings: </label>
+              <label class="inline-flex items-center pr-6">
+                <input type="radio" name="pricingContext" value="textTokens" checked class="form-radio text-blue-600" aria-label="Text Tokens Pricing" />
+                <span class="ml-2">Text Tokens</span>
+              </label>
+              <label class="inline-flex items-center pr-6">
+                <input type="radio" name="pricingContext" value="batchApi" class="form-radio text-blue-600" aria-label="Batch API Pricing" />
+                <span class="mx-2">Batch</span>
+                <a href="https://platform.openai.com/docs/guides/batch"> more info</a>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="checkbox" id="toggle-cached" class="form-checkbox text-blue-600" aria-label="Use Cached Input Price" />
+                <span class="mx-2">Cached Input</span> <a href="https://platform.openai.com/docs/guides/prompt-caching#what-can-be-cached"> more info</a>
+              </label>
+              <label for="input-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2">Add Your Input Prompt</label>
+            <textarea
+              id="input-textarea"
+              class="rounded p-3 w-full"
+              rows="3"
+              placeholder="Enter your prompt here..."
+              aria-describedby="input-help"
+            ></textarea>
+            <div id="output-container-input" class="ml-auto mt-3 p-2 pl-4 pb-3 shadow" style="background-color: #dfdfdf; color: #404040; max-width: 220px;" aria-live="polite"></div>
 
-                    <label for="output-textarea" class="block pt-6 mt-6 text-gray-700 text-sm font-bold mb-2" >Add OpenAI Response</label>
-                    <textarea placeholder="Sure! I can help. Here are the extracted topics…" class=" rounded p-3 w-full" id="output-textarea" rows="3" ></textarea>
-                    <div id="output-container-output" class="ml-auto mt-3 mb-6 p-2 pl-4 pb-3 shadow" style="background-color: #dfdfdf; color:#404040; max-width:220px;"></div>
-                    
+            <label for="output-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2">Add OpenAI Response</label>
+            <textarea
+              id="output-textarea"
+              class="rounded p-3 w-full"
+              rows="3"
+              placeholder="Enter the API response here..."
+              aria-describedby="output-help"
+            ></textarea>
+            <div id="output-container-output" class="ml-auto mt-3 mb-6 p-2 pl-4 pb-3 shadow" style="background-color: #dfdfdf; color: #404040; max-width: 220px;" aria-live="polite"></div>
 
-                    <button  class="mt-6 bg-black hover:bg-white hover:text-black text-white font-bold py-2 px-4 rounded" onclick="calculateTotalPrice()">Calculate Price</button>
-                    <div id="output-container-total" class="mt-6 text-4xl"></div>
-                     <p class="text-xs text-grey-dark m-3">Disclaimer: The cost calculator provided on this platform is intended for general informational purposes only. While we have made every effort to ensure the accuracy and reliability of the calculations, we cannot guarantee its absolute correctness or completeness.
+            <!-- Multiplier Input -->
+            <div class="mb-6">
+              <label for="multiplier" class="block text-gray-700 text-sm font-bold mb-2">Multiplier <span class="text-xs text-gray-500">(when you are running the same thing multiple times)</span></label>
+              <input
+                type="number"
+                id="multiplier"
+                value="1"
+                step="0.1"
+                min="1"
+                class="rounded p-4 w-full"
+                aria-label="Batch multiplier, default value is 1"
+              />
+            </div>
+
+            <button
+              class="mt-6 bg-black hover:bg-white hover:text-black text-white font-bold py-2 px-4 rounded"
+              onclick="calculateTotalPrice()"
+              aria-label="Calculate Price"
+            >
+              Calculate Price
+            </button>
+            <div id="output-container-total" class="mt-6 text-4xl" aria-live="polite"></div>
+
+            <!-- Tips Section -->
+            <div id="tips-container" class="mt-6 p-4 border-gray-300 text-gray-900 rounded bg-blue-50 " role="region" aria-label="Tips for using the calculator">
+              <p class="text-sm">
+                <strong>Tip:</strong> Use the pricing context toggle to switch between per-token pricing and batch API pricing. The "Cached Input" option uses a discounted rate if available.
+              </p>
+              <p class="text-sm mt-2">
+                The <em>Batch Multiplier</em> allows you to scale your calculations for large batches. Simply enter a number greater than 1 to multiply the cost.
+              </p>
+              <button id="hide-tips" class="mt-2 text-xs underline focus:outline-none">Got it, hide tips</button>
+            </div>
+            <!-- End Tips Section -->
+
+            <p class="text-xs text-grey-dark m-3">Disclaimer: The cost calculator provided on this platform is intended for general informational purposes only. While we have made every effort to ensure the accuracy and reliability of the calculations, we cannot guarantee its absolute correctness or completeness.
 
 Users are advised to exercise caution and verify the results obtained from the cost calculator by conducting their own independent calculations or seeking professional advice. We do not assume any responsibility or liability for any errors, inaccuracies, or omissions that may arise from the use of this tool.</p>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
+    </main>
 
-        <script src="browser.min.js"></script>
-        <script>
-    const { encode, decode } = gpt3encoder;
+    <footer class="p-4 bg-gray-100 text-center text-xs text-gray-600">
+      &copy; 2025 ChatGPT API Cost Calculator
+    </footer>
 
-    const dropdown = document.createElement("select");
+    <script src="browser.min.js"></script>
+    <script>
+      const { encode, decode } = gpt3encoder;
 
-    dropdown.classList.add('bg-gray-50','border','border-gray-300','text-gray-900','text-sm','rounded-lg','focus:ring-blue-500','focus:border-blue-500','block','w-full','p-5','dark:bg-gray-700','dark:border-gray-600','dark:placeholder-gray-400','dark:text-white','dark:focus:ring-blue-500','dark:focus:border-blue-500')
+      // Create the model dropdown
+      const dropdown = document.createElement("select");
+      dropdown.classList.add(
+        "bg-gray-50",
 
-    function calculateTotalPrice(){
+        "text-gray-900",
+        "text-sm",
+        "rounded",
+        "focus:ring-blue-500",
+        "focus:border-blue-500",
+        "block",
+        "w-full",
+        "p-5",
+        "dark:bg-gray-700",
+        "dark:border-gray-600",
+        "dark:placeholder-gray-400",
+        "dark:text-white",
+        "dark:focus:ring-blue-500",
+        "dark:focus:border-blue-500"
+      );
+
+      // Calculate total price for both input and output, applying multiplier.
+      function calculateTotalPrice() {
         let total = 0;
-        total += calculatePrice('input');
-        total += calculatePrice('output');
-        // total += calculatePrice('training');
+        total += calculatePrice("input");
+        total += calculatePrice("output");
+        // Multiply by batch multiplier value:
+        const multiplier = parseFloat(document.getElementById("multiplier").value) || 1;
+        total *= multiplier;
 
-
-      const outputContainer = document.getElementById(`output-container-total`);
-      outputContainer.innerHTML = `Total Price: $${total.toFixed(7).replace(/\.?0+$/, "")}`;
-    }
-
-    function calculatePrice(type) {
-      const selectedOption = dropdown.options[dropdown.selectedIndex];
-      const pricePerInputToken = selectedOption.getAttribute(`data-price-per-${type}-token`);
-      const input = document.getElementById(`${type}-textarea`);
-      const encodedInput = encode(input.value);
-      const inputTokenCount = encodedInput.length;
-      // Price per 1K tokens (adjust as needed)
-      const price = (pricePerInputToken * inputTokenCount) / 1000;
-
-      const outputContainer = document.getElementById(`output-container-${type}`);
-      const displayPrice = price === 0 ? 'N/A' : price.toFixed(7).replace(/\.?0+$/, "");
-      const displayPricePerInputToken = pricePerInputToken === '0' ? 'N/A' : (pricePerInputToken/1000).toFixed(7).replace(/\.?0+$/, "");
-      outputContainer.innerHTML = `<div>
-      <div class="flex items-center pt-2 text-base text-gray-900 rounded-lg bg-gray-50 group ">
-        ${type} token count:
-        <span class="flex-1 ml-3 whitespace-nowrap font-bold ">${ price === 0 ? 'N/A' : inputTokenCount }</span>
-      </div>
-      <div class="flex items-center pt-2 text-base text-gray-900 rounded-lg bg-gray-50 group ">
-        $ per token:
-        <span class="flex-1 ml-3 whitespace-nowrap font-bold ">${displayPricePerInputToken}</span>
-      </div>
-      <div class="flex items-center pt-2 text-base text-gray-900 rounded-lg bg-gray-50 group ">
-        $ total:
-        <span class="flex-1 ml-3 whitespace-nowrap font-bold ">${displayPrice}</span>
-      </div>
-
-
-      <div>`;
-      return price;
-    }
-
-    function generateMenuFromJSON(jsonData) {
-      const models = jsonData.models;
-
-      models.forEach((model) => {
-        const modelName = model.name;
-        const contexts = model.contexts;
-
-        for (const context in contexts) {
-          const optionText = `${modelName} ${context}`;
-          const option = document.createElement("option");
-          option.text = optionText;
-          option.dataset.pricePerOutputToken = contexts[context].output;
-          option.dataset.pricePerInputToken = contexts[context].input === undefined ? contexts[context].output : contexts[context].input;
-          option.dataset.pricePerTrainingToken = contexts[context].training === undefined ? 0 : contexts[context].training;
-          dropdown.appendChild(option);
-        }
-      });
-
-      dropdown.onchange = () =>{
-        if(document.getElementById(`input-textarea`).value + document.getElementById(`output-textarea`).value !== ""){
-
-          calculateTotalPrice();
-        }
-
+        const outputContainer = document.getElementById("output-container-total");
+        outputContainer.innerHTML = `Total Price: $${total.toFixed(7).replace(/\.?0+$/, "")}`;
       }
 
-    document.getElementById(`input-textarea`).oninput = () => {
-        calculateTotalPrice();
-    };
-    document.getElementById(`output-textarea`).oninput = () => {
-        calculateTotalPrice();
-    };
+      // Calculate price for a given token type ("input" or "output")
+      function calculatePrice(type) {
+        const selectedOption = dropdown.options[dropdown.selectedIndex];
 
-      const container = document.getElementById("menu-container");
-      container.appendChild(dropdown);
-    }
+        // Get the currently selected pricing context from the radio buttons.
+        const pricingContext = document.querySelector('input[name="pricingContext"]:checked').value;
 
-
-  const jsonData = {
-    "models": [
-        {
-            "name": "gpt-4o",
-            "description": "GPT-4o is optimized for large context sizes with a balanced performance in natural language understanding.",
-            "contexts": {
-                "128K": {
-                    "input": 0.005,
-                    "output": 0.015
-                }
-            }
-        },
-        {
-            "name": "gpt-4o-2024-08-06",
-            "description": "A specific version of GPT-4o with discounted pricing for input and output tokens.",
-            "contexts": {
-                "128K": {
-                    "input": 0.0025,
-                    "output": 0.01
-                }
-            }
-        },
-        {
-            "name": "chatgpt-4o-latest",
-            "description": "Latest version of ChatGPT-4o optimized for large-scale tasks.",
-            "contexts": {
-                "128K": {
-                    "input": 0.005,
-                    "output": 0.015
-                }
-            }
-        },
-        {
-            "name": "gpt-4-turbo",
-            "description": "GPT-4 Turbo provides faster and cheaper alternatives for processing with large context sizes.",
-            "contexts": {
-                "128K": {
-                    "input": 0.01,
-                    "output": 0.03
-                }
-            }
-        },
-        {
-            "name": "gpt-4",
-            "description": "GPT-4 provides extensive language capabilities with a smaller context size.",
-            "contexts": {
-                "8K": {
-                    "input": 0.03,
-                    "output": 0.06
-                }
-            }
-        },
-        {
-            "name": "gpt-3.5-turbo",
-            "description": "GPT-3.5 Turbo is a cost-effective model optimized for dialogue-based applications.",
-            "contexts": {
-                "16K": {
-                    "input": 0.0005,
-                    "output": 0.0015
-                }
-            }
-        },
-        {
-            "name": "gpt-3.5-turbo-instruct",
-            "description": "GPT-3.5 Turbo Instruct is designed for following complex instructions with a smaller context window.",
-            "contexts": {
-                "4K": {
-                    "input": 0.0015,
-                    "output": 0.002
-                }
-            }
-        },
-        {
-            "name": "gpt-3.5-turbo-1106",
-            "description": "A specific version of GPT-3.5 Turbo optimized for a larger context size.",
-            "contexts": {
-                "16K": {
-                    "input": 0.001,
-                    "output": 0.002
-                }
-            }
+        // For "input", check if the cached toggle is on.
+        let dataKey;
+        if (type === "input") {
+          const useCached = document.getElementById("toggle-cached").checked;
+          dataKey = useCached ? `${pricingContext}CachedInput` : `${pricingContext}Input`;
+        } else if (type === "output") {
+          dataKey = `${pricingContext}Output`;
+        } else {
+          // Fallback for any other type
+          dataKey = `${pricingContext}${type.charAt(0).toUpperCase() + type.slice(1)}`;
         }
-    ]
 
-};
-document.addEventListener("DOMContentLoaded", function() {
-    generateMenuFromJSON(jsonData);
-});
-  </script>
-    </body>
+        // Retrieve the per-token price from the data attribute
+        const pricePerToken = parseFloat(selectedOption.dataset[dataKey] || 0);
+        const inputElem = document.getElementById(`${type}-textarea`);
+        const encodedInput = encode(inputElem.value);
+        const tokenCount = encodedInput.length;
+
+        // Calculate price per 1M tokens (adjust as needed)
+        const price = (pricePerToken * tokenCount) / 1000000;
+
+        // Update the UI for this token type
+        const outputContainer = document.getElementById(`output-container-${type}`);
+        const displayPrice = price === 0 ? "N/A" : price.toFixed(7).replace(/\.?0+$/, "");
+        const displayPricePerToken =
+        pricePerToken === 0 ? "N/A" : (pricePerToken / 1000000).toFixed(7).replace(/\.?0+$/, "");
+
+        outputContainer.innerHTML = `<div>
+          <div class="flex items-center pt-2 text-base text-gray-900 rounded bg-gray-50 group">
+            ${type} token count:
+            <span class="flex-1 ml-3 whitespace-nowrap font-bold">${tokenCount === 0 ? "N/A" : tokenCount}</span>
+          </div>
+          <div class="flex items-center pt-2 text-base text-gray-900 rounded bg-gray-50 group">
+            $ per token:
+            <span class="flex-1 ml-3 whitespace-nowrap font-bold">${displayPricePerToken}</span>
+          </div>
+          <div class="flex items-center pt-2 text-base text-gray-900 rounded bg-gray-50 group">
+            $ total:
+            <span class="flex-1 ml-3 whitespace-nowrap font-bold">${displayPrice}</span>
+          </div>
+        </div>`;
+
+        return price;
+      }
+
+      // Generate the dropdown menu from the JSON data
+      function generateMenuFromJSON(jsonData) {
+        const models = jsonData.models;
+
+        models.forEach((model) => {
+          const option = document.createElement("option");
+          option.text = model.name;
+
+          // Save both pricing contexts as separate data attributes.
+          option.dataset.textTokensInput = model.contexts.textTokens.input;
+          option.dataset.textTokensCachedInput = model.contexts.textTokens.cachedInput;
+          option.dataset.textTokensOutput = model.contexts.textTokens.output;
+          option.dataset.batchApiInput = model.contexts.batchApi.input;
+          option.dataset.batchApiCachedInput = model.contexts.batchApi.cachedInput;
+          option.dataset.batchApiOutput = model.contexts.batchApi.output;
+
+          dropdown.appendChild(option);
+        });
+
+        // When the dropdown value changes, recalc if there's any input.
+        dropdown.onchange = () => {
+          if (
+            document.getElementById("input-textarea").value +
+              document.getElementById("output-textarea").value !== ""
+          ) {
+            calculateTotalPrice();
+          }
+        };
+
+        // Recalculate on input changes.
+        document.getElementById("input-textarea").oninput = () => {
+          calculateTotalPrice();
+        };
+        document.getElementById("output-textarea").oninput = () => {
+          calculateTotalPrice();
+        };
+
+        // Also, recalc when toggles change.
+        document.querySelectorAll('input[name="pricingContext"]').forEach((radio) => {
+          radio.onchange = calculateTotalPrice;
+        });
+        document.getElementById("toggle-cached").onchange = calculateTotalPrice;
+        document.getElementById("multiplier").oninput = calculateTotalPrice;
+
+        const container = document.getElementById("menu-container");
+        container.appendChild(dropdown);
+      }
+
+      // JSON model data
+      const jsonData = {
+        models: [
+          {
+            name: "gpt-4o",
+            contexts: {
+              textTokens: { input: 1.25, cachedInput: 0.625, output: 5.0 },
+              batchApi: { input: 2.5, cachedInput: 1.25, output: 10.0 },
+            },
+          },
+          {
+            name: "gpt-4o-mini",
+            contexts: {
+              textTokens: { input: 0.075, cachedInput: 0.0375, output: 0.3 },
+              batchApi: { input: 0.15, cachedInput: 0.075, output: 0.6 },
+            },
+          },
+          {
+            name: "o1",
+            contexts: {
+              textTokens: { input: 7.5, cachedInput: 3.75, output: 30.0 },
+              batchApi: { input: 15.0, cachedInput: 7.5, output: 60.0 },
+            },
+          },
+          {
+            name: "o3-mini",
+            contexts: {
+              textTokens: { input: 0.55, cachedInput: 0.275, output: 2.2 },
+              batchApi: { input: 1.1, cachedInput: 0.55, output: 4.4 },
+            },
+          },
+          {
+            name: "o1-mini",
+            contexts: {
+              textTokens: { input: 0.55, cachedInput: 0.275, output: 2.2 },
+              batchApi: { input: 1.1, cachedInput: 0.55, output: 4.4 },
+            },
+          },
+        ],
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        generateMenuFromJSON(jsonData);
+
+        // Check if tips should be hidden (from previous visit)
+        if (localStorage.getItem("hideTips") === "true") {
+          document.getElementById("tips-container").style.display = "none";
+        }
+
+        // Hide tips when the user clicks "Got it, hide tips"
+        document.getElementById("hide-tips").onclick = function () {
+          document.getElementById("tips-container").style.display = "none";
+          localStorage.setItem("hideTips", "true");
+        };
+      });
+    </script>
+  </body>
 </html>
