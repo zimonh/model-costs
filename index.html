@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Precisely calculate OpenAI API usage costs for models—gpt-4o, gpt-4o-mini, o1, o3-mini, and o1-mini—using real text inputs. Easily switch between text-token and batch-API pricing contexts, include or exclude cached-input rates, and apply configurable batch multipliers."
+      content="Calculate LLM API costs for OpenAI, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models from real text. Prices are updated daily. Switch between standard and batch pricing, include cached-input rates, and apply a multiplier."
     />
-    <title>ChatGPT API Cost Calculator</title>
+    <title>LLM API Cost Calculator</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
     <link href="preflight.min.css" rel="stylesheet" />
     <link href="utilities.min.css" rel="stylesheet" />
   </head>
   <body class="bg-zinc-900 text-gray-900 leading-relaxed">
     <header class="p-4 bg-gray-100 mt-12">
-      <h1 class="text-3xl font-bold text-center">ChatGPT API Cost Calculator</h1>
+      <h1 class="text-3xl font-bold text-center">LLM API Cost Calculator</h1>
     </header>
 
     <main class="p-4">
@@ -24,15 +24,17 @@
             <p class="text-xs mb-1">
               Secure, in-browser, Ad-Free, and
               <a href="https://github.com/zimonh/model-costs" class="underline text-blue-600">Open Source</a>
-              using OpenAI's Tokenizer. Precisely compute API usage costs for the gpt-4o, gpt-4o-mini, o1, o3-mini, and o1-mini models.
+              using OpenAI's Tokenizer. Compute API costs for OpenAI, Anthropic, Google Gemini, Mistral, DeepSeek and xAI models.
+              <span id="prices-updated"></span>
             </p>
 
             <label for="menu-container" class="block pt-6 text-gray-700 text-sm font-bold mt-12 mb-2">Choose Model</label>
-            <div id="menu-container" class="mb-6" aria-live="polite"></div>
+            <div id="menu-container" aria-live="polite"></div>
+            <p id="model-info" class="text-xs mt-2 mb-6"></p>
               <label for="multiplier" class="block text-gray-700 text-sm font-bold mb-2">Settings: </label>
               <label class="inline-flex items-center pr-6">
-                <input type="radio" name="pricingContext" value="textTokens" checked class="form-radio text-blue-600" aria-label="Text Tokens Pricing" />
-                <span class="ml-2">Text Tokens</span>
+                <input type="radio" name="pricingContext" value="textTokens" checked class="form-radio text-blue-600" aria-label="Standard Pricing" />
+                <span class="ml-2">Standard</span>
               </label>
               <label class="inline-flex items-center pr-6">
                 <input type="radio" name="pricingContext" value="batchApi" class="form-radio text-blue-600" aria-label="Batch API Pricing" />
@@ -53,7 +55,7 @@
             ></textarea>
             <div id="output-container-input" class="ml-auto mt-3 p-2 pl-4 pb-3 shadow" style="background-color: #dfdfdf; color: #404040; max-width: 220px;" aria-live="polite"></div>
 
-            <label for="output-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2">Add OpenAI Response</label>
+            <label for="output-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2">Add Model Response</label>
             <textarea
               id="output-textarea"
               class="rounded p-3 w-full"
@@ -95,254 +97,131 @@ Users are advised to exercise caution and verify the results obtained from the c
     </main>
 
     <footer class="p-4 bg-gray-100 text-center text-xs text-gray-600">
-      &copy; 2025 ChatGPT API Cost Calculator
+      &copy; 2026 LLM API Cost Calculator
     </footer>
 
     <script src="browser.min.js"></script>
     <script>
-      const { encode, decode } = gpt3encoder;
+      const { encode } = gpt3encoder;
 
-      // Create the model dropdown
+      // prices.json is refreshed daily by a GitHub Action. Read the copy on
+      // GitHub first so the site picks up new prices without a redeploy.
+      const PRICE_URLS = [
+        "https://raw.githubusercontent.com/zimonh/model-costs/main/prices.json",
+        "prices.json",
+      ];
+      const CONTEXTS = { textTokens: "standard", batchApi: "batch" };
+
       const dropdown = document.createElement("select");
-      dropdown.classList.add(
-        "bg-gray-50",
+      dropdown.classList.add("bg-gray-50", "text-gray-900", "text-sm", "rounded", "block", "w-full", "p-5");
 
-        "text-gray-900",
-        "text-sm",
-        "rounded",
-        "focus:ring-blue-500",
-        "focus:border-blue-500",
-        "block",
-        "w-full",
-        "p-5",
-        "dark:bg-gray-700",
-        "dark:border-gray-600",
-        "dark:placeholder-gray-400",
-        "dark:text-white",
-        "dark:focus:ring-blue-500",
-        "dark:focus:border-blue-500"
-      );
+      let models = [];
+      const selectedModel = () => models[dropdown.value];
+      const formatPrice = (n) => n.toFixed(7).replace(/\.?0+$/, "");
 
       // Calculate total price for both input and output, applying multiplier.
       function calculateTotalPrice() {
-        let total = 0;
-        total += calculatePrice("input");
-        total += calculatePrice("output");
-        // Multiply by batch multiplier value:
-        const multiplier = parseFloat(document.getElementById("multiplier").value) || 1;
-        total *= multiplier;
+        if (!selectedModel()) return;
+        let total = calculatePrice("input") + calculatePrice("output");
+        total *= parseFloat(document.getElementById("multiplier").value) || 1;
 
-        const outputContainer = document.getElementById("output-container-total");
-        outputContainer.innerHTML = `Total Price: $${total.toFixed(7).replace(/\.?0+$/, "")}`;
+        document.getElementById("output-container-total").innerHTML = `Total Price: $${formatPrice(total)}`;
+        renderModelInfo();
       }
 
       // Calculate price for a given token type ("input" or "output")
       function calculatePrice(type) {
-        const selectedOption = dropdown.options[dropdown.selectedIndex];
-
-        // Get the currently selected pricing context from the radio buttons.
         const pricingContext = document.querySelector('input[name="pricingContext"]:checked').value;
+        const prices = selectedModel()[CONTEXTS[pricingContext]];
 
-        // For "input", check if the cached toggle is on.
-        let dataKey;
+        let pricePerMillion = prices.output;
         if (type === "input") {
           const useCached = document.getElementById("toggle-cached").checked;
-          dataKey = useCached ? `${pricingContext}CachedInput` : `${pricingContext}Input`;
-        } else if (type === "output") {
-          dataKey = `${pricingContext}Output`;
-        } else {
-          // Fallback for any other type
-          dataKey = `${pricingContext}${type.charAt(0).toUpperCase() + type.slice(1)}`;
+          pricePerMillion = useCached ? prices.cachedInput : prices.input;
         }
 
-        // Retrieve the per-token price from the data attribute
-        const pricePerToken = parseFloat(selectedOption.dataset[dataKey] || 0);
-        const inputElem = document.getElementById(`${type}-textarea`);
-        const encodedInput = encode(inputElem.value);
-        const tokenCount = encodedInput.length;
+        const tokenCount = encode(document.getElementById(`${type}-textarea`).value).length;
+        const price = ((pricePerMillion ?? 0) * tokenCount) / 1000000;
 
-        // Calculate price per 1M tokens (adjust as needed)
-        const price = (pricePerToken * tokenCount) / 1000000;
-
-        // Update the UI for this token type
-        const outputContainer = document.getElementById(`output-container-${type}`);
-        const displayPrice = price === 0 ? "N/A" : price.toFixed(7).replace(/\.?0+$/, "");
-        const displayPricePerToken =
-        pricePerToken === 0 ? "N/A" : (pricePerToken / 1000000).toFixed(7).replace(/\.?0+$/, "");
-
-        outputContainer.innerHTML = `<div>
+        document.getElementById(`output-container-${type}`).innerHTML = `<div>
           <div class="flex items-center pt-2 text-base text-gray-900 rounded bg-gray-50 group">
             ${type} token count:
             <span class="flex-1 ml-3 whitespace-nowrap font-bold">${tokenCount === 0 ? "N/A" : tokenCount}</span>
           </div>
           <div class="flex items-center pt-2 text-base text-gray-900 rounded bg-gray-50 group">
-            $ per token:
-            <span class="flex-1 ml-3 whitespace-nowrap font-bold">${displayPricePerToken}</span>
+            $ per 1M tokens:
+            <span class="flex-1 ml-3 whitespace-nowrap font-bold">${pricePerMillion == null ? "N/A" : formatPrice(pricePerMillion)}</span>
           </div>
           <div class="flex items-center pt-2 text-base text-gray-900 rounded bg-gray-50 group">
             $ total:
-            <span class="flex-1 ml-3 whitespace-nowrap font-bold">${displayPrice}</span>
+            <span class="flex-1 ml-3 whitespace-nowrap font-bold">${price === 0 ? "N/A" : formatPrice(price)}</span>
           </div>
         </div>`;
 
         return price;
       }
 
-      // Generate the dropdown menu from the JSON data
+      // Show where the price comes from and warn when the token count is an estimate.
+      function renderModelInfo() {
+        const model = selectedModel();
+        const estimate =
+          model.provider === "openai"
+            ? ""
+            : " Token counts use OpenAI's tokenizer, so for this provider they are an estimate.";
+        const source = model.source
+          ? ` <a href="${model.source}" class="underline text-blue-600" target="_blank" rel="noopener">Provider pricing page</a>.`
+          : "";
+        document.getElementById("model-info").innerHTML = `${estimate}${source}`;
+      }
+
+      // Generate the grouped dropdown menu from prices.json
       function generateMenuFromJSON(jsonData) {
-        const models = jsonData.models;
+        models = jsonData.models;
 
-        models.forEach((model) => {
-          const option = document.createElement("option");
-          option.text = model.name;
+        for (const [provider, label] of Object.entries(jsonData.providers)) {
+          const group = document.createElement("optgroup");
+          group.label = label;
+          models.forEach((model, index) => {
+            if (model.provider !== provider) return;
+            group.appendChild(new Option(model.name, index));
+          });
+          dropdown.appendChild(group);
+        }
+        const preferred = models.findIndex((model) => model.name === "gpt-4o");
+        if (preferred !== -1) dropdown.value = preferred;
 
-          // Save both pricing contexts as separate data attributes.
-          option.dataset.textTokensInput = model.contexts.textTokens.input;
-          option.dataset.textTokensCachedInput = model.contexts.textTokens.cachedInput;
-          option.dataset.textTokensOutput = model.contexts.textTokens.output;
-          option.dataset.batchApiInput = model.contexts.batchApi.input;
-          option.dataset.batchApiCachedInput = model.contexts.batchApi.cachedInput;
-          option.dataset.batchApiOutput = model.contexts.batchApi.output;
-
-          dropdown.appendChild(option);
-        });
-
-        // When the dropdown value changes, recalc if there's any input.
-        dropdown.onchange = () => {
-          if (
-            document.getElementById("input-textarea").value +
-              document.getElementById("output-textarea").value !== ""
-          ) {
-            calculateTotalPrice();
-          }
-        };
-
-        // Recalculate on input changes.
-        document.getElementById("input-textarea").oninput = () => {
-          calculateTotalPrice();
-        };
-        document.getElementById("output-textarea").oninput = () => {
-          calculateTotalPrice();
-        };
-
-        // Also, recalc when toggles change.
+        dropdown.onchange = calculateTotalPrice;
+        document.getElementById("input-textarea").oninput = calculateTotalPrice;
+        document.getElementById("output-textarea").oninput = calculateTotalPrice;
         document.querySelectorAll('input[name="pricingContext"]').forEach((radio) => {
           radio.onchange = calculateTotalPrice;
         });
         document.getElementById("toggle-cached").onchange = calculateTotalPrice;
         document.getElementById("multiplier").oninput = calculateTotalPrice;
 
-        const container = document.getElementById("menu-container");
-        container.appendChild(dropdown);
+        document.getElementById("menu-container").appendChild(dropdown);
+        document.getElementById("prices-updated").textContent = `Prices updated ${jsonData.updated}.`;
+        renderModelInfo();
       }
 
-      // JSON model data
-      const jsonData = {
-        models: [
-          {
-            name: "gpt-4o",
-            contexts: {
-              textTokens: { input: 1.25, cachedInput: 0.625, output: 5.0 },
-              batchApi: { input: 2.5, cachedInput: 1.25, output: 10.0 },
-            },
-          },
-          {
-            name: "gpt-4o-mini",
-            contexts: {
-              textTokens: { input: 0.075, cachedInput: 0.0375, output: 0.3 },
-              batchApi: { input: 0.15, cachedInput: 0.075, output: 0.6 },
-            },
-          },
-          {
-            name: "o1",
-            contexts: {
-              textTokens: { input: 7.5, cachedInput: 3.75, output: 30.0 },
-              batchApi: { input: 15.0, cachedInput: 7.5, output: 60.0 },
-            },
-          },
-          {
-            name: "o3-mini",
-            contexts: {
-              textTokens: { input: 0.55, cachedInput: 0.275, output: 2.2 },
-              batchApi: { input: 1.1, cachedInput: 0.55, output: 4.4 },
-            },
-          },
-          {
-            name: "o1-mini",
-            contexts: {
-              textTokens: { input: 0.55, cachedInput: 0.275, output: 2.2 },
-              batchApi: { input: 1.1, cachedInput: 0.55, output: 4.4 },
-            },
-          },
-
-
-
-
-          {
-            name: "gpt-4.1",
-            contexts: {
-              textTokens:  { input: 1.00,  cachedInput: 0.00, output: 4.00 },
-              batchApi:    { input: 2.00,  cachedInput: 0.00, output: 8.00 }
-            }
-          },
-          {
-            name: "gpt-4.1-mini",
-            contexts: {
-              textTokens:  { input: 0.20,  cachedInput: 0.00, output: 0.80 },
-              batchApi:    { input: 0.40,  cachedInput: 0.00, output: 1.60 }
-            }
-          },
-          {
-            name: "gpt-4.1-nano",
-            contexts: {
-              textTokens:  { input: 0.05,  cachedInput: 0.00, output: 0.20 },
-              batchApi:    { input: 0.10,  cachedInput: 0.00, output: 0.40 }
-            }
-          },
-          {
-            name: "gpt-4.5-preview",
-            contexts: {
-              textTokens:  { input: 37.50, cachedInput: 0.00, output: 75.00 },
-              batchApi:    { input: 75.00, cachedInput: 0.00, output: 150.0 }
-            }
-          },
-          {
-            name: "o1-pro",
-            contexts: {
-              textTokens:  { input: 75.00, cachedInput: 0.00, output: 300.0 },
-              batchApi:    { input: 150.0, cachedInput: 0.00, output: 600.0 }
-            }
-          },
-          {
-            name: "o3",
-            contexts: {
-              textTokens:  { input: 5.00,  cachedInput: 0.00, output: 20.0 },
-              batchApi:    { input: 10.0,  cachedInput: 0.00, output: 40.0 }
-            }
-          },
-          {
-            name: "o4-mini",
-            contexts: {
-              textTokens:  { input: 0.55,  cachedInput: 0.00, output: 2.20 },
-              batchApi:    { input: 1.10,  cachedInput: 0.00, output: 4.40 }
-            }
+      async function loadPrices() {
+        for (const url of PRICE_URLS) {
+          try {
+            const response = await fetch(url, { cache: "no-cache" });
+            if (response.ok) return await response.json();
+          } catch (error) {
+            console.warn(`Could not load ${url}`, error);
           }
-        ],
-      };
-
-      document.addEventListener("DOMContentLoaded", function () {
-        generateMenuFromJSON(jsonData);
-
-        // Check if tips should be hidden (from previous visit)
-        if (localStorage.getItem("hideTips") === "true") {
-          document.getElementById("tips-container").style.display = "none";
         }
+        throw new Error("No price list could be loaded");
+      }
 
-        // Hide tips when the user clicks "Got it, hide tips"
-        document.getElementById("hide-tips").onclick = function () {
-          document.getElementById("tips-container").style.display = "none";
-          localStorage.setItem("hideTips", "true");
-        };
+      document.addEventListener("DOMContentLoaded", async function () {
+        try {
+          generateMenuFromJSON(await loadPrices());
+        } catch (error) {
+          document.getElementById("menu-container").textContent = "Prices could not be loaded, try again later.";
+        }
       });
     </script>
   </body>

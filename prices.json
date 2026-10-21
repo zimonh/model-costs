@@ -1,0 +1,1889 @@
+{
+ "updated": "2026-10-21",
+ "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
+ "providers": {
+  "openai": "OpenAI",
+  "anthropic": "Anthropic",
+  "gemini": "Google Gemini",
+  "mistral": "Mistral",
+  "deepseek": "DeepSeek",
+  "xai": "xAI"
+ },
+ "models": [
+  {
+   "name": "chat-latest",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 5,
+    "cachedInput": 0.5,
+    "output": 30
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "gpt-3.5-turbo",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 0.5,
+    "cachedInput": null,
+    "output": 1.5
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "gpt-3.5-turbo-16k",
+   "provider": "openai",
+   "source": null,
+   "standard": {
+    "input": 3,
+    "cachedInput": null,
+    "output": 4
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "gpt-4",
+   "provider": "openai",
+   "source": null,
+   "standard": {
+    "input": 30,
+    "cachedInput": null,
+    "output": 60
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "gpt-4-1106-preview",
+   "provider": "openai",
+   "source": null,
+   "standard": {
+    "input": 10,
+    "cachedInput": null,
+    "output": 30
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "gpt-4-turbo",
+   "provider": "openai",
+   "source": null,
+   "standard": {
+    "input": 10,
+    "cachedInput": null,
+    "output": 30
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "gpt-4.1",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.5,
+    "output": 8
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": null,
+    "output": 4
+   }
+  },
+  {
+   "name": "gpt-4.1-mini",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 0.4,
+    "cachedInput": 0.1,
+    "output": 1.6
+   },
+   "batch": {
+    "input": 0.2,
+    "cachedInput": null,
+    "output": 0.8
+   }
+  },
+  {
+   "name": "gpt-4.1-nano",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 0.1,
+    "cachedInput": 0.025,
+    "output": 0.4
+   },
+   "batch": {
+    "input": 0.05,
+    "cachedInput": null,
+    "output": 0.2
+   }
+  },
+  {
+   "name": "gpt-4o",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 2.5,
+    "cachedInput": 1.25,
+    "output": 10
+   },
+   "batch": {
+    "input": 1.25,
+    "cachedInput": null,
+    "output": 5
+   }
+  },
+  {
+   "name": "gpt-4o-mini",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 0.15,
+    "cachedInput": 0.075,
+    "output": 0.6
+   },
+   "batch": {
+    "input": 0.075,
+    "cachedInput": null,
+    "output": 0.3
+   }
+  },
+  {
+   "name": "gpt-5",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.125,
+    "output": 10
+   },
+   "batch": {
+    "input": 0.625,
+    "cachedInput": 0.0625,
+    "output": 5
+   }
+  },
+  {
+   "name": "gpt-5-mini",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 0.25,
+    "cachedInput": 0.025,
+    "output": 2
+   },
+   "batch": {
+    "input": 0.125,
+    "cachedInput": 0.0125,
+    "output": 1
+   }
+  },
+  {
+   "name": "gpt-5-nano",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 0.05,
+    "cachedInput": 0.005,
+    "output": 0.4
+   },
+   "batch": {
+    "input": 0.025,
+    "cachedInput": 0.0025,
+    "output": 0.2
+   }
+  },
+  {
+   "name": "gpt-5.1",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.125,
+    "output": 10
+   },
+   "batch": {
+    "input": 0.625,
+    "cachedInput": 0.0625,
+    "output": 5
+   }
+  },
+  {
+   "name": "gpt-5.2",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 1.75,
+    "cachedInput": 0.175,
+    "output": 14
+   },
+   "batch": {
+    "input": 0.875,
+    "cachedInput": 0.0875,
+    "output": 7
+   }
+  },
+  {
+   "name": "gpt-5.4",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 2.5,
+    "cachedInput": 0.25,
+    "output": 15
+   },
+   "batch": {
+    "input": 1.25,
+    "cachedInput": 0.13,
+    "output": 7.5
+   }
+  },
+  {
+   "name": "gpt-5.4-mini",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 0.75,
+    "cachedInput": 0.075,
+    "output": 4.5
+   },
+   "batch": {
+    "input": 0.375,
+    "cachedInput": 0.0375,
+    "output": 2.25
+   }
+  },
+  {
+   "name": "gpt-5.4-nano",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 0.2,
+    "cachedInput": 0.02,
+    "output": 1.25
+   },
+   "batch": {
+    "input": 0.1,
+    "cachedInput": 0.01,
+    "output": 0.625
+   }
+  },
+  {
+   "name": "gpt-5.5",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 5,
+    "cachedInput": 0.5,
+    "output": 30
+   },
+   "batch": {
+    "input": 2.5,
+    "cachedInput": 0.25,
+    "output": 15
+   }
+  },
+  {
+   "name": "gpt-5.6",
+   "provider": "openai",
+   "source": null,
+   "standard": {
+    "input": 4,
+    "cachedInput": 0.4,
+    "output": 20
+   },
+   "batch": {
+    "input": 2,
+    "cachedInput": 0.2,
+    "output": 10
+   }
+  },
+  {
+   "name": "gpt-5.6-luna",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 0.2,
+    "cachedInput": 0.02,
+    "output": 1.2
+   },
+   "batch": {
+    "input": 0.1,
+    "cachedInput": 0.01,
+    "output": 0.6
+   }
+  },
+  {
+   "name": "gpt-5.6-sol",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 4,
+    "cachedInput": 0.4,
+    "output": 20
+   },
+   "batch": {
+    "input": 2,
+    "cachedInput": 0.2,
+    "output": 10
+   }
+  },
+  {
+   "name": "gpt-5.6-terra",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.2,
+    "output": 12
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.1,
+    "output": 6
+   }
+  },
+  {
+   "name": "gpt-6-astra",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 10,
+    "cachedInput": 1,
+    "output": 50
+   },
+   "batch": {
+    "input": 5,
+    "cachedInput": 0.5,
+    "output": 25
+   }
+  },
+  {
+   "name": "gpt-6-luna",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 0.1,
+    "cachedInput": 0.01,
+    "output": 0.5
+   },
+   "batch": {
+    "input": 0.05,
+    "cachedInput": 0.005,
+    "output": 0.25
+   }
+  },
+  {
+   "name": "gpt-6-sol",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.2,
+    "output": 10
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.1,
+    "output": 5
+   }
+  },
+  {
+   "name": "gpt-6.1-sol",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.1,
+    "output": 10
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.05,
+    "output": 5
+   }
+  },
+  {
+   "name": "o1",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 15,
+    "cachedInput": 7.5,
+    "output": 60
+   },
+   "batch": {
+    "input": 7.5,
+    "cachedInput": null,
+    "output": 30
+   }
+  },
+  {
+   "name": "o3",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.5,
+    "output": 8
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": null,
+    "output": 4
+   }
+  },
+  {
+   "name": "o3-mini",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 1.1,
+    "cachedInput": 0.55,
+    "output": 4.4
+   },
+   "batch": {
+    "input": 0.55,
+    "cachedInput": null,
+    "output": 2.2
+   }
+  },
+  {
+   "name": "o4-mini",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 1.1,
+    "cachedInput": 0.275,
+    "output": 4.4
+   },
+   "batch": {
+    "input": 0.55,
+    "cachedInput": null,
+    "output": 2.2
+   }
+  },
+  {
+   "name": "claude-fable-5",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 10,
+    "cachedInput": 1,
+    "output": 50
+   },
+   "batch": {
+    "input": 5,
+    "cachedInput": 0.5,
+    "output": 25
+   }
+  },
+  {
+   "name": "claude-fable-5-1",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 10,
+    "cachedInput": 0.25,
+    "output": 50
+   },
+   "batch": {
+    "input": 5,
+    "cachedInput": 0.125,
+    "output": 25
+   }
+  },
+  {
+   "name": "claude-haiku-4-5",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 1,
+    "cachedInput": 0.1,
+    "output": 5
+   },
+   "batch": {
+    "input": 0.5,
+    "cachedInput": 0.05,
+    "output": 2.5
+   }
+  },
+  {
+   "name": "claude-haiku-5-5",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+   "standard": {
+    "input": 0.1,
+    "cachedInput": 0.01,
+    "output": 0.5
+   },
+   "batch": {
+    "input": 0.05,
+    "cachedInput": 0.005,
+    "output": 0.25
+   }
+  },
+  {
+   "name": "claude-mythos-5",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 10,
+    "cachedInput": 1,
+    "output": 50
+   },
+   "batch": {
+    "input": 5,
+    "cachedInput": 0.5,
+    "output": 25
+   }
+  },
+  {
+   "name": "claude-mythos-5-1",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 10,
+    "cachedInput": 0.25,
+    "output": 50
+   },
+   "batch": {
+    "input": 5,
+    "cachedInput": 0.125,
+    "output": 25
+   }
+  },
+  {
+   "name": "claude-opus-4-5",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 5,
+    "cachedInput": 0.5,
+    "output": 25
+   },
+   "batch": {
+    "input": 2.5,
+    "cachedInput": 0.25,
+    "output": 12.5
+   }
+  },
+  {
+   "name": "claude-opus-4-6",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 5,
+    "cachedInput": 0.5,
+    "output": 25
+   },
+   "batch": {
+    "input": 2.5,
+    "cachedInput": 0.25,
+    "output": 12.5
+   }
+  },
+  {
+   "name": "claude-opus-4-7",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 5,
+    "cachedInput": 0.5,
+    "output": 25
+   },
+   "batch": {
+    "input": 2.5,
+    "cachedInput": 0.25,
+    "output": 12.5
+   }
+  },
+  {
+   "name": "claude-opus-4-8",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 5,
+    "cachedInput": 0.5,
+    "output": 25
+   },
+   "batch": {
+    "input": 2.5,
+    "cachedInput": 0.25,
+    "output": 12.5
+   }
+  },
+  {
+   "name": "claude-opus-5",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 5,
+    "cachedInput": 0.5,
+    "output": 25
+   },
+   "batch": {
+    "input": 2.5,
+    "cachedInput": 0.25,
+    "output": 12.5
+   }
+  },
+  {
+   "name": "claude-opus-5-5",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 4,
+    "cachedInput": 0.2,
+    "output": 20
+   },
+   "batch": {
+    "input": 2,
+    "cachedInput": 0.1,
+    "output": 10
+   }
+  },
+  {
+   "name": "claude-sonnet-4-5",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 3,
+    "cachedInput": 0.3,
+    "output": 15
+   },
+   "batch": {
+    "input": 1.5,
+    "cachedInput": 0.15,
+    "output": 7.5
+   }
+  },
+  {
+   "name": "claude-sonnet-4-6",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 3,
+    "cachedInput": 0.3,
+    "output": 15
+   },
+   "batch": {
+    "input": 1.5,
+    "cachedInput": 0.15,
+    "output": 7.5
+   }
+  },
+  {
+   "name": "claude-sonnet-5",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.2,
+    "output": 10
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.1,
+    "output": 5
+   }
+  },
+  {
+   "name": "claude-sonnet-5-5",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.1,
+    "output": 10
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.05,
+    "output": 5
+   }
+  },
+  {
+   "name": "gemini-2.5-flash",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.03,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 0.15,
+    "cachedInput": 0.03,
+    "output": 1.25
+   }
+  },
+  {
+   "name": "gemini-2.5-flash-lite",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 0.1,
+    "cachedInput": 0.01,
+    "output": 0.4
+   },
+   "batch": {
+    "input": 0.05,
+    "cachedInput": 0.01,
+    "output": 0.2
+   }
+  },
+  {
+   "name": "gemini-2.5-pro",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.125,
+    "output": 10
+   },
+   "batch": {
+    "input": 0.625,
+    "cachedInput": 0.125,
+    "output": 5
+   }
+  },
+  {
+   "name": "gemini-3-flash-preview",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 0.5,
+    "cachedInput": 0.05,
+    "output": 3
+   },
+   "batch": {
+    "input": 0.25,
+    "cachedInput": 0.05,
+    "output": 1.5
+   }
+  },
+  {
+   "name": "gemini-3.1-flash-lite",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 0.25,
+    "cachedInput": 0.025,
+    "output": 1.5
+   },
+   "batch": {
+    "input": 0.125,
+    "cachedInput": 0.0125,
+    "output": 0.75
+   }
+  },
+  {
+   "name": "gemini-3.1-pro-preview",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.2,
+    "output": 12
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.2,
+    "output": 6
+   }
+  },
+  {
+   "name": "gemini-3.5-flash",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": 0.15,
+    "output": 9
+   },
+   "batch": {
+    "input": 0.75,
+    "cachedInput": 0.075,
+    "output": 4.5
+   }
+  },
+  {
+   "name": "gemini-3.5-flash-lite",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.03,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 0.15,
+    "cachedInput": 0.02,
+    "output": 1.25
+   }
+  },
+  {
+   "name": "gemini-3.6-flash",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 0.75,
+    "cachedInput": 0.075,
+    "output": 3.75
+   },
+   "batch": {
+    "input": 0.375,
+    "cachedInput": 0.0375,
+    "output": 1.875
+   }
+  },
+  {
+   "name": "gemini-3.7-flash",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 0.75,
+    "cachedInput": 0.075,
+    "output": 3.75
+   },
+   "batch": {
+    "input": 0.375,
+    "cachedInput": 0.0375,
+    "output": 1.875
+   }
+  },
+  {
+   "name": "gemini-3.8-flash",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 0.75,
+    "cachedInput": 0.075,
+    "output": 3.75
+   },
+   "batch": {
+    "input": 0.375,
+    "cachedInput": 0.0375,
+    "output": 1.875
+   }
+  },
+  {
+   "name": "gemini-4-argon",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.1,
+    "output": 10
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.05,
+    "output": 5
+   }
+  },
+  {
+   "name": "gemini-flash-latest",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 0.75,
+    "cachedInput": 0.075,
+    "output": 3.75
+   },
+   "batch": {
+    "input": 0.375,
+    "cachedInput": null,
+    "output": 1.875
+   }
+  },
+  {
+   "name": "gemini-flash-lite-latest",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.03,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 0.15,
+    "cachedInput": null,
+    "output": 1.25
+   }
+  },
+  {
+   "name": "gemini-omni-1.1-flash",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": null,
+    "output": 9
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "gemini-omni-flash-preview",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": null,
+    "output": 9
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "gemini-pro-latest",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.2,
+    "output": 12
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": null,
+    "output": 6
+   }
+  },
+  {
+   "name": "codestral-2508",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/codestral-25-08",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.03,
+    "output": 0.9
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "codestral-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/codestral-25-08",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.03,
+    "output": 0.9
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "codestral-mamba-latest",
+   "provider": "mistral",
+   "source": "https://mistral.ai/technology/",
+   "standard": {
+    "input": 0.25,
+    "cachedInput": 0.025,
+    "output": 0.25
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "devstral-latest",
+   "provider": "mistral",
+   "source": "https://mistral.ai/news/devstral-2-vibe-cli",
+   "standard": {
+    "input": 0.4,
+    "cachedInput": 0.04,
+    "output": 2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "devstral-medium-latest",
+   "provider": "mistral",
+   "source": "https://mistral.ai/news/devstral-2-vibe-cli",
+   "standard": {
+    "input": 0.4,
+    "cachedInput": 0.04,
+    "output": 2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "devstral-small-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/devstral-small-2-25-12",
+   "standard": {
+    "input": 0.1,
+    "cachedInput": 0.01,
+    "output": 0.3
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "labs-leanstral-1-5-1",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/leanstral-1-5",
+   "standard": {
+    "input": 0,
+    "cachedInput": null,
+    "output": 0
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "magistral-medium-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": 0.15,
+    "output": 7.5
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "magistral-small-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/mistral-small-4-0-26-03",
+   "standard": {
+    "input": 0.15,
+    "cachedInput": 0.015,
+    "output": 0.6
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "ministral-3-3b-2512",
+   "provider": "mistral",
+   "source": "https://mistral.ai/pricing",
+   "standard": {
+    "input": 0.1,
+    "cachedInput": 0.01,
+    "output": 0.1
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "ministral-3-8b-2512",
+   "provider": "mistral",
+   "source": "https://mistral.ai/pricing",
+   "standard": {
+    "input": 0.15,
+    "cachedInput": 0.015,
+    "output": 0.15
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "ministral-3-14b-2512",
+   "provider": "mistral",
+   "source": "https://mistral.ai/pricing",
+   "standard": {
+    "input": 0.2,
+    "cachedInput": 0.02,
+    "output": 0.2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "ministral-3b-2512",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/ministral-3-3b-25-12",
+   "standard": {
+    "input": 0.1,
+    "cachedInput": 0.01,
+    "output": 0.1
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "ministral-3b-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/ministral-3-3b-25-12",
+   "standard": {
+    "input": 0.1,
+    "cachedInput": 0.01,
+    "output": 0.1
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "ministral-8b-2512",
+   "provider": "mistral",
+   "source": "https://mistral.ai/pricing",
+   "standard": {
+    "input": 0.15,
+    "cachedInput": 0.015,
+    "output": 0.15
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "ministral-8b-latest",
+   "provider": "mistral",
+   "source": "https://mistral.ai/pricing",
+   "standard": {
+    "input": 0.15,
+    "cachedInput": 0.015,
+    "output": 0.15
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "ministral-14b-2512",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/ministral-3-14b-25-12",
+   "standard": {
+    "input": 0.2,
+    "cachedInput": 0.02,
+    "output": 0.2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "ministral-14b-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/ministral-3-14b-25-12",
+   "standard": {
+    "input": 0.2,
+    "cachedInput": 0.02,
+    "output": 0.2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-code-agent-latest",
+   "provider": "mistral",
+   "source": "https://mistral.ai/news/devstral-2-vibe-cli",
+   "standard": {
+    "input": 0.4,
+    "cachedInput": 0.04,
+    "output": 2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-code-fim-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/codestral-25-08",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.03,
+    "output": 0.9
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-code-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/codestral-25-08",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.03,
+    "output": 0.9
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-large-3",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/mistral-large-3-25-12",
+   "standard": {
+    "input": 0.5,
+    "cachedInput": 0.05,
+    "output": 1.5
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-large-4",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/mistral-large-4",
+   "standard": {
+    "input": 0.68,
+    "cachedInput": 0.068,
+    "output": 2.09
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-large-4-0",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/mistral-large-4",
+   "standard": {
+    "input": 0.68,
+    "cachedInput": 0.068,
+    "output": 2.09
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-large-2512",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/mistral-large-3-25-12",
+   "standard": {
+    "input": 0.5,
+    "cachedInput": 0.05,
+    "output": 1.5
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-large-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/mistral-large-3-25-12",
+   "standard": {
+    "input": 0.5,
+    "cachedInput": 0.05,
+    "output": 1.5
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-medium",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": 0.15,
+    "output": 7.5
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-medium-3",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": 0.15,
+    "output": 7.5
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-medium-3-5",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": 0.15,
+    "output": 7.5
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-medium-3.5",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": 0.15,
+    "output": 7.5
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-medium-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/mistral-medium-3-5-26-04",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": 0.15,
+    "output": 7.5
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-small",
+   "provider": "mistral",
+   "source": null,
+   "standard": {
+    "input": 0.1,
+    "cachedInput": 0.01,
+    "output": 0.3
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-small-latest",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/model-cards/mistral-small-4-0-26-03",
+   "standard": {
+    "input": 0.15,
+    "cachedInput": 0.015,
+    "output": 0.6
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "mistral-tiny",
+   "provider": "mistral",
+   "source": null,
+   "standard": {
+    "input": 0.25,
+    "cachedInput": 0.025,
+    "output": 0.25
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "open-mistral-nemo",
+   "provider": "mistral",
+   "source": "https://mistral.ai/technology/",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.03,
+    "output": 0.3
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "pixtral-large-latest",
+   "provider": "mistral",
+   "source": null,
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.2,
+    "output": 6
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "deepseek-coder",
+   "provider": "deepseek",
+   "source": null,
+   "standard": {
+    "input": 0.14,
+    "cachedInput": 0.014,
+    "output": 0.28
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "deepseek-flash",
+   "provider": "deepseek",
+   "source": "https://api-docs.deepseek.com/quick_start/pricing",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.006,
+    "output": 1.2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "deepseek-r1",
+   "provider": "deepseek",
+   "source": null,
+   "standard": {
+    "input": 0.55,
+    "cachedInput": 0.14,
+    "output": 2.19
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "deepseek-v3",
+   "provider": "deepseek",
+   "source": null,
+   "standard": {
+    "input": 0.27,
+    "cachedInput": 0.07,
+    "output": 1.1
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "deepseek-v3.2",
+   "provider": "deepseek",
+   "source": null,
+   "standard": {
+    "input": 0.28,
+    "cachedInput": 0.028,
+    "output": 0.4
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "deepseek-v4-flash",
+   "provider": "deepseek",
+   "source": "https://api-docs.deepseek.com/quick_start/pricing",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.006,
+    "output": 1.2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "deepseek-v4-pro",
+   "provider": "deepseek",
+   "source": "https://api-docs.deepseek.com/quick_start/pricing",
+   "standard": {
+    "input": 1.32,
+    "cachedInput": 0.044,
+    "output": 3.96
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "grok-4.3",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.2,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.16,
+    "output": 2
+   }
+  },
+  {
+   "name": "grok-4.3-latest",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.2,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.16,
+    "output": 2
+   }
+  },
+  {
+   "name": "grok-4.5",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.3,
+    "output": 6
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "grok-4.5-latest",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.3,
+    "output": 6
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "grok-4.6",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.5,
+    "output": 6
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "grok-4.7",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.5,
+    "output": 6
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "grok-4.20",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.2,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.16,
+    "output": 2
+   }
+  },
+  {
+   "name": "grok-4.20-0309-non-reasoning",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.2,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.16,
+    "output": 2
+   }
+  },
+  {
+   "name": "grok-4.20-0309-reasoning",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.2,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.16,
+    "output": 2
+   }
+  },
+  {
+   "name": "grok-4.20-non-reasoning",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.2,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.16,
+    "output": 2
+   }
+  },
+  {
+   "name": "grok-4.20-non-reasoning-latest",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.2,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.16,
+    "output": 2
+   }
+  },
+  {
+   "name": "grok-4.20-reasoning",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.2,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.16,
+    "output": 2
+   }
+  },
+  {
+   "name": "grok-4.20-reasoning-latest",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1.25,
+    "cachedInput": 0.2,
+    "output": 2.5
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.16,
+    "output": 2
+   }
+  },
+  {
+   "name": "grok-build-0.1",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1,
+    "cachedInput": 0.2,
+    "output": 2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "grok-build-latest",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.3,
+    "output": 6
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "grok-code-fast",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1,
+    "cachedInput": 0.2,
+    "output": 2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
+   "name": "grok-code-fast-1",
+   "provider": "xai",
+   "source": "https://api.x.ai/v1/language-models",
+   "standard": {
+    "input": 1,
+    "cachedInput": 0.2,
+    "output": 2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  }
+ ]
+}
