@@ -3,205 +3,980 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLM API Cost Calculator – OpenAI, Claude, Gemini &amp; Grok pricing | apicost.app</title>
     <meta
       name="description"
-      content="Calculate LLM API costs for OpenAI, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models from real text. Prices are updated daily. Switch between standard and batch pricing, include cached-input rates, and apply a multiplier."
+      content="Free LLM API cost calculator. Paste a prompt and see what it costs on GPT, Claude, Gemini, Mistral, DeepSeek and Grok. Compare token prices side by side, with batch and cached-input rates. Prices updated daily."
     />
-    <title>LLM API Cost Calculator</title>
+    <link rel="canonical" href="https://apicost.app/" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://apicost.app/" />
+    <meta property="og:site_name" content="apicost.app" />
+    <meta property="og:title" content="LLM API Cost Calculator – compare GPT, Claude, Gemini and Grok prices" />
+    <meta property="og:description" content="Paste a prompt, pick a model, see the cost. Token prices for OpenAI, Anthropic, Google, Mistral, DeepSeek and xAI, updated daily." />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="LLM API Cost Calculator – apicost.app" />
+    <meta name="twitter:description" content="Compare API token prices for GPT, Claude, Gemini, Mistral, DeepSeek and Grok. Updated daily." />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-    <link href="preflight.min.css" rel="stylesheet" />
-    <link href="utilities.min.css" rel="stylesheet" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "LLM API Cost Calculator",
+            "url": "https://apicost.app/",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "isAccessibleForFree": true,
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+            "description": "Calculate and compare API costs for OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models from real text, with batch and cached-input pricing."
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How is the API cost calculated?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Cost = input tokens × input price + output tokens × output price. Prices are per 1 million tokens, in US dollars. Multiply by the number of requests to get the total." }
+              },
+              {
+                "@type": "Question",
+                "name": "How often are the prices updated?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Every day. Prices come from the open LiteLLM price list, which links each provider's official pricing page." }
+              },
+              {
+                "@type": "Question",
+                "name": "What is batch pricing?",
+                "acceptedAnswer": { "@type": "Answer", "text": "OpenAI, Anthropic and Google offer a batch API: you send requests that are processed within 24 hours, at about half the normal price." }
+              },
+              {
+                "@type": "Question",
+                "name": "What is cached input?",
+                "acceptedAnswer": { "@type": "Answer", "text": "When the start of a prompt repeats across requests, providers can cache it and charge a much lower rate for those input tokens, often 10% of the normal input price." }
+              },
+              {
+                "@type": "Question",
+                "name": "Are the token counts exact?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Token counts are estimated in your browser with an OpenAI tokenizer. Other providers count tokens differently, so treat those as close estimates. You can also type a token count yourself." }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+    <style>
+      :root {
+        --bg: #f6f7f9;
+        --surface: #ffffff;
+        --surface-2: #f1f3f6;
+        --border: #e2e5ea;
+        --text: #14171c;
+        --muted: #5d6573;
+        --accent: #0b7a52;
+        --accent-strong: #08643f;
+        --accent-soft: #e3f4ec;
+        --focus: #2f6fed;
+        --shadow: 0 1px 2px rgba(20, 23, 28, 0.04), 0 8px 24px rgba(20, 23, 28, 0.06);
+        --radius: 14px;
+        color-scheme: light;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1115;
+          --surface: #171a20;
+          --surface-2: #1f232b;
+          --border: #2b3039;
+          --text: #eceff3;
+          --muted: #9aa3b2;
+          --accent: #3fd39a;
+          --accent-strong: #6be3b4;
+          --accent-soft: #143428;
+          --focus: #7aa7ff;
+          --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+          color-scheme: dark;
+        }
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      }
+      a { color: var(--accent); }
+      a:hover { color: var(--accent-strong); }
+      :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+      .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+      .num { font-variant-numeric: tabular-nums; }
+      .muted { color: var(--muted); }
+      .small { font-size: 0.85rem; }
+      .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+      kbd { font: inherit; font-size: 0.78rem; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; background: var(--surface); }
+
+      /* Header */
+      .site-header { border-bottom: 1px solid var(--border); background: var(--surface); }
+      .site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 16px; }
+      .brand { font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
+      .nav { display: flex; gap: 18px; font-size: 0.92rem; }
+      .nav a { color: var(--muted); text-decoration: none; }
+      .nav a:hover { color: var(--text); }
+
+      /* Hero */
+      .hero { padding: 40px 0 24px; }
+      .hero h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 10px; }
+      .hero p { margin: 0; max-width: 680px; color: var(--muted); font-size: 1.05rem; }
+      .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 3px 10px; margin-bottom: 14px; font-weight: 600; }
+
+      /* Cards and layout */
+      .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+      .calc { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; scroll-margin-top: 16px; }
+      .calc-main { padding: 22px; }
+      .field { margin-bottom: 22px; }
+      .field:last-child { margin-bottom: 0; }
+      .label { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-weight: 600; font-size: 0.92rem; margin-bottom: 8px; }
+      .label .hint { font-weight: 400; color: var(--muted); font-size: 0.82rem; }
+      textarea, input[type="number"], input[type="search"] {
+        width: 100%;
+        font: inherit;
+        color: var(--text);
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+      }
+      textarea { resize: vertical; min-height: 96px; }
+      textarea:focus, input:focus { border-color: var(--focus); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 25%, transparent); }
+      .tokens-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 0.88rem; color: var(--muted); }
+      .tokens-row input { width: 140px; padding: 6px 10px; }
+      .row { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+
+      /* Segmented control and toggle */
+      .segmented { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 3px; }
+      .segmented label { position: relative; }
+      .segmented input { position: absolute; opacity: 0; inset: 0; cursor: pointer; margin: 0; }
+      .segmented span { display: block; padding: 6px 14px; border-radius: 7px; font-size: 0.9rem; color: var(--muted); cursor: pointer; }
+      .segmented input:checked + span { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
+      .segmented input:focus-visible + span { outline: 2px solid var(--focus); }
+      .switch { display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; }
+      .switch input { width: 18px; height: 18px; accent-color: var(--accent); }
+      .info { font-size: 0.8rem; color: var(--muted); margin: 8px 0 0; }
+
+      /* Model picker */
+      .picker { position: relative; }
+      .picker-button {
+        width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer;
+        font: inherit; color: var(--text); background: var(--surface-2);
+        border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px;
+      }
+      .picker-button:hover { border-color: color-mix(in srgb, var(--text) 25%, var(--border)); }
+      .picker-button .name { font-weight: 600; }
+      .picker-button .meta { margin-left: auto; color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+      .picker-button .chev { color: var(--muted); }
+      .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; background: var(--p, var(--muted)); }
+      .popover {
+        position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; right: 0;
+        background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .popover[hidden] { display: none; }
+      .popover-search { padding: 10px; border-bottom: 1px solid var(--border); }
+      .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+      .chip {
+        display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 0.8rem; cursor: pointer;
+        color: var(--muted); background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px;
+      }
+      .chip[aria-pressed="true"] { color: var(--text); border-color: var(--text); }
+      .chip .dot { width: 8px; height: 8px; }
+      .listbox { max-height: 340px; overflow-y: auto; margin: 0; padding: 6px; list-style: none; }
+      .group-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 10px 8px 4px; }
+      .option { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 8px; cursor: pointer; font-size: 0.92rem; }
+      .option .price { margin-left: auto; color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+      .option[aria-selected="true"] { font-weight: 600; }
+      .option.active { background: var(--surface-2); }
+      .option mark { background: none; color: var(--accent); font-weight: 700; }
+      .empty { padding: 16px; color: var(--muted); font-size: 0.9rem; }
+
+      /* Result panel */
+      .result { position: sticky; top: 16px; padding: 22px; }
+      .result .model-line { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+      .total { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.02em; margin: 6px 0 2px; color: var(--accent); word-break: break-all; }
+      .breakdown { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.9rem; }
+      .breakdown td { padding: 7px 0; border-top: 1px solid var(--border); }
+      .breakdown td:last-child { text-align: right; }
+      .result-actions { display: flex; gap: 8px; margin-top: 18px; }
+      .btn {
+        font: inherit; font-size: 0.88rem; cursor: pointer; border-radius: 9px; padding: 8px 12px; text-decoration: none;
+        border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+      }
+      .btn:hover { border-color: var(--text); color: var(--text); }
+      .note { margin: 14px 0 0; font-size: 0.8rem; color: var(--muted); }
+
+      /* Comparison table */
+      section { padding: 44px 0 0; scroll-margin-top: 8px; }
+      h2 { font-size: 1.5rem; letter-spacing: -0.01em; margin: 0 0 6px; }
+      .section-intro { color: var(--muted); margin: 0 0 16px; }
+      .table-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+      .table-tools input { max-width: 280px; }
+      .table-wrap { overflow-x: auto; }
+      table.prices { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+      .prices th, .prices td { padding: 10px 14px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border); }
+      .prices th:first-child, .prices td:first-child, .prices th:nth-child(2), .prices td:nth-child(2) { text-align: left; }
+      .prices th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 600; }
+      .prices th button { all: unset; cursor: pointer; }
+      .prices th button:focus-visible { outline: 2px solid var(--focus); }
+      .prices th[aria-sort] { color: var(--text); }
+      .prices th[aria-sort="ascending"] button::after { content: " ↑"; }
+      .prices th[aria-sort="descending"] button::after { content: " ↓"; }
+      .prices tbody tr { cursor: pointer; }
+      .prices tbody tr:hover { background: var(--surface-2); }
+      .prices tbody tr.selected { background: var(--accent-soft); }
+      .prices .cost { font-weight: 600; }
+      .provider-cell { display: inline-flex; align-items: center; gap: 8px; }
+
+      /* FAQ and footer */
+      .faq details { border-bottom: 1px solid var(--border); padding: 14px 0; }
+      .faq summary { cursor: pointer; font-weight: 600; }
+      .faq p { margin: 8px 0 0; color: var(--muted); }
+      footer { margin-top: 56px; padding: 28px 0 40px; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--muted); }
+      footer p { margin: 0 0 8px; max-width: 760px; }
+
+      @media (max-width: 860px) {
+        .calc { grid-template-columns: minmax(0, 1fr); }
+        .result { position: static; }
+        .nav a.hide-sm { display: none; }
+        .nav { gap: 14px; }
+      }
+      @media (max-width: 520px) {
+        .calc-main, .result { padding: 16px; }
+        .picker-button .meta { display: none; }
+        .total { font-size: 2rem; }
+        .label .hint { display: none; }
+        .nav a[href="#calculator"] { display: none; }
+      }
+    </style>
   </head>
-  <body class="bg-zinc-900 text-gray-900 leading-relaxed">
-    <header class="p-4 bg-gray-100 mt-12">
-      <h1 class="text-3xl font-bold text-center">LLM API Cost Calculator</h1>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">💸 apicost.app</a>
+        <nav class="nav" aria-label="Main">
+          <a href="#calculator">Calculator</a>
+          <a href="#prices">Compare prices</a>
+          <a href="#faq" class="hide-sm">FAQ</a>
+          <a href="https://github.com/zimonh/model-costs" class="hide-sm">GitHub</a>
+        </nav>
+      </div>
     </header>
 
-    <main class="p-4">
-      <div class="inline-block w-full grid text-center">
-        <div style="max-width: 40rem;" class="w-full place-self-center p-12 inline-block">
-          <div class="text-left">
-            <p class="text-xs mb-1">
-              Secure, in-browser, Ad-Free, and
-              <a href="https://github.com/zimonh/model-costs" class="underline text-blue-600">Open Source</a>
-              using OpenAI's Tokenizer. Compute API costs for OpenAI, Anthropic, Google Gemini, Mistral, DeepSeek and xAI models.
-              <span id="prices-updated"></span>
-            </p>
+    <main class="wrap">
+      <div class="hero">
+        <div class="badge"><span aria-hidden="true">●</span> <span id="updated-badge">Prices updated daily</span></div>
+        <h1>LLM API Cost Calculator</h1>
+        <p>
+          Paste a prompt, pick a model and see what it costs. Compare API token prices for OpenAI GPT, Anthropic Claude,
+          Google Gemini, Mistral, DeepSeek and xAI Grok. Runs in your browser, no sign-up, no ads.
+        </p>
+      </div>
 
-            <label for="menu-container" class="block pt-6 text-gray-700 text-sm font-bold mt-12 mb-2">Choose Model</label>
-            <div id="menu-container" aria-live="polite"></div>
-            <p id="model-info" class="text-xs mt-2 mb-6"></p>
-              <label for="multiplier" class="block text-gray-700 text-sm font-bold mb-2">Settings: </label>
-              <label class="inline-flex items-center pr-6">
-                <input type="radio" name="pricingContext" value="textTokens" checked class="form-radio text-blue-600" aria-label="Standard Pricing" />
-                <span class="ml-2">Standard</span>
-              </label>
-              <label class="inline-flex items-center pr-6">
-                <input type="radio" name="pricingContext" value="batchApi" class="form-radio text-blue-600" aria-label="Batch API Pricing" />
-                <span class="mx-2">Batch</span>
-                <a href="https://platform.openai.com/docs/guides/batch"> more info</a>
-              </label>
-              <label class="inline-flex items-center">
-                <input type="checkbox" id="toggle-cached" class="form-checkbox text-blue-600" aria-label="Use Cached Input Price" />
-                <span class="mx-2">Cached Input</span> <a href="https://platform.openai.com/docs/guides/prompt-caching#what-can-be-cached"> more info</a>
-              </label>
-              <label for="input-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2">Add Your Input Prompt</label>
-            <textarea
-              id="input-textarea"
-              class="rounded p-3 w-full"
-              rows="3"
-              placeholder="Enter your prompt here..."
-              aria-describedby="input-help"
-            ></textarea>
-            <div id="output-container-input" class="ml-auto mt-3 p-2 pl-4 pb-3 shadow" style="background-color: #dfdfdf; color: #404040; max-width: 220px;" aria-live="polite"></div>
-
-            <label for="output-textarea" class="block pt-6 text-gray-700 text-sm font-bold mb-2">Add Model Response</label>
-            <textarea
-              id="output-textarea"
-              class="rounded p-3 w-full"
-              rows="3"
-              placeholder="Enter the API response here..."
-              aria-describedby="output-help"
-            ></textarea>
-            <div id="output-container-output" class="ml-auto mt-3 mb-6 p-2 pl-4 pb-3 shadow" style="background-color: #dfdfdf; color: #404040; max-width: 220px;" aria-live="polite"></div>
-
-            <!-- Multiplier Input -->
-            <div class="mb-6">
-              <label for="multiplier" class="block text-gray-700 text-sm font-bold mb-2">Multiplier <span class="text-xs text-gray-500">(when you are running the same thing multiple times)</span></label>
-              <input
-                type="number"
-                id="multiplier"
-                value="1"
-                step="0.1"
-                min="1"
-                class="rounded p-4 w-full"
-                aria-label="Batch multiplier, default value is 1"
-              />
+      <div class="calc" id="calculator">
+        <div class="card calc-main">
+          <div class="field">
+            <div class="label">
+              <span id="model-label">Model</span>
+              <span class="hint">Press <kbd>/</kbd> to search</span>
             </div>
+            <div class="picker" id="picker">
+              <button type="button" class="picker-button" id="picker-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="model-label picker-name">
+                <span class="dot" id="picker-dot" aria-hidden="true"></span>
+                <span class="name" id="picker-name">Loading models…</span>
+                <span class="meta num" id="picker-meta"></span>
+                <span class="chev" aria-hidden="true">▾</span>
+              </button>
+              <div class="popover" id="popover" hidden>
+                <div class="popover-search">
+                  <label for="model-search" class="visually-hidden">Search models</label>
+                  <input
+                    type="search"
+                    id="model-search"
+                    placeholder="Search models, e.g. sonnet, gpt-5, flash…"
+                    autocomplete="off"
+                    role="combobox"
+                    aria-expanded="true"
+                    aria-controls="model-list"
+                    aria-autocomplete="list"
+                  />
+                  <div class="chips" id="picker-chips" role="group" aria-label="Filter by provider"></div>
+                </div>
+                <ul class="listbox" id="model-list" role="listbox" aria-label="Models"></ul>
+              </div>
+            </div>
+            <p class="info" id="model-info"></p>
+          </div>
 
-            <button
-              class="mt-6 bg-black hover:bg-white hover:text-black text-white font-bold py-2 px-4 rounded"
-              onclick="calculateTotalPrice()"
-              aria-label="Calculate Price"
-            >
-              Calculate Price
-            </button>
-            <div id="output-container-total" class="mt-6 text-4xl" aria-live="polite"></div>
+          <div class="field row">
+            <div class="segmented" role="radiogroup" aria-label="Pricing">
+              <label><input type="radio" name="pricing" value="standard" checked /><span>Standard</span></label>
+              <label><input type="radio" name="pricing" value="batch" /><span>Batch</span></label>
+            </div>
+            <label class="switch"><input type="checkbox" id="cached" /> Cached input</label>
+          </div>
 
-            <p class="text-xs text-grey-dark m-3">Disclaimer: The cost calculator provided on this platform is intended for general informational purposes only. While we have made every effort to ensure the accuracy and reliability of the calculations, we cannot guarantee its absolute correctness or completeness.
+          <div class="field">
+            <label class="label" for="input-text">Prompt <span class="hint">Paste your input</span></label>
+            <textarea id="input-text" rows="4" placeholder="Paste your prompt, system prompt and context here…"></textarea>
+            <div class="tokens-row">
+              <label for="input-tokens">Input tokens</label>
+              <input type="number" id="input-tokens" class="num" min="0" step="1" value="1000" inputmode="numeric" />
+            </div>
+          </div>
 
-Users are advised to exercise caution and verify the results obtained from the cost calculator by conducting their own independent calculations or seeking professional advice. We do not assume any responsibility or liability for any errors, inaccuracies, or omissions that may arise from the use of this tool.</p>
+          <div class="field">
+            <label class="label" for="output-text">Response <span class="hint">Paste an example answer</span></label>
+            <textarea id="output-text" rows="4" placeholder="Paste a typical model response here…"></textarea>
+            <div class="tokens-row">
+              <label for="output-tokens">Output tokens</label>
+              <input type="number" id="output-tokens" class="num" min="0" step="1" value="500" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="requests">Number of requests <span class="hint">e.g. 1000 for a daily job</span></label>
+            <input type="number" id="requests" class="num" min="1" step="1" value="1" inputmode="numeric" style="max-width: 200px" />
           </div>
         </div>
+
+        <aside class="card result" aria-live="polite" aria-label="Cost">
+          <div class="model-line"><span class="dot" id="result-dot" aria-hidden="true"></span><span id="result-model">–</span></div>
+          <div class="total num" id="total">$0</div>
+          <div class="muted small" id="total-sub">total cost</div>
+          <table class="breakdown num">
+            <tbody>
+              <tr><td>Input</td><td id="input-cost">–</td></tr>
+              <tr><td>Output</td><td id="output-cost">–</td></tr>
+              <tr><td>Per request</td><td id="per-request">–</td></tr>
+              <tr><td>Input price / 1M</td><td id="input-rate">–</td></tr>
+              <tr><td>Output price / 1M</td><td id="output-rate">–</td></tr>
+            </tbody>
+          </table>
+          <div class="result-actions">
+            <button type="button" class="btn" id="copy-link">Copy link</button>
+            <a class="btn" href="#prices">Compare all</a>
+          </div>
+          <p class="note" id="result-note"></p>
+        </aside>
       </div>
+
+      <section id="prices" aria-labelledby="prices-title">
+        <h2 id="prices-title">Compare LLM API prices</h2>
+        <p class="section-intro">
+          Prices per 1 million tokens in US dollars. The last column shows the cost of your prompt on each model. Click a row to use that model.
+        </p>
+        <div class="table-tools">
+          <label for="table-search" class="visually-hidden">Filter models</label>
+          <input type="search" id="table-search" placeholder="Filter models…" autocomplete="off" />
+          <div class="chips" id="table-chips" role="group" aria-label="Filter by provider" style="margin: 0"></div>
+        </div>
+        <div class="card table-wrap">
+          <table class="prices num">
+            <thead>
+              <tr>
+                <th scope="col" data-sort="name"><button type="button">Model</button></th>
+                <th scope="col" data-sort="provider"><button type="button">Provider</button></th>
+                <th scope="col" data-sort="input"><button type="button">Input</button></th>
+                <th scope="col" data-sort="cached"><button type="button">Cached input</button></th>
+                <th scope="col" data-sort="output"><button type="button">Output</button></th>
+                <th scope="col" data-sort="cost" aria-sort="ascending"><button type="button">Your cost</button></th>
+              </tr>
+            </thead>
+            <tbody id="price-rows">
+<!-- prices:start -->
+<tr data-name="chat-latest"><td><strong>chat-latest</strong></td><td>OpenAI</td><td>$5</td><td>$0.5</td><td>$30</td><td class="cost">$0.02</td></tr>
+<tr data-name="gpt-3.5-turbo"><td><strong>gpt-3.5-turbo</strong></td><td>OpenAI</td><td>$0.5</td><td>–</td><td>$1.5</td><td class="cost">$0.00125</td></tr>
+<tr data-name="gpt-3.5-turbo-16k"><td><strong>gpt-3.5-turbo-16k</strong></td><td>OpenAI</td><td>$3</td><td>–</td><td>$4</td><td class="cost">$0.005</td></tr>
+<tr data-name="gpt-4"><td><strong>gpt-4</strong></td><td>OpenAI</td><td>$30</td><td>–</td><td>$60</td><td class="cost">$0.06</td></tr>
+<tr data-name="gpt-4-1106-preview"><td><strong>gpt-4-1106-preview</strong></td><td>OpenAI</td><td>$10</td><td>–</td><td>$30</td><td class="cost">$0.025</td></tr>
+<tr data-name="gpt-4-turbo"><td><strong>gpt-4-turbo</strong></td><td>OpenAI</td><td>$10</td><td>–</td><td>$30</td><td class="cost">$0.025</td></tr>
+<tr data-name="gpt-4.1"><td><strong>gpt-4.1</strong></td><td>OpenAI</td><td>$2</td><td>$0.5</td><td>$8</td><td class="cost">$0.006</td></tr>
+<tr data-name="gpt-4.1-mini"><td><strong>gpt-4.1-mini</strong></td><td>OpenAI</td><td>$0.4</td><td>$0.1</td><td>$1.6</td><td class="cost">$0.0012</td></tr>
+<tr data-name="gpt-4.1-nano"><td><strong>gpt-4.1-nano</strong></td><td>OpenAI</td><td>$0.1</td><td>$0.025</td><td>$0.4</td><td class="cost">$0.0003</td></tr>
+<tr data-name="gpt-4o"><td><strong>gpt-4o</strong></td><td>OpenAI</td><td>$2.5</td><td>$1.25</td><td>$10</td><td class="cost">$0.0075</td></tr>
+<tr data-name="gpt-4o-mini"><td><strong>gpt-4o-mini</strong></td><td>OpenAI</td><td>$0.15</td><td>$0.075</td><td>$0.6</td><td class="cost">$0.00045</td></tr>
+<tr data-name="gpt-5"><td><strong>gpt-5</strong></td><td>OpenAI</td><td>$1.25</td><td>$0.125</td><td>$10</td><td class="cost">$0.00625</td></tr>
+<tr data-name="gpt-5-mini"><td><strong>gpt-5-mini</strong></td><td>OpenAI</td><td>$0.25</td><td>$0.025</td><td>$2</td><td class="cost">$0.00125</td></tr>
+<tr data-name="gpt-5-nano"><td><strong>gpt-5-nano</strong></td><td>OpenAI</td><td>$0.05</td><td>$0.005</td><td>$0.4</td><td class="cost">$0.00025</td></tr>
+<tr data-name="gpt-5.1"><td><strong>gpt-5.1</strong></td><td>OpenAI</td><td>$1.25</td><td>$0.125</td><td>$10</td><td class="cost">$0.00625</td></tr>
+<tr data-name="gpt-5.2"><td><strong>gpt-5.2</strong></td><td>OpenAI</td><td>$1.75</td><td>$0.175</td><td>$14</td><td class="cost">$0.00875</td></tr>
+<tr data-name="gpt-5.4"><td><strong>gpt-5.4</strong></td><td>OpenAI</td><td>$2.5</td><td>$0.25</td><td>$15</td><td class="cost">$0.01</td></tr>
+<tr data-name="gpt-5.4-mini"><td><strong>gpt-5.4-mini</strong></td><td>OpenAI</td><td>$0.75</td><td>$0.075</td><td>$4.5</td><td class="cost">$0.003</td></tr>
+<tr data-name="gpt-5.4-nano"><td><strong>gpt-5.4-nano</strong></td><td>OpenAI</td><td>$0.2</td><td>$0.02</td><td>$1.25</td><td class="cost">$0.000825</td></tr>
+<tr data-name="gpt-5.5"><td><strong>gpt-5.5</strong></td><td>OpenAI</td><td>$5</td><td>$0.5</td><td>$30</td><td class="cost">$0.02</td></tr>
+<tr data-name="gpt-5.6"><td><strong>gpt-5.6</strong></td><td>OpenAI</td><td>$4</td><td>$0.4</td><td>$20</td><td class="cost">$0.014</td></tr>
+<tr data-name="gpt-5.6-luna"><td><strong>gpt-5.6-luna</strong></td><td>OpenAI</td><td>$0.2</td><td>$0.02</td><td>$1.2</td><td class="cost">$0.0008</td></tr>
+<tr data-name="gpt-5.6-sol"><td><strong>gpt-5.6-sol</strong></td><td>OpenAI</td><td>$4</td><td>$0.4</td><td>$20</td><td class="cost">$0.014</td></tr>
+<tr data-name="gpt-5.6-terra"><td><strong>gpt-5.6-terra</strong></td><td>OpenAI</td><td>$2</td><td>$0.2</td><td>$12</td><td class="cost">$0.008</td></tr>
+<tr data-name="gpt-6-astra"><td><strong>gpt-6-astra</strong></td><td>OpenAI</td><td>$10</td><td>$1</td><td>$50</td><td class="cost">$0.035</td></tr>
+<tr data-name="gpt-6-luna"><td><strong>gpt-6-luna</strong></td><td>OpenAI</td><td>$0.1</td><td>$0.01</td><td>$0.5</td><td class="cost">$0.00035</td></tr>
+<tr data-name="gpt-6-sol"><td><strong>gpt-6-sol</strong></td><td>OpenAI</td><td>$2</td><td>$0.2</td><td>$10</td><td class="cost">$0.007</td></tr>
+<tr data-name="gpt-6.1-sol"><td><strong>gpt-6.1-sol</strong></td><td>OpenAI</td><td>$2</td><td>$0.1</td><td>$10</td><td class="cost">$0.007</td></tr>
+<tr data-name="o1"><td><strong>o1</strong></td><td>OpenAI</td><td>$15</td><td>$7.5</td><td>$60</td><td class="cost">$0.045</td></tr>
+<tr data-name="o3"><td><strong>o3</strong></td><td>OpenAI</td><td>$2</td><td>$0.5</td><td>$8</td><td class="cost">$0.006</td></tr>
+<tr data-name="o3-mini"><td><strong>o3-mini</strong></td><td>OpenAI</td><td>$1.1</td><td>$0.55</td><td>$4.4</td><td class="cost">$0.0033</td></tr>
+<tr data-name="o4-mini"><td><strong>o4-mini</strong></td><td>OpenAI</td><td>$1.1</td><td>$0.275</td><td>$4.4</td><td class="cost">$0.0033</td></tr>
+<tr data-name="claude-fable-5"><td><strong>claude-fable-5</strong></td><td>Anthropic</td><td>$10</td><td>$1</td><td>$50</td><td class="cost">$0.035</td></tr>
+<tr data-name="claude-fable-5-1"><td><strong>claude-fable-5-1</strong></td><td>Anthropic</td><td>$10</td><td>$0.25</td><td>$50</td><td class="cost">$0.035</td></tr>
+<tr data-name="claude-haiku-4-5"><td><strong>claude-haiku-4-5</strong></td><td>Anthropic</td><td>$1</td><td>$0.1</td><td>$5</td><td class="cost">$0.0035</td></tr>
+<tr data-name="claude-haiku-5-5"><td><strong>claude-haiku-5-5</strong></td><td>Anthropic</td><td>$0.1</td><td>$0.01</td><td>$0.5</td><td class="cost">$0.00035</td></tr>
+<tr data-name="claude-mythos-5"><td><strong>claude-mythos-5</strong></td><td>Anthropic</td><td>$10</td><td>$1</td><td>$50</td><td class="cost">$0.035</td></tr>
+<tr data-name="claude-mythos-5-1"><td><strong>claude-mythos-5-1</strong></td><td>Anthropic</td><td>$10</td><td>$0.25</td><td>$50</td><td class="cost">$0.035</td></tr>
+<tr data-name="claude-opus-4-5"><td><strong>claude-opus-4-5</strong></td><td>Anthropic</td><td>$5</td><td>$0.5</td><td>$25</td><td class="cost">$0.0175</td></tr>
+<tr data-name="claude-opus-4-6"><td><strong>claude-opus-4-6</strong></td><td>Anthropic</td><td>$5</td><td>$0.5</td><td>$25</td><td class="cost">$0.0175</td></tr>
+<tr data-name="claude-opus-4-7"><td><strong>claude-opus-4-7</strong></td><td>Anthropic</td><td>$5</td><td>$0.5</td><td>$25</td><td class="cost">$0.0175</td></tr>
+<tr data-name="claude-opus-4-8"><td><strong>claude-opus-4-8</strong></td><td>Anthropic</td><td>$5</td><td>$0.5</td><td>$25</td><td class="cost">$0.0175</td></tr>
+<tr data-name="claude-opus-5"><td><strong>claude-opus-5</strong></td><td>Anthropic</td><td>$5</td><td>$0.5</td><td>$25</td><td class="cost">$0.0175</td></tr>
+<tr data-name="claude-opus-5-5"><td><strong>claude-opus-5-5</strong></td><td>Anthropic</td><td>$4</td><td>$0.2</td><td>$20</td><td class="cost">$0.014</td></tr>
+<tr data-name="claude-sonnet-4-5"><td><strong>claude-sonnet-4-5</strong></td><td>Anthropic</td><td>$3</td><td>$0.3</td><td>$15</td><td class="cost">$0.0105</td></tr>
+<tr data-name="claude-sonnet-4-6"><td><strong>claude-sonnet-4-6</strong></td><td>Anthropic</td><td>$3</td><td>$0.3</td><td>$15</td><td class="cost">$0.0105</td></tr>
+<tr data-name="claude-sonnet-5"><td><strong>claude-sonnet-5</strong></td><td>Anthropic</td><td>$2</td><td>$0.2</td><td>$10</td><td class="cost">$0.007</td></tr>
+<tr data-name="claude-sonnet-5-5"><td><strong>claude-sonnet-5-5</strong></td><td>Anthropic</td><td>$2</td><td>$0.1</td><td>$10</td><td class="cost">$0.007</td></tr>
+<tr data-name="gemini-2.5-flash"><td><strong>gemini-2.5-flash</strong></td><td>Google Gemini</td><td>$0.3</td><td>$0.03</td><td>$2.5</td><td class="cost">$0.00155</td></tr>
+<tr data-name="gemini-2.5-flash-lite"><td><strong>gemini-2.5-flash-lite</strong></td><td>Google Gemini</td><td>$0.1</td><td>$0.01</td><td>$0.4</td><td class="cost">$0.0003</td></tr>
+<tr data-name="gemini-2.5-pro"><td><strong>gemini-2.5-pro</strong></td><td>Google Gemini</td><td>$1.25</td><td>$0.125</td><td>$10</td><td class="cost">$0.00625</td></tr>
+<tr data-name="gemini-3-flash-preview"><td><strong>gemini-3-flash-preview</strong></td><td>Google Gemini</td><td>$0.5</td><td>$0.05</td><td>$3</td><td class="cost">$0.002</td></tr>
+<tr data-name="gemini-3.1-flash-lite"><td><strong>gemini-3.1-flash-lite</strong></td><td>Google Gemini</td><td>$0.25</td><td>$0.025</td><td>$1.5</td><td class="cost">$0.001</td></tr>
+<tr data-name="gemini-3.1-pro-preview"><td><strong>gemini-3.1-pro-preview</strong></td><td>Google Gemini</td><td>$2</td><td>$0.2</td><td>$12</td><td class="cost">$0.008</td></tr>
+<tr data-name="gemini-3.5-flash"><td><strong>gemini-3.5-flash</strong></td><td>Google Gemini</td><td>$1.5</td><td>$0.15</td><td>$9</td><td class="cost">$0.006</td></tr>
+<tr data-name="gemini-3.5-flash-lite"><td><strong>gemini-3.5-flash-lite</strong></td><td>Google Gemini</td><td>$0.3</td><td>$0.03</td><td>$2.5</td><td class="cost">$0.00155</td></tr>
+<tr data-name="gemini-3.6-flash"><td><strong>gemini-3.6-flash</strong></td><td>Google Gemini</td><td>$0.75</td><td>$0.075</td><td>$3.75</td><td class="cost">$0.00263</td></tr>
+<tr data-name="gemini-3.7-flash"><td><strong>gemini-3.7-flash</strong></td><td>Google Gemini</td><td>$0.75</td><td>$0.075</td><td>$3.75</td><td class="cost">$0.00263</td></tr>
+<tr data-name="gemini-3.8-flash"><td><strong>gemini-3.8-flash</strong></td><td>Google Gemini</td><td>$0.75</td><td>$0.075</td><td>$3.75</td><td class="cost">$0.00263</td></tr>
+<tr data-name="gemini-4-argon"><td><strong>gemini-4-argon</strong></td><td>Google Gemini</td><td>$2</td><td>$0.1</td><td>$10</td><td class="cost">$0.007</td></tr>
+<tr data-name="gemini-flash-latest"><td><strong>gemini-flash-latest</strong></td><td>Google Gemini</td><td>$0.75</td><td>$0.075</td><td>$3.75</td><td class="cost">$0.00263</td></tr>
+<tr data-name="gemini-flash-lite-latest"><td><strong>gemini-flash-lite-latest</strong></td><td>Google Gemini</td><td>$0.3</td><td>$0.03</td><td>$2.5</td><td class="cost">$0.00155</td></tr>
+<tr data-name="gemini-omni-1.1-flash"><td><strong>gemini-omni-1.1-flash</strong></td><td>Google Gemini</td><td>$1.5</td><td>–</td><td>$9</td><td class="cost">$0.006</td></tr>
+<tr data-name="gemini-omni-flash-preview"><td><strong>gemini-omni-flash-preview</strong></td><td>Google Gemini</td><td>$1.5</td><td>–</td><td>$9</td><td class="cost">$0.006</td></tr>
+<tr data-name="gemini-pro-latest"><td><strong>gemini-pro-latest</strong></td><td>Google Gemini</td><td>$2</td><td>$0.2</td><td>$12</td><td class="cost">$0.008</td></tr>
+<tr data-name="codestral-2508"><td><strong>codestral-2508</strong></td><td>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.9</td><td class="cost">$0.00075</td></tr>
+<tr data-name="codestral-latest"><td><strong>codestral-latest</strong></td><td>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.9</td><td class="cost">$0.00075</td></tr>
+<tr data-name="codestral-mamba-latest"><td><strong>codestral-mamba-latest</strong></td><td>Mistral</td><td>$0.25</td><td>$0.025</td><td>$0.25</td><td class="cost">$0.000375</td></tr>
+<tr data-name="devstral-latest"><td><strong>devstral-latest</strong></td><td>Mistral</td><td>$0.4</td><td>$0.04</td><td>$2</td><td class="cost">$0.0014</td></tr>
+<tr data-name="devstral-medium-latest"><td><strong>devstral-medium-latest</strong></td><td>Mistral</td><td>$0.4</td><td>$0.04</td><td>$2</td><td class="cost">$0.0014</td></tr>
+<tr data-name="devstral-small-latest"><td><strong>devstral-small-latest</strong></td><td>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.3</td><td class="cost">$0.00025</td></tr>
+<tr data-name="labs-leanstral-1-5-1"><td><strong>labs-leanstral-1-5-1</strong></td><td>Mistral</td><td>$0</td><td>–</td><td>$0</td><td class="cost">$0</td></tr>
+<tr data-name="magistral-medium-latest"><td><strong>magistral-medium-latest</strong></td><td>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td class="cost">$0.00525</td></tr>
+<tr data-name="magistral-small-latest"><td><strong>magistral-small-latest</strong></td><td>Mistral</td><td>$0.15</td><td>$0.015</td><td>$0.6</td><td class="cost">$0.00045</td></tr>
+<tr data-name="ministral-3-3b-2512"><td><strong>ministral-3-3b-2512</strong></td><td>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.1</td><td class="cost">$0.00015</td></tr>
+<tr data-name="ministral-3-8b-2512"><td><strong>ministral-3-8b-2512</strong></td><td>Mistral</td><td>$0.15</td><td>$0.015</td><td>$0.15</td><td class="cost">$0.000225</td></tr>
+<tr data-name="ministral-3-14b-2512"><td><strong>ministral-3-14b-2512</strong></td><td>Mistral</td><td>$0.2</td><td>$0.02</td><td>$0.2</td><td class="cost">$0.0003</td></tr>
+<tr data-name="ministral-3b-2512"><td><strong>ministral-3b-2512</strong></td><td>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.1</td><td class="cost">$0.00015</td></tr>
+<tr data-name="ministral-3b-latest"><td><strong>ministral-3b-latest</strong></td><td>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.1</td><td class="cost">$0.00015</td></tr>
+<tr data-name="ministral-8b-2512"><td><strong>ministral-8b-2512</strong></td><td>Mistral</td><td>$0.15</td><td>$0.015</td><td>$0.15</td><td class="cost">$0.000225</td></tr>
+<tr data-name="ministral-8b-latest"><td><strong>ministral-8b-latest</strong></td><td>Mistral</td><td>$0.15</td><td>$0.015</td><td>$0.15</td><td class="cost">$0.000225</td></tr>
+<tr data-name="ministral-14b-2512"><td><strong>ministral-14b-2512</strong></td><td>Mistral</td><td>$0.2</td><td>$0.02</td><td>$0.2</td><td class="cost">$0.0003</td></tr>
+<tr data-name="ministral-14b-latest"><td><strong>ministral-14b-latest</strong></td><td>Mistral</td><td>$0.2</td><td>$0.02</td><td>$0.2</td><td class="cost">$0.0003</td></tr>
+<tr data-name="mistral-code-agent-latest"><td><strong>mistral-code-agent-latest</strong></td><td>Mistral</td><td>$0.4</td><td>$0.04</td><td>$2</td><td class="cost">$0.0014</td></tr>
+<tr data-name="mistral-code-fim-latest"><td><strong>mistral-code-fim-latest</strong></td><td>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.9</td><td class="cost">$0.00075</td></tr>
+<tr data-name="mistral-code-latest"><td><strong>mistral-code-latest</strong></td><td>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.9</td><td class="cost">$0.00075</td></tr>
+<tr data-name="mistral-large-3"><td><strong>mistral-large-3</strong></td><td>Mistral</td><td>$0.5</td><td>$0.05</td><td>$1.5</td><td class="cost">$0.00125</td></tr>
+<tr data-name="mistral-large-4"><td><strong>mistral-large-4</strong></td><td>Mistral</td><td>$0.68</td><td>$0.068</td><td>$2.09</td><td class="cost">$0.00172</td></tr>
+<tr data-name="mistral-large-4-0"><td><strong>mistral-large-4-0</strong></td><td>Mistral</td><td>$0.68</td><td>$0.068</td><td>$2.09</td><td class="cost">$0.00172</td></tr>
+<tr data-name="mistral-large-2512"><td><strong>mistral-large-2512</strong></td><td>Mistral</td><td>$0.5</td><td>$0.05</td><td>$1.5</td><td class="cost">$0.00125</td></tr>
+<tr data-name="mistral-large-latest"><td><strong>mistral-large-latest</strong></td><td>Mistral</td><td>$0.5</td><td>$0.05</td><td>$1.5</td><td class="cost">$0.00125</td></tr>
+<tr data-name="mistral-medium"><td><strong>mistral-medium</strong></td><td>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td class="cost">$0.00525</td></tr>
+<tr data-name="mistral-medium-3"><td><strong>mistral-medium-3</strong></td><td>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td class="cost">$0.00525</td></tr>
+<tr data-name="mistral-medium-3-5"><td><strong>mistral-medium-3-5</strong></td><td>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td class="cost">$0.00525</td></tr>
+<tr data-name="mistral-medium-3.5"><td><strong>mistral-medium-3.5</strong></td><td>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td class="cost">$0.00525</td></tr>
+<tr data-name="mistral-medium-latest"><td><strong>mistral-medium-latest</strong></td><td>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td class="cost">$0.00525</td></tr>
+<tr data-name="mistral-small"><td><strong>mistral-small</strong></td><td>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.3</td><td class="cost">$0.00025</td></tr>
+<tr data-name="mistral-small-latest"><td><strong>mistral-small-latest</strong></td><td>Mistral</td><td>$0.15</td><td>$0.015</td><td>$0.6</td><td class="cost">$0.00045</td></tr>
+<tr data-name="mistral-tiny"><td><strong>mistral-tiny</strong></td><td>Mistral</td><td>$0.25</td><td>$0.025</td><td>$0.25</td><td class="cost">$0.000375</td></tr>
+<tr data-name="open-mistral-nemo"><td><strong>open-mistral-nemo</strong></td><td>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.3</td><td class="cost">$0.00045</td></tr>
+<tr data-name="pixtral-large-latest"><td><strong>pixtral-large-latest</strong></td><td>Mistral</td><td>$2</td><td>$0.2</td><td>$6</td><td class="cost">$0.005</td></tr>
+<tr data-name="deepseek-coder"><td><strong>deepseek-coder</strong></td><td>DeepSeek</td><td>$0.14</td><td>$0.014</td><td>$0.28</td><td class="cost">$0.00028</td></tr>
+<tr data-name="deepseek-flash"><td><strong>deepseek-flash</strong></td><td>DeepSeek</td><td>$0.3</td><td>$0.006</td><td>$1.2</td><td class="cost">$0.0009</td></tr>
+<tr data-name="deepseek-r1"><td><strong>deepseek-r1</strong></td><td>DeepSeek</td><td>$0.55</td><td>$0.14</td><td>$2.19</td><td class="cost">$0.00164</td></tr>
+<tr data-name="deepseek-v3"><td><strong>deepseek-v3</strong></td><td>DeepSeek</td><td>$0.27</td><td>$0.07</td><td>$1.1</td><td class="cost">$0.00082</td></tr>
+<tr data-name="deepseek-v3.2"><td><strong>deepseek-v3.2</strong></td><td>DeepSeek</td><td>$0.28</td><td>$0.028</td><td>$0.4</td><td class="cost">$0.00048</td></tr>
+<tr data-name="deepseek-v4-flash"><td><strong>deepseek-v4-flash</strong></td><td>DeepSeek</td><td>$0.3</td><td>$0.006</td><td>$1.2</td><td class="cost">$0.0009</td></tr>
+<tr data-name="deepseek-v4-pro"><td><strong>deepseek-v4-pro</strong></td><td>DeepSeek</td><td>$1.32</td><td>$0.044</td><td>$3.96</td><td class="cost">$0.0033</td></tr>
+<tr data-name="grok-4.3"><td><strong>grok-4.3</strong></td><td>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td class="cost">$0.0025</td></tr>
+<tr data-name="grok-4.3-latest"><td><strong>grok-4.3-latest</strong></td><td>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td class="cost">$0.0025</td></tr>
+<tr data-name="grok-4.5"><td><strong>grok-4.5</strong></td><td>xAI</td><td>$2</td><td>$0.3</td><td>$6</td><td class="cost">$0.005</td></tr>
+<tr data-name="grok-4.5-latest"><td><strong>grok-4.5-latest</strong></td><td>xAI</td><td>$2</td><td>$0.3</td><td>$6</td><td class="cost">$0.005</td></tr>
+<tr data-name="grok-4.6"><td><strong>grok-4.6</strong></td><td>xAI</td><td>$2</td><td>$0.5</td><td>$6</td><td class="cost">$0.005</td></tr>
+<tr data-name="grok-4.7"><td><strong>grok-4.7</strong></td><td>xAI</td><td>$2</td><td>$0.5</td><td>$6</td><td class="cost">$0.005</td></tr>
+<tr data-name="grok-4.20"><td><strong>grok-4.20</strong></td><td>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td class="cost">$0.0025</td></tr>
+<tr data-name="grok-4.20-0309-non-reasoning"><td><strong>grok-4.20-0309-non-reasoning</strong></td><td>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td class="cost">$0.0025</td></tr>
+<tr data-name="grok-4.20-0309-reasoning"><td><strong>grok-4.20-0309-reasoning</strong></td><td>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td class="cost">$0.0025</td></tr>
+<tr data-name="grok-4.20-non-reasoning"><td><strong>grok-4.20-non-reasoning</strong></td><td>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td class="cost">$0.0025</td></tr>
+<tr data-name="grok-4.20-non-reasoning-latest"><td><strong>grok-4.20-non-reasoning-latest</strong></td><td>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td class="cost">$0.0025</td></tr>
+<tr data-name="grok-4.20-reasoning"><td><strong>grok-4.20-reasoning</strong></td><td>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td class="cost">$0.0025</td></tr>
+<tr data-name="grok-4.20-reasoning-latest"><td><strong>grok-4.20-reasoning-latest</strong></td><td>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td class="cost">$0.0025</td></tr>
+<tr data-name="grok-build-0.1"><td><strong>grok-build-0.1</strong></td><td>xAI</td><td>$1</td><td>$0.2</td><td>$2</td><td class="cost">$0.002</td></tr>
+<tr data-name="grok-build-latest"><td><strong>grok-build-latest</strong></td><td>xAI</td><td>$2</td><td>$0.3</td><td>$6</td><td class="cost">$0.005</td></tr>
+<tr data-name="grok-code-fast"><td><strong>grok-code-fast</strong></td><td>xAI</td><td>$1</td><td>$0.2</td><td>$2</td><td class="cost">$0.002</td></tr>
+<tr data-name="grok-code-fast-1"><td><strong>grok-code-fast-1</strong></td><td>xAI</td><td>$1</td><td>$0.2</td><td>$2</td><td class="cost">$0.002</td></tr>
+<!-- prices:end -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="faq" class="faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">FAQ</h2>
+        <details open>
+          <summary>How is the API cost calculated?</summary>
+          <p>Cost = input tokens × input price + output tokens × output price. Prices are per 1 million tokens, in US dollars. Multiply by the number of requests to get the total.</p>
+        </details>
+        <details>
+          <summary>How often are the prices updated?</summary>
+          <p>Every day. Prices come from the open <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, which links each provider's official pricing page. Each model links to its source.</p>
+        </details>
+        <details>
+          <summary>What is batch pricing?</summary>
+          <p>OpenAI, Anthropic and Google offer a batch API: you send requests that are processed within 24 hours, at about half the normal price. Models without a batch price show a dash.</p>
+        </details>
+        <details>
+          <summary>What is cached input?</summary>
+          <p>When the start of a prompt repeats across requests, providers can cache it and charge a much lower rate for those tokens, often 10% of the normal input price. Turn on "Cached input" to price the whole prompt at that rate.</p>
+        </details>
+        <details>
+          <summary>Are the token counts exact?</summary>
+          <p>Token counts are estimated in your browser with an OpenAI tokenizer. Claude, Gemini and other models count tokens differently, so treat those as close estimates. You can also type a token count yourself.</p>
+        </details>
+        <details>
+          <summary>Is my text sent anywhere?</summary>
+          <p>No. Everything runs in your browser. The page only downloads the price list.</p>
+        </details>
+      </section>
     </main>
 
-    <footer class="p-4 bg-gray-100 text-center text-xs text-gray-600">
-      &copy; 2026 LLM API Cost Calculator
+    <footer>
+      <div class="wrap">
+        <p id="footer-updated">Prices from the LiteLLM price list, refreshed daily.</p>
+        <p>
+          Disclaimer: this calculator is for general information only. Prices and token counts may differ from what a provider bills,
+          so check the provider's own pricing page before relying on a number.
+        </p>
+        <p>© 2026 apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a></p>
+      </div>
     </footer>
 
-    <script src="browser.min.js"></script>
+    <script src="browser.min.js" defer></script>
     <script>
-      const { encode } = gpt3encoder;
-
       // prices.json is refreshed daily by a GitHub Action. Read the copy on
       // GitHub first so the site picks up new prices without a redeploy.
       const PRICE_URLS = [
         "https://raw.githubusercontent.com/zimonh/model-costs/main/prices.json",
         "prices.json",
       ];
-      const CONTEXTS = { textTokens: "standard", batchApi: "batch" };
+      const PROVIDER_COLORS = {
+        openai: "#10a37f",
+        anthropic: "#d97757",
+        gemini: "#4285f4",
+        mistral: "#fa520f",
+        deepseek: "#4d6bfe",
+        xai: "#8b8f98",
+      };
+      const DEFAULT_MODEL = "gpt-4o";
 
-      const dropdown = document.createElement("select");
-      dropdown.classList.add("bg-gray-50", "text-gray-900", "text-sm", "rounded", "block", "w-full", "p-5");
+      const $ = (id) => document.getElementById(id);
+      const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
-      let models = [];
-      const selectedModel = () => models[dropdown.value];
-      const formatPrice = (n) => n.toFixed(7).replace(/\.?0+$/, "");
+      const state = {
+        data: null,
+        model: null,
+        pricing: "standard",
+        cached: false,
+        inputTokens: 1000,
+        outputTokens: 500,
+        requests: 1,
+        pickerProvider: null,
+        tableProvider: null,
+        sort: { key: "cost", dir: 1 },
+      };
 
-      // Calculate total price for both input and output, applying multiplier.
-      function calculateTotalPrice() {
-        if (!selectedModel()) return;
-        let total = calculatePrice("input") + calculatePrice("output");
-        total *= parseFloat(document.getElementById("multiplier").value) || 1;
+      // ---------- Formatting ----------
 
-        document.getElementById("output-container-total").innerHTML = `Total Price: $${formatPrice(total)}`;
-        renderModelInfo();
+      function usd(n) {
+        if (n == null || Number.isNaN(n)) return "–";
+        if (n === 0) return "$0";
+        if (n >= 100) return "$" + n.toLocaleString("en-US", { maximumFractionDigits: 0 });
+        if (n >= 1) return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        if (n >= 0.01) return "$" + n.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
+        return "$" + Number(n.toPrecision(3)).toString();
+      }
+      const rate = (n) => (n == null ? "–" : "$" + Number(n.toPrecision(4)).toString());
+
+      // ---------- Pricing ----------
+
+      // Prices per 1M tokens for the current pricing mode; null when the mode is not offered.
+      function ratesFor(model) {
+        const p = model[state.pricing];
+        if (p.input == null || p.output == null) return null;
+        const input = state.cached ? p.cachedInput ?? p.input : p.input;
+        return { input, output: p.output, cachedMissing: state.cached && p.cachedInput == null };
       }
 
-      // Calculate price for a given token type ("input" or "output")
-      function calculatePrice(type) {
-        const pricingContext = document.querySelector('input[name="pricingContext"]:checked').value;
-        const prices = selectedModel()[CONTEXTS[pricingContext]];
+      function costFor(model) {
+        const r = ratesFor(model);
+        if (!r) return null;
+        const input = (r.input * state.inputTokens) / 1e6;
+        const output = (r.output * state.outputTokens) / 1e6;
+        return { input, output, perRequest: input + output, total: (input + output) * state.requests, rates: r };
+      }
 
-        let pricePerMillion = prices.output;
-        if (type === "input") {
-          const useCached = document.getElementById("toggle-cached").checked;
-          pricePerMillion = useCached ? prices.cachedInput : prices.input;
+      // ---------- Tokens ----------
+
+      function countTokens(text) {
+        if (!text) return 0;
+        if (window.gpt3encoder) return gpt3encoder.encode(text).length;
+        return Math.ceil(text.length / 4); // rough estimate until the tokenizer has loaded
+      }
+
+      function syncTokensFromText() {
+        for (const kind of ["input", "output"]) {
+          const text = $(`${kind}-text`).value;
+          if (!text) continue;
+          state[`${kind}Tokens`] = countTokens(text);
+          $(`${kind}-tokens`).value = state[`${kind}Tokens`];
         }
-
-        const tokenCount = encode(document.getElementById(`${type}-textarea`).value).length;
-        const price = ((pricePerMillion ?? 0) * tokenCount) / 1000000;
-
-        document.getElementById(`output-container-${type}`).innerHTML = `<div>
-          <div class="flex items-center pt-2 text-base text-gray-900 rounded bg-gray-50 group">
-            ${type} token count:
-            <span class="flex-1 ml-3 whitespace-nowrap font-bold">${tokenCount === 0 ? "N/A" : tokenCount}</span>
-          </div>
-          <div class="flex items-center pt-2 text-base text-gray-900 rounded bg-gray-50 group">
-            $ per 1M tokens:
-            <span class="flex-1 ml-3 whitespace-nowrap font-bold">${pricePerMillion == null ? "N/A" : formatPrice(pricePerMillion)}</span>
-          </div>
-          <div class="flex items-center pt-2 text-base text-gray-900 rounded bg-gray-50 group">
-            $ total:
-            <span class="flex-1 ml-3 whitespace-nowrap font-bold">${price === 0 ? "N/A" : formatPrice(price)}</span>
-          </div>
-        </div>`;
-
-        return price;
       }
 
-      // Show where the price comes from and warn when the token count is an estimate.
-      function renderModelInfo() {
-        const model = selectedModel();
-        const estimate =
-          model.provider === "openai"
-            ? ""
-            : " Token counts use OpenAI's tokenizer, so for this provider they are an estimate.";
-        const source = model.source
-          ? ` <a href="${model.source}" class="underline text-blue-600" target="_blank" rel="noopener">Provider pricing page</a>.`
-          : "";
-        document.getElementById("model-info").innerHTML = `${estimate}${source}`;
+      // ---------- Provider chips ----------
+
+      function renderChips(container, key) {
+        const providers = { all: "All", ...state.data.providers };
+        container.innerHTML = Object.entries(providers)
+          .map(([id, label]) => {
+            const pressed = (state[key] ?? "all") === id;
+            const dot = id === "all" ? "" : `<span class="dot" style="--p:${PROVIDER_COLORS[id]}"></span>`;
+            return `<button type="button" class="chip" data-provider="${id}" aria-pressed="${pressed}">${dot}${escapeHtml(label)}</button>`;
+          })
+          .join("");
+        container.onclick = (e) => {
+          const chip = e.target.closest(".chip");
+          if (!chip) return;
+          state[key] = chip.dataset.provider === "all" ? null : chip.dataset.provider;
+          renderChips(container, key);
+          if (key === "pickerProvider") {
+            renderOptions();
+            $("model-search").focus();
+          } else {
+            renderTable();
+          }
+        };
       }
 
-      // Generate the grouped dropdown menu from prices.json
-      function generateMenuFromJSON(jsonData) {
-        models = jsonData.models;
+      // ---------- Search ----------
 
-        for (const [provider, label] of Object.entries(jsonData.providers)) {
-          const group = document.createElement("optgroup");
-          group.label = label;
-          models.forEach((model, index) => {
-            if (model.provider !== provider) return;
-            group.appendChild(new Option(model.name, index));
-          });
-          dropdown.appendChild(group);
+      // Every word of the query must appear in the model name or provider name.
+      function matches(model, query) {
+        const haystack = `${model.name} ${state.data.providers[model.provider]}`.toLowerCase();
+        return query
+          .toLowerCase()
+          .split(/\s+/)
+          .filter(Boolean)
+          .every((word) => haystack.includes(word));
+      }
+
+      function highlight(name, query) {
+        let html = escapeHtml(name);
+        for (const word of query.toLowerCase().split(/\s+/).filter(Boolean)) {
+          const needle = escapeHtml(word);
+          const i = html.toLowerCase().indexOf(needle);
+          if (i !== -1) {
+            html = `${html.slice(0, i)}<mark>${html.slice(i, i + needle.length)}</mark>${html.slice(i + needle.length)}`;
+          }
         }
-        const preferred = models.findIndex((model) => model.name === "gpt-4o");
-        if (preferred !== -1) dropdown.value = preferred;
+        return html;
+      }
 
-        dropdown.onchange = calculateTotalPrice;
-        document.getElementById("input-textarea").oninput = calculateTotalPrice;
-        document.getElementById("output-textarea").oninput = calculateTotalPrice;
-        document.querySelectorAll('input[name="pricingContext"]').forEach((radio) => {
-          radio.onchange = calculateTotalPrice;
+      // ---------- Model picker ----------
+
+      let visibleOptions = [];
+      let activeIndex = 0;
+
+      function renderOptions() {
+        const query = $("model-search").value.trim();
+        const list = $("model-list");
+        visibleOptions = state.data.models.filter(
+          (m) => (!state.pickerProvider || m.provider === state.pickerProvider) && matches(m, query)
+        );
+        if (!visibleOptions.length) {
+          list.innerHTML = `<li class="empty">No models match "${escapeHtml(query)}".</li>`;
+          $("model-search").removeAttribute("aria-activedescendant");
+          return;
+        }
+        activeIndex = query ? 0 : Math.max(0, visibleOptions.indexOf(state.model));
+
+        let html = "";
+        let lastProvider = null;
+        visibleOptions.forEach((m, i) => {
+          if (m.provider !== lastProvider) {
+            html += `<li class="group-label" role="presentation">${escapeHtml(state.data.providers[m.provider])}</li>`;
+            lastProvider = m.provider;
+          }
+          const p = m.standard;
+          html += `<li class="option" role="option" id="opt-${i}" data-index="${i}" aria-selected="${m === state.model}">
+            <span class="dot" style="--p:${PROVIDER_COLORS[m.provider]}" aria-hidden="true"></span>
+            <span>${highlight(m.name, query)}</span>
+            <span class="price num">${rate(p.input)} / ${rate(p.output)}</span>
+          </li>`;
         });
-        document.getElementById("toggle-cached").onchange = calculateTotalPrice;
-        document.getElementById("multiplier").oninput = calculateTotalPrice;
+        list.innerHTML = html;
+        setActive(activeIndex);
+      }
 
-        document.getElementById("menu-container").appendChild(dropdown);
-        document.getElementById("prices-updated").textContent = `Prices updated ${jsonData.updated}.`;
-        renderModelInfo();
+      function setActive(i) {
+        if (!visibleOptions.length) return;
+        activeIndex = (i + visibleOptions.length) % visibleOptions.length;
+        $("model-list").querySelectorAll(".option").forEach((el) => {
+          el.classList.toggle("active", Number(el.dataset.index) === activeIndex);
+        });
+        const el = $(`opt-${activeIndex}`);
+        $("model-search").setAttribute("aria-activedescendant", el.id);
+        // Scroll only the list, not the page; show the group label above the first option.
+        const list = $("model-list");
+        const top = activeIndex === 0 ? 0 : el.offsetTop - list.offsetTop;
+        if (top < list.scrollTop) list.scrollTop = top;
+        else if (top + el.offsetHeight > list.scrollTop + list.clientHeight) list.scrollTop = top + el.offsetHeight - list.clientHeight;
+      }
+
+      function openPicker() {
+        $("popover").hidden = false;
+        $("picker-button").setAttribute("aria-expanded", "true");
+        $("model-search").value = "";
+        renderOptions();
+        $("model-search").focus();
+      }
+
+      function closePicker(focusButton = true) {
+        if ($("popover").hidden) return;
+        $("popover").hidden = true;
+        $("picker-button").setAttribute("aria-expanded", "false");
+        if (focusButton) $("picker-button").focus();
+      }
+
+      function selectModel(model) {
+        state.model = model;
+        closePicker();
+        update();
+      }
+
+      function setupPicker() {
+        $("picker-button").onclick = () => ($("popover").hidden ? openPicker() : closePicker());
+        $("model-search").oninput = renderOptions;
+        $("model-search").onkeydown = (e) => {
+          if (e.key === "ArrowDown") { e.preventDefault(); setActive(activeIndex + 1); }
+          else if (e.key === "ArrowUp") { e.preventDefault(); setActive(activeIndex - 1); }
+          else if (e.key === "Enter") { e.preventDefault(); if (visibleOptions[activeIndex]) selectModel(visibleOptions[activeIndex]); }
+          else if (e.key === "Escape") { e.preventDefault(); closePicker(); }
+        };
+        $("model-list").onmousedown = (e) => e.preventDefault(); // keep focus in the search field
+        $("model-list").onclick = (e) => {
+          const el = e.target.closest(".option");
+          if (el) selectModel(visibleOptions[Number(el.dataset.index)]);
+        };
+        $("model-list").onmousemove = (e) => {
+          const el = e.target.closest(".option");
+          if (el && Number(el.dataset.index) !== activeIndex) setActive(Number(el.dataset.index));
+        };
+        document.addEventListener("mousedown", (e) => {
+          if (!$("picker").contains(e.target)) closePicker(false);
+        });
+        document.addEventListener("keydown", (e) => {
+          const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+          if (e.key === "/" && !typing) {
+            e.preventDefault();
+            $("calculator").scrollIntoView({ behavior: "smooth", block: "start" });
+            openPicker();
+          }
+        });
+        renderChips($("picker-chips"), "pickerProvider");
+      }
+
+      // ---------- Comparison table ----------
+
+      function renderTable() {
+        const query = $("table-search").value.trim();
+        const { key, dir } = state.sort;
+        const value = (m) => {
+          if (key === "name") return m.name;
+          if (key === "provider") return state.data.providers[m.provider];
+          if (key === "cost") return costFor(m)?.total;
+          const p = m[state.pricing];
+          return key === "cached" ? p.cachedInput : p[key];
+        };
+        const rows = state.data.models
+          .filter((m) => (!state.tableProvider || m.provider === state.tableProvider) && matches(m, query))
+          .sort((a, b) => {
+            const va = value(a), vb = value(b);
+            if (va == null) return vb == null ? 0 : 1; // missing prices always last
+            if (vb == null) return -1;
+            return (typeof va === "string" ? va.localeCompare(vb, "en", { numeric: true }) : va - vb) * dir;
+          });
+
+        $("price-rows").innerHTML =
+          rows
+            .map((m) => {
+              const p = m[state.pricing];
+              const cost = costFor(m);
+              return `<tr data-name="${escapeHtml(m.name)}" class="${m === state.model ? "selected" : ""}">
+                <td><strong>${escapeHtml(m.name)}</strong></td>
+                <td><span class="provider-cell"><span class="dot" style="--p:${PROVIDER_COLORS[m.provider]}"></span>${escapeHtml(state.data.providers[m.provider])}</span></td>
+                <td>${rate(p.input)}</td>
+                <td>${rate(p.cachedInput)}</td>
+                <td>${rate(p.output)}</td>
+                <td class="cost">${cost ? usd(cost.total) : "–"}</td>
+              </tr>`;
+            })
+            .join("") || `<tr><td colspan="6" class="muted">No models match.</td></tr>`;
+
+        document.querySelectorAll(".prices th").forEach((th) => {
+          if (th.dataset.sort === key) th.setAttribute("aria-sort", dir === 1 ? "ascending" : "descending");
+          else th.removeAttribute("aria-sort");
+        });
+      }
+
+      function setupTable() {
+        $("table-search").oninput = renderTable;
+        renderChips($("table-chips"), "tableProvider");
+        document.querySelectorAll(".prices th button").forEach((button) => {
+          button.onclick = () => {
+            const key = button.parentElement.dataset.sort;
+            state.sort = { key, dir: state.sort.key === key ? -state.sort.dir : 1 };
+            renderTable();
+          };
+        });
+        $("price-rows").onclick = (e) => {
+          const row = e.target.closest("tr[data-name]");
+          if (!row) return;
+          state.model = state.data.models.find((m) => m.name === row.dataset.name);
+          update();
+          $("calculator").scrollIntoView({ behavior: "smooth", block: "start" });
+        };
+      }
+
+      // ---------- Result ----------
+
+      function update() {
+        const m = state.model;
+        const color = PROVIDER_COLORS[m.provider];
+        const providerName = state.data.providers[m.provider];
+
+        $("picker-dot").style.setProperty("--p", color);
+        $("picker-name").textContent = m.name;
+        $("picker-meta").textContent = `${providerName} · ${rate(m.standard.input)} in / ${rate(m.standard.output)} out`;
+        $("result-dot").style.setProperty("--p", color);
+        $("result-model").textContent = `${m.name} · ${state.pricing === "batch" ? "Batch" : "Standard"}`;
+
+        const estimate = m.provider === "openai" ? "" : "Token counts are estimated with OpenAI's tokenizer. ";
+        const source = m.source ? `<a href="${escapeHtml(m.source)}" target="_blank" rel="noopener">${escapeHtml(providerName)} pricing page</a>` : "";
+        $("model-info").innerHTML = `${estimate}${source}`;
+
+        const cost = costFor(m);
+        if (!cost) {
+          $("total").textContent = "–";
+          ["input-cost", "output-cost", "per-request", "input-rate", "output-rate"].forEach((id) => ($(id).textContent = "–"));
+          $("result-note").textContent = `${m.name} has no ${state.pricing} price.`;
+        } else {
+          $("total").textContent = usd(cost.total);
+          $("total-sub").textContent =
+            state.requests > 1 ? `total for ${state.requests.toLocaleString("en-US")} requests` : "total cost";
+          $("input-cost").textContent = usd(cost.input * state.requests);
+          $("output-cost").textContent = usd(cost.output * state.requests);
+          $("per-request").textContent = usd(cost.perRequest);
+          $("input-rate").textContent = rate(cost.rates.input);
+          $("output-rate").textContent = rate(cost.rates.output);
+          $("result-note").textContent = cost.rates.cachedMissing
+            ? "This model has no cached-input price, so the normal input price is used."
+            : `${state.inputTokens.toLocaleString("en-US")} input + ${state.outputTokens.toLocaleString("en-US")} output tokens per request.`;
+        }
+
+        saveToUrl();
+        renderTable();
+      }
+
+      // ---------- URL state (shareable links) ----------
+
+      function saveToUrl() {
+        const params = new URLSearchParams();
+        params.set("model", state.model.name);
+        if (state.pricing !== "standard") params.set("pricing", state.pricing);
+        if (state.cached) params.set("cached", "1");
+        params.set("in", state.inputTokens);
+        params.set("out", state.outputTokens);
+        if (state.requests !== 1) params.set("n", state.requests);
+        history.replaceState(null, "", `?${params}${location.hash}`);
+      }
+
+      function loadFromUrl() {
+        const params = new URLSearchParams(location.search);
+        const models = state.data.models;
+        state.model =
+          models.find((m) => m.name === params.get("model")) ||
+          models.find((m) => m.name === DEFAULT_MODEL) ||
+          models[0];
+        state.pricing = params.get("pricing") === "batch" ? "batch" : "standard";
+        state.cached = params.get("cached") === "1";
+        const int = (v, fallback) => (parseInt(v) >= 0 ? parseInt(v) : fallback);
+        state.inputTokens = int(params.get("in"), 1000);
+        state.outputTokens = int(params.get("out"), 500);
+        state.requests = Math.max(1, int(params.get("n"), 1));
+
+        document.querySelector(`input[name="pricing"][value="${state.pricing}"]`).checked = true;
+        $("cached").checked = state.cached;
+        $("input-tokens").value = state.inputTokens;
+        $("output-tokens").value = state.outputTokens;
+        $("requests").value = state.requests;
+      }
+
+      function setupInputs() {
+        for (const kind of ["input", "output"]) {
+          $(`${kind}-text`).oninput = () => {
+            state[`${kind}Tokens`] = countTokens($(`${kind}-text`).value);
+            $(`${kind}-tokens`).value = state[`${kind}Tokens`];
+            if (state.model) update();
+          };
+          $(`${kind}-tokens`).oninput = () => {
+            state[`${kind}Tokens`] = Math.max(0, parseInt($(`${kind}-tokens`).value) || 0);
+            if (state.model) update();
+          };
+        }
+        $("requests").oninput = () => {
+          state.requests = Math.max(1, parseInt($("requests").value) || 1);
+          if (state.model) update();
+        };
+        document.querySelectorAll('input[name="pricing"]').forEach((radio) => {
+          radio.onchange = () => {
+            state.pricing = radio.value;
+            if (state.model) update();
+          };
+        });
+        $("cached").onchange = () => {
+          state.cached = $("cached").checked;
+          if (state.model) update();
+        };
+        $("copy-link").onclick = async () => {
+          try {
+            await navigator.clipboard.writeText(location.href);
+            $("copy-link").textContent = "Copied!";
+          } catch {
+            $("copy-link").textContent = "Copy failed";
+          }
+          setTimeout(() => ($("copy-link").textContent = "Copy link"), 1500);
+        };
+        // The tokenizer loads after the page; recount any text typed before that.
+        window.addEventListener("load", () => {
+          syncTokensFromText();
+          if (state.model) update();
+        });
       }
 
       async function loadPrices() {
@@ -216,12 +991,20 @@ Users are advised to exercise caution and verify the results obtained from the c
         throw new Error("No price list could be loaded");
       }
 
-      document.addEventListener("DOMContentLoaded", async function () {
+      document.addEventListener("DOMContentLoaded", async () => {
+        setupInputs();
         try {
-          generateMenuFromJSON(await loadPrices());
+          state.data = await loadPrices();
         } catch (error) {
-          document.getElementById("menu-container").textContent = "Prices could not be loaded, try again later.";
+          $("picker-name").textContent = "Prices could not be loaded, try again later.";
+          return;
         }
+        $("updated-badge").textContent = `${state.data.models.length} models · prices updated ${state.data.updated}`;
+        $("footer-updated").innerHTML = `Prices from the <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, last changed ${escapeHtml(state.data.updated)}. Refreshed daily.`;
+        loadFromUrl();
+        setupPicker();
+        setupTable();
+        update();
       });
     </script>
   </body>

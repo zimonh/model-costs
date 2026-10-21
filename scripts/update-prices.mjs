@@ -71,3 +71,21 @@ const models = [...byName.values()].sort(
 const out = { updated: today, source: SOURCE, providers: PROVIDERS, models };
 await writeFile(new URL("../prices.json", import.meta.url), JSON.stringify(out, null, 1) + "\n");
 console.log(`prices.json: ${models.length} models`);
+
+// Pre-render the price table into index.html so search engines and visitors
+// without JavaScript see the prices. The page re-renders it from prices.json.
+const rate = (n) => (n == null ? "–" : "$" + Number(n.toPrecision(4)));
+const escape = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+const rows = models
+  .map((m) => {
+    const p = m.standard;
+    const cost = (p.input * 1000 + p.output * 500) / 1e6;
+    return `<tr data-name="${escape(m.name)}"><td><strong>${escape(m.name)}</strong></td><td>${PROVIDERS[m.provider]}</td><td>${rate(p.input)}</td><td>${rate(p.cachedInput)}</td><td>${rate(p.output)}</td><td class="cost">$${Number(cost.toPrecision(3))}</td></tr>`;
+  })
+  .join("\n");
+const indexUrl = new URL("../index.html", import.meta.url);
+const html = await readFile(indexUrl, "utf8");
+await writeFile(
+  indexUrl,
+  html.replace(/<!-- prices:start -->[\s\S]*<!-- prices:end -->/, `<!-- prices:start -->\n${rows}\n<!-- prices:end -->`)
+);

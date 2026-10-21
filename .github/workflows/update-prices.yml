@@ -19,7 +19,7 @@ jobs:
       - run: node scripts/update-prices.mjs
       - name: Commit when prices changed
         run: |
-          git add prices.json
+          git add prices.json index.html
           if git diff --cached --quiet -I '"updated"'; then
             echo "No price changes"
             exit 0
