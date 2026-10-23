@@ -17,7 +17,12 @@
     <meta property="og:site_name" content="apicost.app" />
     <meta property="og:title" content="LLM API Cost Calculator – compare GPT, Claude, Gemini and Grok prices" />
     <meta property="og:description" content="Paste a prompt, pick a model, see the cost. Token prices for OpenAI, Anthropic, Google, Mistral, DeepSeek and xAI, updated daily." />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://apicost.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="LLM API Cost Calculator: compare OpenAI, Anthropic, Gemini, Mistral, DeepSeek and xAI token prices" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://apicost.app/og-image.png" />
     <meta name="twitter:title" content="LLM API Cost Calculator – apicost.app" />
     <meta name="twitter:description" content="Compare API token prices for GPT, Claude, Gemini, Mistral, DeepSeek and Grok. Updated daily." />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
@@ -62,7 +67,7 @@
               {
                 "@type": "Question",
                 "name": "Are the token counts exact?",
-                "acceptedAnswer": { "@type": "Answer", "text": "Token counts are estimated in your browser with an OpenAI tokenizer. Other providers count tokens differently, so treat those as close estimates. You can also type a token count yourself." }
+                "acceptedAnswer": { "@type": "Answer", "text": "Token counts use OpenAI's o200k tokenizer, the one GPT-4o and newer OpenAI models use, so they are exact for those models. Claude, Gemini and other models count tokens differently, so treat those as close estimates. You can also type a token count yourself." }
               }
             ]
           }
@@ -546,7 +551,7 @@
         </details>
         <details>
           <summary>Are the token counts exact?</summary>
-          <p>Token counts are estimated in your browser with an OpenAI tokenizer. Claude, Gemini and other models count tokens differently, so treat those as close estimates. You can also type a token count yourself.</p>
+          <p>Token counts use OpenAI's o200k tokenizer, the one GPT-4o and newer OpenAI models use, so they are exact for those models. Claude, Gemini and other models count tokens differently, so treat those as close estimates. You can also type a token count yourself.</p>
         </details>
         <details>
           <summary>Is my text sent anywhere?</summary>
@@ -566,7 +571,6 @@
       </div>
     </footer>
 
-    <script src="browser.min.js" defer></script>
     <script>
       // prices.json is refreshed daily by a GitHub Action. Read the copy on
       // GitHub first so the site picks up new prices without a redeploy.
@@ -634,8 +638,23 @@
 
       function countTokens(text) {
         if (!text) return 0;
-        if (window.gpt3encoder) return gpt3encoder.encode(text).length;
+        if (window.tokenizer) return tokenizer.count(text);
+        loadTokenizer();
         return Math.ceil(text.length / 4); // rough estimate until the tokenizer has loaded
+      }
+
+      // The o200k tokenizer (GPT-4o and newer) is 2 MB, so it only loads once someone types or pastes.
+      let tokenizerRequested = false;
+      function loadTokenizer() {
+        if (tokenizerRequested) return;
+        tokenizerRequested = true;
+        const script = document.createElement("script");
+        script.src = "tokenizer.min.js";
+        script.onload = () => {
+          syncTokensFromText();
+          if (state.model) update();
+        };
+        document.head.appendChild(script);
       }
 
       function syncTokensFromText() {
@@ -971,11 +990,8 @@
           }
           setTimeout(() => ($("copy-link").textContent = "Copy link"), 1500);
         };
-        // The tokenizer loads after the page; recount any text typed before that.
-        window.addEventListener("load", () => {
-          syncTokensFromText();
-          if (state.model) update();
-        });
+        $("input-text").addEventListener("focus", loadTokenizer, { once: true });
+        $("output-text").addEventListener("focus", loadTokenizer, { once: true });
       }
 
       async function loadPrices() {
