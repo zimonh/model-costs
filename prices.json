@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-23",
+ "updated": "2026-10-24",
  "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
  "providers": {
   "openai": "OpenAI",
@@ -17,81 +17,6 @@
    "standard": {
     "input": 5,
     "cachedInput": 0.5,
-    "output": 30
-   },
-   "batch": {
-    "input": null,
-    "cachedInput": null,
-    "output": null
-   }
-  },
-  {
-   "name": "gpt-3.5-turbo",
-   "provider": "openai",
-   "source": "https://developers.openai.com/api/docs/pricing",
-   "standard": {
-    "input": 0.5,
-    "cachedInput": null,
-    "output": 1.5
-   },
-   "batch": {
-    "input": null,
-    "cachedInput": null,
-    "output": null
-   }
-  },
-  {
-   "name": "gpt-3.5-turbo-16k",
-   "provider": "openai",
-   "source": null,
-   "standard": {
-    "input": 3,
-    "cachedInput": null,
-    "output": 4
-   },
-   "batch": {
-    "input": null,
-    "cachedInput": null,
-    "output": null
-   }
-  },
-  {
-   "name": "gpt-4",
-   "provider": "openai",
-   "source": null,
-   "standard": {
-    "input": 30,
-    "cachedInput": null,
-    "output": 60
-   },
-   "batch": {
-    "input": null,
-    "cachedInput": null,
-    "output": null
-   }
-  },
-  {
-   "name": "gpt-4-1106-preview",
-   "provider": "openai",
-   "source": null,
-   "standard": {
-    "input": 10,
-    "cachedInput": null,
-    "output": 30
-   },
-   "batch": {
-    "input": null,
-    "cachedInput": null,
-    "output": null
-   }
-  },
-  {
-   "name": "gpt-4-turbo",
-   "provider": "openai",
-   "source": null,
-   "standard": {
-    "input": 10,
-    "cachedInput": null,
     "output": 30
    },
    "batch": {
@@ -128,21 +53,6 @@
     "input": 0.2,
     "cachedInput": null,
     "output": 0.8
-   }
-  },
-  {
-   "name": "gpt-4.1-nano",
-   "provider": "openai",
-   "source": "https://developers.openai.com/api/docs/pricing",
-   "standard": {
-    "input": 0.1,
-    "cachedInput": 0.025,
-    "output": 0.4
-   },
-   "batch": {
-    "input": 0.05,
-    "cachedInput": null,
-    "output": 0.2
    }
   },
   {
@@ -431,21 +341,6 @@
    }
   },
   {
-   "name": "o1",
-   "provider": "openai",
-   "source": "https://developers.openai.com/api/docs/pricing",
-   "standard": {
-    "input": 15,
-    "cachedInput": 7.5,
-    "output": 60
-   },
-   "batch": {
-    "input": 7.5,
-    "cachedInput": null,
-    "output": 30
-   }
-  },
-  {
    "name": "o3",
    "provider": "openai",
    "source": "https://developers.openai.com/api/docs/pricing",
@@ -458,36 +353,6 @@
     "input": 1,
     "cachedInput": null,
     "output": 4
-   }
-  },
-  {
-   "name": "o3-mini",
-   "provider": "openai",
-   "source": "https://developers.openai.com/api/docs/pricing",
-   "standard": {
-    "input": 1.1,
-    "cachedInput": 0.55,
-    "output": 4.4
-   },
-   "batch": {
-    "input": 0.55,
-    "cachedInput": null,
-    "output": 2.2
-   }
-  },
-  {
-   "name": "o4-mini",
-   "provider": "openai",
-   "source": "https://developers.openai.com/api/docs/pricing",
-   "standard": {
-    "input": 1.1,
-    "cachedInput": 0.275,
-    "output": 4.4
-   },
-   "batch": {
-    "input": 0.55,
-    "cachedInput": null,
-    "output": 2.2
    }
   },
   {
