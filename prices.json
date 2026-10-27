@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-24",
+ "updated": "2026-10-27",
  "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
  "providers": {
   "openai": "OpenAI",
@@ -338,6 +338,21 @@
     "input": 1,
     "cachedInput": 0.05,
     "output": 5
+   }
+  },
+  {
+   "name": "gpt-6.1-terra",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 1,
+    "cachedInput": 0.05,
+    "output": 5
+   },
+   "batch": {
+    "input": 0.5,
+    "cachedInput": 0.025,
+    "output": 2.5
    }
   },
   {
