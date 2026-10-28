@@ -3,6 +3,7 @@
 // search and Copilot. Takes changed repo files and maps them to URLs; removed
 // pages are reported too, so they drop out of the index.
 // Usage: node scripts/indexnow.mjs index.html pricing/gpt-4o/index.html ...
+// Other files are ignored, so passing every changed file is fine.
 import { readdir } from "node:fs/promises";
 import { SITE } from "./site.mjs";
 
@@ -15,7 +16,7 @@ const urls = [
   ...new Set(
     process.argv
       .slice(2)
-      .filter((file) => file === "index.html" || /^pricing\/.*index\.html$/.test(file))
+      .filter((file) => /(^|\/)index\.html$/.test(file))
       .map((file) => SITE + "/" + file.replace(/index\.html$/, ""))
   ),
 ];

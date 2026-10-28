@@ -27,6 +27,16 @@ const SCENARIOS = [
   { label: "Coding agent step", input: 50000, output: 2000 },
 ];
 
+// The OpenAI models people ask about: every variant of the three newest GPT
+// versions, plus gpt-4o and gpt-4o-mini, which people still search for by name.
+const gptVersion = (name) => Number(name.match(/^gpt-(\d+(?:\.\d+)?)(-|$)/)?.[1]);
+const openai = models.filter((m) => m.provider === "openai");
+const newestGpt = [...new Set(openai.map((m) => gptVersion(m.name)).filter((v) => v >= 5))].sort((a, b) => b - a).slice(0, 3);
+const popularGpt = [
+  ...openai.filter((m) => newestGpt.includes(gptVersion(m.name))).sort((a, b) => gptVersion(b.name) - gptVersion(a.name)),
+  ...openai.filter((m) => m.name === "gpt-4o" || m.name === "gpt-4o-mini"),
+];
+
 // Ratio, not difference, so $0.001 vs $0.002 counts as far apart as $1 vs $2. Free models sit at a tiny floor.
 const priceDistance = (a, b) => Math.abs(Math.log((a + 1e-7) / (b + 1e-7)));
 
@@ -74,13 +84,19 @@ th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color:
 .providers .muted { font-size: .88rem; }
 p.note { font-size: .85rem; color: var(--muted); max-width: 760px; }
 footer { margin-top: 56px; padding: 28px 0 40px; border-top: 1px solid var(--border); font-size: .82rem; color: var(--muted); } footer p { margin: 0 0 8px; }
+h3 { font-size: 1.05rem; margin: 24px 0 4px; } h3 + p { margin: 0; color: var(--muted); max-width: 760px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.counter { padding: 18px; margin-top: 24px; }
+.counter textarea { width: 100%; min-height: 180px; resize: vertical; font: inherit; color: var(--text); background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+.counter textarea:focus { border-color: var(--focus); outline: none; }
+.counts { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 14px; } .counts .v { font-size: 1.6rem; font-weight: 700; margin-right: 6px; } .counts .k { color: var(--muted); }
 @media (max-width: 560px) { .nav .hide-sm { display: none; } }
 `;
 
 const ICON = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>`;
 
 // `crumbs` is a list of [name, path]; the last one is this page.
-function layout({ path, title, description, crumbs = [], body, jsonLd = [], index = true }) {
+function layout({ path, title, description, crumbs = [], body, script = "", jsonLd = [], index = true }) {
   const url = SITE + path;
   const graph = [{ "@type": "WebPage", name: title, url, dateModified: updated }, ...jsonLd];
   if (crumbs.length) {
@@ -119,7 +135,7 @@ function layout({ path, title, description, crumbs = [], body, jsonLd = [], inde
         <nav class="nav" aria-label="Main">
           <a href="/#calculator">Calculator</a>
           <a href="/pricing/">Pricing by model</a>
-          <a href="/#faq" class="hide-sm">FAQ</a>
+          <a href="/token-counter/" class="hide-sm">Token counter</a>
         </nav>
       </div>
     </header>
@@ -133,7 +149,7 @@ ${body}
         <p>Check the provider's own pricing page before relying on a number. Providers bill by their own token counts.</p>
         <p>© ${updated.slice(0, 4)} apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a></p>
       </div>
-    </footer>
+    </footer>${script ? `\n    <script>${script}    </script>` : ""}
   </body>
 </html>
 `;
@@ -314,6 +330,8 @@ function indexPage() {
       <p class="lead">Prices per million tokens for ${models.length} models from ${escape(companies)}, updated daily.</p>
       <h2>By provider</h2>
       <div class="providers">${providerCards(true)}</div>
+      <h2>Guides</h2>
+${guideLinks}
       <h2>All models</h2>
 ${priceTable([...models].sort(byTypicalCost))}
       <a class="cta" href="/#calculator">Calculate the cost of your own prompt →</a>
@@ -333,9 +351,251 @@ function notFoundPage() {
       <a class="cta" href="/#calculator">Open the calculator →</a>
       <h2>API pricing by provider</h2>
       <div class="providers">${providerCards(false)}</div>
+      <h2>Guides</h2>
+${guideLinks}
 `,
   });
 }
+
+// ---------- Topic pages ----------
+
+// Pages for searches that cut across models. They sit next to the model pages,
+// so a model with one of these names would overwrite it.
+const TOPICS = {
+  cheapest: "/pricing/cheapest/",
+  batch: "/pricing/batch-api/",
+  caching: "/pricing/prompt-caching/",
+  tokenCounter: "/token-counter/",
+};
+for (const m of models) {
+  if (Object.values(TOPICS).includes(modelPath(m))) throw new Error(`Model ${m.name} collides with a topic page`);
+}
+
+const percent = (fraction) => `${Math.round(fraction * 100)}%`;
+const median = (values) => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)];
+
+function cheapestPage() {
+  // A $0 price is a gap in the price list more often than a free model.
+  const priced = models.filter((m) => typicalCost(m) > 0).sort(byTypicalCost);
+  const top = priced[0];
+  const capabilities = [
+    ["Reasoning", (m) => m.reasoning],
+    ["Image input", (m) => m.vision],
+    ["Tool calling", (m) => m.tools],
+    ["1M+ token context", (m) => m.maxInputTokens >= 1e6],
+  ]
+    .map(([label, has]) => [label, priced.find(has)])
+    .filter(([, m]) => m);
+  const capabilityRows = capabilities
+    .map(([label, m]) => `<tr><td>${label}</td><td class="left"><a href="${modelPath(m)}"><strong>${escape(m.name)}</strong></a></td><td class="left">${dot(m.provider)}${escape(PROVIDERS[m.provider].name)}</td><td>${rate(m.standard.input)}</td><td>${rate(m.standard.output)}</td><td>${usd(typicalCost(m))}</td></tr>`)
+    .join("\n");
+  const answer =
+    `The cheapest LLM API right now is ${top.name} from ${PROVIDERS[top.provider].name}: ${rate(top.standard.input)} per million input tokens and ${rate(top.standard.output)} per million output tokens, ` +
+    `so a typical request of 1,000 input and 500 output tokens costs ${usd(typicalCost(top))}.`;
+
+  return layout({
+    path: TOPICS.cheapest,
+    title: "Cheapest LLM API – The Lowest-Cost GPT, Claude & Gemini Models",
+    description: `${answer} Updated ${longDate}.`,
+    crumbs: [["Home", "/"], ["Pricing", "/pricing/"], ["Cheapest LLM APIs", TOPICS.cheapest]],
+    jsonLd: [faqLd([["What is the cheapest LLM API?", answer]])],
+    body: `
+      <h1>The cheapest LLM APIs</h1>
+      <p class="lead">${escape(answer)} Below are the ${Math.min(20, priced.length)} cheapest of ${priced.length} models, and the cheapest from each provider.</p>
+      <div class="badge">Prices updated ${longDate}</div>
+      <h2>Cheapest models overall</h2>
+${priceTable(priced.slice(0, 20))}
+      <h2>Cheapest model from each provider</h2>
+${priceTable(providerKeys.map((key) => priced.find((m) => m.provider === key)).filter(Boolean))}
+      <h2>Cheapest model with a given feature</h2>
+      <div class="card table-wrap"><table class="num">
+        <thead><tr><th scope="col">Feature</th><th scope="col" class="left">Model</th><th scope="col" class="left">Provider</th><th scope="col">Input / 1M</th><th scope="col">Output / 1M</th><th scope="col">Typical request</th></tr></thead>
+        <tbody>
+${capabilityRows}
+        </tbody>
+      </table></div>
+      <p class="note">Ranked by the cost of a typical request of 1,000 input and 500 output tokens at standard rates. Models listed at $0 are left out. The batch API and prompt caching make most models cheaper still, see <a href="${TOPICS.batch}">batch API pricing</a> and <a href="${TOPICS.caching}">prompt caching pricing</a>.</p>
+      <a class="cta" href="/#calculator">Calculate the cost of your own prompt →</a>
+`,
+  });
+}
+
+function batchPage() {
+  const batchCost = (m) => cost(m.batch, TYPICAL.input, TYPICAL.output);
+  const batched = models
+    .filter((m) => batchCost(m) != null && typicalCost(m) > 0)
+    .map((m) => ({ m, saving: 1 - batchCost(m) / typicalCost(m) }))
+    .sort((a, b) => batchCost(a.m) - batchCost(b.m));
+  const companies = list(providerKeys.filter((key) => batched.some(({ m }) => m.provider === key)).map((key) => PROVIDERS[key].name));
+  const intro =
+    `${batched.length} models from ${companies} offer a batch API: you submit requests in bulk, they are processed within 24 hours, ` +
+    `and you pay less, typically ${percent(median(batched.map((b) => b.saving)))} less than the standard price.`;
+  const rows = batched
+    .map(
+      ({ m, saving }) =>
+        `<tr><td><a href="${modelPath(m)}"><strong>${escape(m.name)}</strong></a></td><td class="left">${dot(m.provider)}${escape(PROVIDERS[m.provider].name)}</td>` +
+        `<td>${rate(m.standard.input)} / ${rate(m.standard.output)}</td><td>${rate(m.batch.input)} / ${rate(m.batch.output)}</td><td>${percent(saving)}</td><td>${usd(batchCost(m) * 1000)}</td></tr>`
+    )
+    .join("\n");
+
+  return layout({
+    path: TOPICS.batch,
+    title: "Batch API Pricing – OpenAI, Claude & Gemini Batch Discounts Compared",
+    description: `${intro} Compare batch prices per 1M tokens for every model. Updated ${longDate}.`,
+    crumbs: [["Home", "/"], ["Pricing", "/pricing/"], ["Batch API pricing", TOPICS.batch]],
+    jsonLd: [
+      faqLd([
+        ["What is a batch API?", "A batch API lets you send many requests at once as a file. The provider processes them within 24 hours, when it has spare capacity, and charges less per token than for real-time requests."],
+        ["How much cheaper is the batch API?", intro],
+      ]),
+    ],
+    body: `
+      <h1>Batch API pricing compared</h1>
+      <p class="lead">${escape(intro)} Use it for work that doesn't need an instant answer: evaluations, classification, embeddings of a backlog, nightly reports.</p>
+      <div class="badge">Prices updated ${longDate}</div>
+      <h2>Batch prices per million tokens</h2>
+      <div class="card table-wrap"><table class="num">
+        <thead><tr><th scope="col">Model</th><th scope="col" class="left">Provider</th><th scope="col">Standard in / out</th><th scope="col">Batch in / out</th><th scope="col">Saving</th><th scope="col">1,000 batch requests</th></tr></thead>
+        <tbody>
+${rows}
+        </tbody>
+      </table></div>
+      <p class="note">Sorted by batch price. Saving and cost are for requests of 1,000 input and 500 output tokens.</p>
+      <a class="cta" href="/?pricing=batch#calculator">Calculate a batch job →</a>
+`,
+  });
+}
+
+function cachingPage() {
+  const cached = models
+    .filter((m) => m.standard.cachedInput != null && m.standard.input > 0)
+    .map((m) => ({ m, discount: 1 - m.standard.cachedInput / m.standard.input }))
+    .sort((a, b) => b.discount - a.discount || a.m.standard.cachedInput - b.m.standard.cachedInput);
+  const intro =
+    `${cached.length} models charge less for input they have seen before. When the start of your prompt repeats across requests, ` +
+    `such as a long system prompt or a document you ask several questions about, those tokens cost typically ${percent(median(cached.map((c) => c.discount)))} less.`;
+  const rows = cached
+    .map(
+      ({ m, discount }) =>
+        `<tr><td><a href="${modelPath(m)}"><strong>${escape(m.name)}</strong></a></td><td class="left">${dot(m.provider)}${escape(PROVIDERS[m.provider].name)}</td>` +
+        `<td>${rate(m.standard.input)}</td><td>${rate(m.standard.cachedInput)}</td><td>${percent(discount)}</td></tr>`
+    )
+    .join("\n");
+
+  return layout({
+    path: TOPICS.caching,
+    title: "Prompt Caching Pricing – Cached Input Token Prices for GPT, Claude & Gemini",
+    description: `${intro} Compare cached input prices per 1M tokens. Updated ${longDate}.`,
+    crumbs: [["Home", "/"], ["Pricing", "/pricing/"], ["Prompt caching pricing", TOPICS.caching]],
+    jsonLd: [
+      faqLd([
+        ["What is prompt caching?", "When many requests start with the same text, the provider can keep that part of the prompt processed and reuse it. You pay a lower cached-input price for those tokens."],
+        ["How much does prompt caching save?", intro],
+      ]),
+    ],
+    body: `
+      <h1>Prompt caching pricing compared</h1>
+      <p class="lead">${escape(intro)}</p>
+      <div class="badge">Prices updated ${longDate}</div>
+      <h2>Cached input prices per million tokens</h2>
+      <div class="card table-wrap"><table class="num">
+        <thead><tr><th scope="col">Model</th><th scope="col" class="left">Provider</th><th scope="col">Input / 1M</th><th scope="col">Cached input / 1M</th><th scope="col">Discount</th></tr></thead>
+        <tbody>
+${rows}
+        </tbody>
+      </table></div>
+      <p class="note">Some providers also charge for writing to the cache or for how long it is kept; check the provider's pricing page for those. To cache, put the part that repeats (instructions, examples, documents) at the start of the prompt.</p>
+      <a class="cta" href="/?cached=1#calculator">Calculate with cached input →</a>
+`,
+  });
+}
+
+function tokenCounterPage() {
+  const prices = popularGpt.map((m) => ({ name: m.name, input: m.standard.input, output: m.standard.output }));
+  const costRows = (n) =>
+    prices.map((m) => `<tr><td><a href="/pricing/${m.name}/"><strong>${escape(m.name)}</strong></a></td><td>${usd((n * m.input) / 1e6)}</td><td>${usd((n * m.output) / 1e6)}</td></tr>`).join("\n");
+  const faq = [
+    ["What is a token?", "Language models read and write text in tokens: common words are one token, rarer words are split into pieces. In English a token is about 4 characters, or three quarters of a word. API prices are per token."],
+    ["How many tokens is 1,000 words?", "About 1,300 tokens for English text with OpenAI's tokenizer. Code, numbers and other languages use more tokens per word."],
+    ["Does this count tokens like ChatGPT does?", "Yes. It uses o200k_base, the tokenizer of GPT-4o and newer OpenAI models, so the count is exact for them. Claude, Gemini and other models use their own tokenizers, so for those it is a close estimate."],
+    ["Is my text uploaded?", "No. The tokenizer runs in your browser; the text never leaves your device."],
+  ];
+
+  return layout({
+    path: TOPICS.tokenCounter,
+    title: "ChatGPT Token Counter – Count OpenAI GPT Tokens Online, Free",
+    description: "Free ChatGPT token counter. Paste text to count its tokens with OpenAI's own tokenizer (o200k, GPT-4o and newer) and see what it costs on the API. Runs in your browser.",
+    crumbs: [["Home", "/"], ["Token counter", TOPICS.tokenCounter]],
+    jsonLd: [
+      { "@type": "WebApplication", name: "ChatGPT Token Counter", url: SITE + TOPICS.tokenCounter, applicationCategory: "DeveloperApplication", operatingSystem: "Any", isAccessibleForFree: true, offers: { "@type": "Offer", price: "0", priceCurrency: "USD" } },
+      faqLd(faq),
+    ],
+    body: `
+      <h1>ChatGPT token counter</h1>
+      <p class="lead">Paste any text to count its tokens with OpenAI's own tokenizer, and see what it would cost to send or receive through the API. Nothing is uploaded.</p>
+      <div class="card counter">
+        <label for="text" class="visually-hidden">Text to count</label>
+        <textarea id="text" rows="8" placeholder="Paste or type your text here…"></textarea>
+        <div class="counts num" aria-live="polite">
+          <div><span class="v" id="tokens">0</span><span class="k">tokens</span></div>
+          <div><span class="v" id="words">0</span><span class="k">words</span></div>
+          <div><span class="v" id="chars">0</span><span class="k">characters</span></div>
+        </div>
+      </div>
+
+      <h2 id="cost-label">What 1,000 tokens cost</h2>
+      <div class="card table-wrap"><table class="num">
+        <thead><tr><th scope="col">Model</th><th scope="col">As input</th><th scope="col">As output</th></tr></thead>
+        <tbody id="costs">
+${costRows(1000)}
+        </tbody>
+      </table></div>
+      <p class="note">At standard rates. To price a full request with a response, batch or cached input, or another provider, use the <a href="/#calculator">cost calculator</a>.</p>
+
+      <h2>About tokens</h2>
+      ${faq.map(([q, a]) => `<h3>${escape(q)}</h3>\n      <p>${escape(a)}</p>`).join("\n      ")}
+`,
+    script: `
+      const PRICES = ${JSON.stringify(prices)};
+      const usd = ${usd.toString()};
+      const $ = (id) => document.getElementById(id);
+      let requested = false;
+      // The tokenizer is 2 MB, so it only loads once someone starts typing.
+      function loadTokenizer() {
+        if (requested) return;
+        requested = true;
+        const script = document.createElement("script");
+        script.src = "/tokenizer.min.js";
+        script.onload = render;
+        document.head.appendChild(script);
+      }
+      function render() {
+        const text = $("text").value;
+        if (text) loadTokenizer();
+        const exact = Boolean(window.tokenizer);
+        const tokens = !text ? 0 : exact ? tokenizer.count(text) : Math.ceil(text.length / 4);
+        $("tokens").textContent = (text && !exact ? "≈ " : "") + tokens.toLocaleString("en-US");
+        $("words").textContent = (text.trim() ? text.trim().split(/\\s+/).length : 0).toLocaleString("en-US");
+        $("chars").textContent = text.length.toLocaleString("en-US");
+        const n = text ? tokens : 1000;
+        $("cost-label").textContent = text ? "What this text costs" : "What 1,000 tokens cost";
+        $("costs").innerHTML = PRICES.map(
+          (m) => \`<tr><td><a href="/pricing/\${m.name}/"><strong>\${m.name}</strong></a></td><td>\${usd((n * m.input) / 1e6)}</td><td>\${usd((n * m.output) / 1e6)}</td></tr>\`
+        ).join("");
+      }
+      $("text").addEventListener("input", render);
+      $("text").addEventListener("focus", loadTokenizer, { once: true });
+`,
+  });
+}
+
+const guideLinks = `
+      <div class="providers">
+        <a class="card" href="${TOPICS.cheapest}"><strong>Cheapest LLM APIs</strong><div class="muted">Lowest-cost models overall and per provider</div></a>
+        <a class="card" href="${TOPICS.batch}"><strong>Batch API pricing</strong><div class="muted">Batch discounts for every model</div></a>
+        <a class="card" href="${TOPICS.caching}"><strong>Prompt caching pricing</strong><div class="muted">Cached input prices and discounts</div></a>
+        <a class="card" href="${TOPICS.tokenCounter}"><strong>Token counter</strong><div class="muted">Count tokens with OpenAI's tokenizer</div></a>
+      </div>`;
 
 // ---------- Home page ----------
 
@@ -352,15 +612,7 @@ function renderHome(html) {
     )
     .join("\n");
 
-  // "How much does the ChatGPT API cost?": every variant of the three newest GPT
-  // versions, plus gpt-4o and gpt-4o-mini, which people still search for by name.
-  const gptVersion = (name) => Number(name.match(/^gpt-(\d+(?:\.\d+)?)(-|$)/)?.[1]);
-  const openai = models.filter((m) => m.provider === "openai");
-  const newest = [...new Set(openai.map((m) => gptVersion(m.name)).filter((v) => v >= 5))].sort((a, b) => b - a).slice(0, 3);
-  const exampleRows = [
-    ...openai.filter((m) => newest.includes(gptVersion(m.name))).sort((a, b) => gptVersion(b.name) - gptVersion(a.name)),
-    ...openai.filter((m) => m.name === "gpt-4o" || m.name === "gpt-4o-mini"),
-  ]
+  const exampleRows = popularGpt
     .map((m) => {
       const one = typicalCost(m);
       return `<tr><td><a href="${modelPath(m)}"><strong>${escape(m.name)}</strong></a></td><td>${rate(m.standard.input)}</td><td>${rate(m.standard.output)}</td><td>${usd(one)}</td><td>${usd(one * 1000)}</td></tr>`;
@@ -396,6 +648,10 @@ function llmsTxt() {
 
 - [Calculator](${SITE}/): count tokens and calculate the cost of a prompt, with batch and cached-input pricing
 - [All model prices](${SITE}/pricing/): every model sorted by the cost of a typical request
+- [Token counter](${SITE}${TOPICS.tokenCounter}): count tokens with OpenAI's o200k tokenizer, in the browser
+- [Cheapest LLM APIs](${SITE}${TOPICS.cheapest}): the lowest-cost models overall, per provider and per feature
+- [Batch API pricing](${SITE}${TOPICS.batch}): batch prices and savings for every model that offers a batch API
+- [Prompt caching pricing](${SITE}${TOPICS.caching}): cached input prices and discounts
 - [prices.json](${SITE}/prices.json): all prices as JSON, per 1M tokens, standard and batch
 
 ${providerKeys.map(section).join("\n\n")}
@@ -406,12 +662,17 @@ ${providerKeys.map(section).join("\n\n")}
 
 const pages = new Map([
   ["/pricing/", indexPage()],
+  [TOPICS.cheapest, cheapestPage()],
+  [TOPICS.batch, batchPage()],
+  [TOPICS.caching, cachingPage()],
+  [TOPICS.tokenCounter, tokenCounterPage()],
   ...providerKeys.map((key) => [providerPath(key), providerPage(key)]),
   ...models.map((m) => [modelPath(m), modelPage(m)]),
 ]);
 
 // Start from scratch so models that left the price list lose their page.
 await rm(new URL("pricing/", root), { recursive: true, force: true });
+await rm(new URL("token-counter/", root), { recursive: true, force: true });
 for (const [path, html] of pages) {
   const dir = new URL("." + path, root);
   await mkdir(dir, { recursive: true });
@@ -430,4 +691,4 @@ ${["/", ...pages.keys()].map((u) => `  <url>\n    <loc>${SITE}${u}</loc>\n    <l
 </urlset>
 `
 );
-console.log(`site: home, ${pages.size} pricing pages, 404, sitemap, llms.txt`);
+console.log(`site: home, ${pages.size} pages, 404, sitemap, llms.txt`);

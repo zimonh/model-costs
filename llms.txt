@@ -4,6 +4,10 @@
 
 - [Calculator](https://apicost.app/): count tokens and calculate the cost of a prompt, with batch and cached-input pricing
 - [All model prices](https://apicost.app/pricing/): every model sorted by the cost of a typical request
+- [Token counter](https://apicost.app/token-counter/): count tokens with OpenAI's o200k tokenizer, in the browser
+- [Cheapest LLM APIs](https://apicost.app/pricing/cheapest/): the lowest-cost models overall, per provider and per feature
+- [Batch API pricing](https://apicost.app/pricing/batch-api/): batch prices and savings for every model that offers a batch API
+- [Prompt caching pricing](https://apicost.app/pricing/prompt-caching/): cached input prices and discounts
 - [prices.json](https://apicost.app/prices.json): all prices as JSON, per 1M tokens, standard and batch
 
 ## OpenAI ChatGPT API pricing
