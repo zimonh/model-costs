@@ -1,0 +1,116 @@
+# apicost.app
+
+> Free LLM API cost calculator and price list. Paste a prompt to count tokens and see what it costs on OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models. Prices per 1 million tokens in US dollars, updated daily from the LiteLLM price list. Last update: 2026-10-28.
+
+- [Calculator](https://apicost.app/): count tokens and calculate the cost of a prompt, with batch and cached-input pricing
+- [All model prices](https://apicost.app/pricing/): every model sorted by the cost of a typical request
+- [prices.json](https://apicost.app/prices.json): all prices as JSON, per 1M tokens, standard and batch
+
+## OpenAI ChatGPT API pricing
+
+- [gpt-4.1](https://apicost.app/pricing/gpt-4.1/): $2 input, $8 output per 1M tokens
+- [gpt-4.1-mini](https://apicost.app/pricing/gpt-4.1-mini/): $0.4 input, $1.6 output per 1M tokens
+- [gpt-4o](https://apicost.app/pricing/gpt-4o/): $2.5 input, $10 output per 1M tokens
+- [gpt-4o-mini](https://apicost.app/pricing/gpt-4o-mini/): $0.15 input, $0.6 output per 1M tokens
+- [gpt-5](https://apicost.app/pricing/gpt-5/): $1.25 input, $10 output per 1M tokens
+- [gpt-5-mini](https://apicost.app/pricing/gpt-5-mini/): $0.25 input, $2 output per 1M tokens
+- [gpt-5-nano](https://apicost.app/pricing/gpt-5-nano/): $0.05 input, $0.4 output per 1M tokens
+- [gpt-5.1](https://apicost.app/pricing/gpt-5.1/): $1.25 input, $10 output per 1M tokens
+- [gpt-5.2](https://apicost.app/pricing/gpt-5.2/): $1.75 input, $14 output per 1M tokens
+- [gpt-5.4](https://apicost.app/pricing/gpt-5.4/): $2.5 input, $15 output per 1M tokens
+- [gpt-5.4-mini](https://apicost.app/pricing/gpt-5.4-mini/): $0.75 input, $4.5 output per 1M tokens
+- [gpt-5.4-nano](https://apicost.app/pricing/gpt-5.4-nano/): $0.2 input, $1.25 output per 1M tokens
+- [gpt-5.5](https://apicost.app/pricing/gpt-5.5/): $5 input, $30 output per 1M tokens
+- [gpt-5.6](https://apicost.app/pricing/gpt-5.6/): $4 input, $20 output per 1M tokens
+- [gpt-5.6-luna](https://apicost.app/pricing/gpt-5.6-luna/): $0.2 input, $1.2 output per 1M tokens
+- [gpt-5.6-sol](https://apicost.app/pricing/gpt-5.6-sol/): $4 input, $20 output per 1M tokens
+- [gpt-5.6-terra](https://apicost.app/pricing/gpt-5.6-terra/): $2 input, $12 output per 1M tokens
+- [gpt-6-astra](https://apicost.app/pricing/gpt-6-astra/): $10 input, $50 output per 1M tokens
+- [gpt-6-luna](https://apicost.app/pricing/gpt-6-luna/): $0.1 input, $0.5 output per 1M tokens
+- [gpt-6-sol](https://apicost.app/pricing/gpt-6-sol/): $2 input, $10 output per 1M tokens
+- [gpt-6.1-sol](https://apicost.app/pricing/gpt-6.1-sol/): $2 input, $10 output per 1M tokens
+- [gpt-6.1-terra](https://apicost.app/pricing/gpt-6.1-terra/): $1 input, $5 output per 1M tokens
+- [o3](https://apicost.app/pricing/o3/): $2 input, $8 output per 1M tokens
+
+## Anthropic Claude API pricing
+
+- [claude-fable-5](https://apicost.app/pricing/claude-fable-5/): $10 input, $50 output per 1M tokens
+- [claude-fable-5-1](https://apicost.app/pricing/claude-fable-5-1/): $10 input, $50 output per 1M tokens
+- [claude-haiku-4-5](https://apicost.app/pricing/claude-haiku-4-5/): $1 input, $5 output per 1M tokens
+- [claude-haiku-5-5](https://apicost.app/pricing/claude-haiku-5-5/): $0.1 input, $0.5 output per 1M tokens
+- [claude-mythos-5](https://apicost.app/pricing/claude-mythos-5/): $10 input, $50 output per 1M tokens
+- [claude-mythos-5-1](https://apicost.app/pricing/claude-mythos-5-1/): $10 input, $50 output per 1M tokens
+- [claude-opus-4-5](https://apicost.app/pricing/claude-opus-4-5/): $5 input, $25 output per 1M tokens
+- [claude-opus-4-6](https://apicost.app/pricing/claude-opus-4-6/): $5 input, $25 output per 1M tokens
+- [claude-opus-4-7](https://apicost.app/pricing/claude-opus-4-7/): $5 input, $25 output per 1M tokens
+- [claude-opus-4-8](https://apicost.app/pricing/claude-opus-4-8/): $5 input, $25 output per 1M tokens
+- [claude-opus-5](https://apicost.app/pricing/claude-opus-5/): $5 input, $25 output per 1M tokens
+- [claude-opus-5-5](https://apicost.app/pricing/claude-opus-5-5/): $4 input, $20 output per 1M tokens
+- [claude-sonnet-4-5](https://apicost.app/pricing/claude-sonnet-4-5/): $3 input, $15 output per 1M tokens
+- [claude-sonnet-4-6](https://apicost.app/pricing/claude-sonnet-4-6/): $3 input, $15 output per 1M tokens
+- [claude-sonnet-5](https://apicost.app/pricing/claude-sonnet-5/): $2 input, $10 output per 1M tokens
+- [claude-sonnet-5-5](https://apicost.app/pricing/claude-sonnet-5-5/): $2 input, $10 output per 1M tokens
+
+## Google Gemini API pricing
+
+- [gemini-2.5-flash](https://apicost.app/pricing/gemini-2.5-flash/): $0.3 input, $2.5 output per 1M tokens
+- [gemini-2.5-flash-lite](https://apicost.app/pricing/gemini-2.5-flash-lite/): $0.1 input, $0.4 output per 1M tokens
+- [gemini-2.5-pro](https://apicost.app/pricing/gemini-2.5-pro/): $1.25 input, $10 output per 1M tokens
+- [gemini-3-flash-preview](https://apicost.app/pricing/gemini-3-flash-preview/): $0.5 input, $3 output per 1M tokens
+- [gemini-3.1-flash-lite](https://apicost.app/pricing/gemini-3.1-flash-lite/): $0.25 input, $1.5 output per 1M tokens
+- [gemini-3.1-pro-preview](https://apicost.app/pricing/gemini-3.1-pro-preview/): $2 input, $12 output per 1M tokens
+- [gemini-3.5-flash](https://apicost.app/pricing/gemini-3.5-flash/): $1.5 input, $9 output per 1M tokens
+- [gemini-3.5-flash-lite](https://apicost.app/pricing/gemini-3.5-flash-lite/): $0.3 input, $2.5 output per 1M tokens
+- [gemini-3.6-flash](https://apicost.app/pricing/gemini-3.6-flash/): $0.75 input, $3.75 output per 1M tokens
+- [gemini-3.7-flash](https://apicost.app/pricing/gemini-3.7-flash/): $0.75 input, $3.75 output per 1M tokens
+- [gemini-3.8-flash](https://apicost.app/pricing/gemini-3.8-flash/): $0.75 input, $3.75 output per 1M tokens
+- [gemini-4-argon](https://apicost.app/pricing/gemini-4-argon/): $2 input, $10 output per 1M tokens
+- [gemini-omni-1.1-flash](https://apicost.app/pricing/gemini-omni-1.1-flash/): $1.5 input, $9 output per 1M tokens
+
+## Mistral API pricing
+
+- [codestral-2508](https://apicost.app/pricing/codestral-2508/): $0.3 input, $0.9 output per 1M tokens
+- [deepseek-v4-1-flash-1017](https://apicost.app/pricing/deepseek-v4-1-flash-1017/): $0.3 input, $1.2 output per 1M tokens
+- [labs-leanstral-1-5-1](https://apicost.app/pricing/labs-leanstral-1-5-1/): $0 input, $0 output per 1M tokens
+- [ministral-3-3b-2512](https://apicost.app/pricing/ministral-3-3b-2512/): $0.1 input, $0.1 output per 1M tokens
+- [ministral-3-8b-2512](https://apicost.app/pricing/ministral-3-8b-2512/): $0.15 input, $0.15 output per 1M tokens
+- [ministral-3-14b-2512](https://apicost.app/pricing/ministral-3-14b-2512/): $0.2 input, $0.2 output per 1M tokens
+- [ministral-3b-2512](https://apicost.app/pricing/ministral-3b-2512/): $0.1 input, $0.1 output per 1M tokens
+- [ministral-8b-2512](https://apicost.app/pricing/ministral-8b-2512/): $0.15 input, $0.15 output per 1M tokens
+- [ministral-14b-2512](https://apicost.app/pricing/ministral-14b-2512/): $0.2 input, $0.2 output per 1M tokens
+- [mistral-large-3](https://apicost.app/pricing/mistral-large-3/): $0.5 input, $1.5 output per 1M tokens
+- [mistral-large-4](https://apicost.app/pricing/mistral-large-4/): $1.36 input, $4.18 output per 1M tokens
+- [mistral-large-4-0](https://apicost.app/pricing/mistral-large-4-0/): $1.36 input, $4.18 output per 1M tokens
+- [mistral-large-2512](https://apicost.app/pricing/mistral-large-2512/): $0.5 input, $1.5 output per 1M tokens
+- [mistral-medium](https://apicost.app/pricing/mistral-medium/): $1.5 input, $7.5 output per 1M tokens
+- [mistral-medium-3](https://apicost.app/pricing/mistral-medium-3/): $1.5 input, $7.5 output per 1M tokens
+- [mistral-medium-3-5](https://apicost.app/pricing/mistral-medium-3-5/): $1.5 input, $7.5 output per 1M tokens
+- [mistral-medium-3.5](https://apicost.app/pricing/mistral-medium-3.5/): $1.5 input, $7.5 output per 1M tokens
+- [mistral-small](https://apicost.app/pricing/mistral-small/): $0.1 input, $0.3 output per 1M tokens
+- [mistral-tiny](https://apicost.app/pricing/mistral-tiny/): $0.25 input, $0.25 output per 1M tokens
+- [open-mistral-nemo](https://apicost.app/pricing/open-mistral-nemo/): $0.3 input, $0.3 output per 1M tokens
+
+## DeepSeek API pricing
+
+- [deepseek-coder](https://apicost.app/pricing/deepseek-coder/): $0.14 input, $0.28 output per 1M tokens
+- [deepseek-flash](https://apicost.app/pricing/deepseek-flash/): $0.3 input, $1.2 output per 1M tokens
+- [deepseek-r1](https://apicost.app/pricing/deepseek-r1/): $0.55 input, $2.19 output per 1M tokens
+- [deepseek-v3](https://apicost.app/pricing/deepseek-v3/): $0.27 input, $1.1 output per 1M tokens
+- [deepseek-v3.2](https://apicost.app/pricing/deepseek-v3.2/): $0.28 input, $0.4 output per 1M tokens
+- [deepseek-v4-flash](https://apicost.app/pricing/deepseek-v4-flash/): $0.3 input, $1.2 output per 1M tokens
+- [deepseek-v4-pro](https://apicost.app/pricing/deepseek-v4-pro/): $1.32 input, $3.96 output per 1M tokens
+
+## xAI Grok API pricing
+
+- [grok-4.3](https://apicost.app/pricing/grok-4.3/): $1.25 input, $2.5 output per 1M tokens
+- [grok-4.5](https://apicost.app/pricing/grok-4.5/): $2 input, $6 output per 1M tokens
+- [grok-4.6](https://apicost.app/pricing/grok-4.6/): $2 input, $6 output per 1M tokens
+- [grok-4.7](https://apicost.app/pricing/grok-4.7/): $2 input, $6 output per 1M tokens
+- [grok-4.20](https://apicost.app/pricing/grok-4.20/): $1.25 input, $2.5 output per 1M tokens
+- [grok-4.20-0309-non-reasoning](https://apicost.app/pricing/grok-4.20-0309-non-reasoning/): $1.25 input, $2.5 output per 1M tokens
+- [grok-4.20-0309-reasoning](https://apicost.app/pricing/grok-4.20-0309-reasoning/): $1.25 input, $2.5 output per 1M tokens
+- [grok-4.20-non-reasoning](https://apicost.app/pricing/grok-4.20-non-reasoning/): $1.25 input, $2.5 output per 1M tokens
+- [grok-4.20-reasoning](https://apicost.app/pricing/grok-4.20-reasoning/): $1.25 input, $2.5 output per 1M tokens
+- [grok-build-0.1](https://apicost.app/pricing/grok-build-0.1/): $1 input, $2 output per 1M tokens
+- [grok-code-fast](https://apicost.app/pricing/grok-code-fast/): $1 input, $2 output per 1M tokens
+- [grok-code-fast-1-0825](https://apicost.app/pricing/grok-code-fast-1-0825/): $1 input, $2 output per 1M tokens

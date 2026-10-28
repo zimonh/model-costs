@@ -14,7 +14,7 @@
     <meta property="og:image" content="https://apicost.app/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","name":"gemini-2.5-flash-lite API Pricing – Cost per 1M Tokens & Calculator","url":"https://apicost.app/pricing/gemini-2.5-flash-lite/","dateModified":"2026-10-28"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://apicost.app/"},{"@type":"ListItem","position":2,"name":"Pricing","item":"https://apicost.app/pricing/"},{"@type":"ListItem","position":3,"name":"Google Gemini","item":"https://apicost.app/pricing/gemini/"},{"@type":"ListItem","position":4,"name":"gemini-2.5-flash-lite","item":"https://apicost.app/pricing/gemini-2.5-flash-lite/"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does the gemini-2.5-flash-lite API cost?","acceptedAnswer":{"@type":"Answer","text":"Google Gemini charges $0.1 per million input tokens and $0.4 per million output tokens for gemini-2.5-flash-lite, and $0.01 per million cached input tokens. A typical request of 1,000 input and 500 output tokens costs $0.0003, or $0.00015 through the batch API."}},{"@type":"Question","name":"Is there a cheaper way to use gemini-2.5-flash-lite?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Google Gemini batch API runs requests within 24 hours for $0.05 per million input tokens and $0.2 per million output tokens. Prompt caching lowers the price of repeated input to $0.01 per million tokens."}}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","name":"gemini-2.5-flash-lite API Pricing – Cost per 1M Tokens & Calculator","url":"https://apicost.app/pricing/gemini-2.5-flash-lite/","dateModified":"2026-10-28"},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does the gemini-2.5-flash-lite API cost?","acceptedAnswer":{"@type":"Answer","text":"Google Gemini charges $0.1 per million input tokens and $0.4 per million output tokens for gemini-2.5-flash-lite, and $0.01 per million cached input tokens. A typical request of 1,000 input and 500 output tokens costs $0.0003, or $0.00015 through the batch API."}},{"@type":"Question","name":"Is there a cheaper way to use gemini-2.5-flash-lite?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Google Gemini batch API runs requests within 24 hours for $0.05 per million input tokens and $0.2 per million output tokens. Prompt caching lowers the price of repeated input to $0.01 per million tokens."}}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://apicost.app/"},{"@type":"ListItem","position":2,"name":"Pricing","item":"https://apicost.app/pricing/"},{"@type":"ListItem","position":3,"name":"Google Gemini","item":"https://apicost.app/pricing/gemini/"},{"@type":"ListItem","position":4,"name":"gemini-2.5-flash-lite","item":"https://apicost.app/pricing/gemini-2.5-flash-lite/"}]}]}</script>
     <style>
 :root { --bg: #f6f7f9; --surface: #fff; --surface-2: #f1f3f6; --border: #e2e5ea; --text: #14171c; --muted: #5d6573; --accent: #0b7a52; --accent-strong: #08643f; --accent-soft: #e3f4ec; --focus: #2f6fed; --shadow: 0 1px 2px rgba(20,23,28,.04), 0 8px 24px rgba(20,23,28,.06); color-scheme: light; }
 @media (prefers-color-scheme: dark) { :root { --bg: #0f1115; --surface: #171a20; --surface-2: #1f232b; --border: #2b3039; --text: #eceff3; --muted: #9aa3b2; --accent: #3fd39a; --accent-strong: #6be3b4; --accent-soft: #143428; --focus: #7aa7ff; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25); color-scheme: dark; } }
@@ -32,6 +32,7 @@ a { color: var(--accent); } a:hover { color: var(--accent-strong); }
 .crumbs { font-size: .85rem; color: var(--muted); padding-top: 20px; } .crumbs a { color: var(--muted); }
 h1, h2 { overflow-wrap: anywhere; }
 h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.15; letter-spacing: -.02em; margin: 14px 0 10px; }
+main > h1:first-child { margin-top: 36px; }
 h2 { font-size: 1.35rem; letter-spacing: -.01em; margin: 40px 0 12px; }
 .lead { color: var(--muted); font-size: 1.05rem; max-width: 720px; margin: 0; }
 .badge { display: inline-flex; gap: 6px; font-size: .8rem; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 3px 10px; font-weight: 600; margin-top: 14px; }
@@ -39,7 +40,7 @@ h2 { font-size: 1.35rem; letter-spacing: -.01em; margin: 40px 0 12px; }
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: .92rem; }
 th, td { padding: 10px 14px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border); }
-th:first-child, td:first-child { text-align: left; }
+th:first-child, td:first-child, .left { text-align: left; }
 tbody tr:last-child td { border-bottom: 0; }
 th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; }
@@ -108,16 +109,16 @@ footer { margin-top: 56px; padding: 28px 0 40px; border-top: 1px solid var(--bor
 
       <h2>Models with a similar price</h2>
 <div class="card table-wrap"><table class="num">
-  <thead><tr><th scope="col">Model</th><th scope="col" style="text-align:left">Provider</th><th scope="col">Input / 1M</th><th scope="col">Cached input / 1M</th><th scope="col">Output / 1M</th><th scope="col">Typical request</th></tr></thead>
+  <thead><tr><th scope="col">Model</th><th scope="col" class="left">Provider</th><th scope="col">Input / 1M</th><th scope="col">Cached input / 1M</th><th scope="col">Output / 1M</th><th scope="col">Typical request</th></tr></thead>
   <tbody>
-<tr><td><a href="/pricing/gpt-5-nano/"><strong>gpt-5-nano</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.05</td><td>$0.005</td><td>$0.4</td><td>$0.00025</td></tr>
-<tr><td><a href="/pricing/mistral-small/"><strong>mistral-small</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.3</td><td>$0.00025</td></tr>
-<tr><td><a href="/pricing/deepseek-coder/"><strong>deepseek-coder</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4d6bfe"></span>DeepSeek</td><td>$0.14</td><td>$0.014</td><td>$0.28</td><td>$0.00028</td></tr>
-<tr><td><a href="/pricing/ministral-3-14b-2512/"><strong>ministral-3-14b-2512</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.2</td><td>$0.02</td><td>$0.2</td><td>$0.0003</td></tr>
-<tr><td><a href="/pricing/ministral-14b-2512/"><strong>ministral-14b-2512</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.2</td><td>$0.02</td><td>$0.2</td><td>$0.0003</td></tr>
-<tr><td><a href="/pricing/gpt-6-luna/"><strong>gpt-6-luna</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.1</td><td>$0.01</td><td>$0.5</td><td>$0.00035</td></tr>
-<tr><td><a href="/pricing/claude-haiku-5-5/"><strong>claude-haiku-5-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$0.1</td><td>$0.01</td><td>$0.5</td><td>$0.00035</td></tr>
-<tr><td><a href="/pricing/mistral-tiny/"><strong>mistral-tiny</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.25</td><td>$0.025</td><td>$0.25</td><td>$0.000375</td></tr>
+<tr><td><a href="/pricing/gpt-5-nano/"><strong>gpt-5-nano</strong></a></td><td class="left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.05</td><td>$0.005</td><td>$0.4</td><td>$0.00025</td></tr>
+<tr><td><a href="/pricing/mistral-small/"><strong>mistral-small</strong></a></td><td class="left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.3</td><td>$0.00025</td></tr>
+<tr><td><a href="/pricing/deepseek-coder/"><strong>deepseek-coder</strong></a></td><td class="left"><span class="dot" style="--p:#4d6bfe"></span>DeepSeek</td><td>$0.14</td><td>$0.014</td><td>$0.28</td><td>$0.00028</td></tr>
+<tr><td><a href="/pricing/ministral-3-14b-2512/"><strong>ministral-3-14b-2512</strong></a></td><td class="left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.2</td><td>$0.02</td><td>$0.2</td><td>$0.0003</td></tr>
+<tr><td><a href="/pricing/ministral-14b-2512/"><strong>ministral-14b-2512</strong></a></td><td class="left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.2</td><td>$0.02</td><td>$0.2</td><td>$0.0003</td></tr>
+<tr><td><a href="/pricing/gpt-6-luna/"><strong>gpt-6-luna</strong></a></td><td class="left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.1</td><td>$0.01</td><td>$0.5</td><td>$0.00035</td></tr>
+<tr><td><a href="/pricing/claude-haiku-5-5/"><strong>claude-haiku-5-5</strong></a></td><td class="left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$0.1</td><td>$0.01</td><td>$0.5</td><td>$0.00035</td></tr>
+<tr><td><a href="/pricing/mistral-tiny/"><strong>mistral-tiny</strong></a></td><td class="left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.25</td><td>$0.025</td><td>$0.25</td><td>$0.000375</td></tr>
   </tbody>
 </table></div>
 

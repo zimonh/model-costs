@@ -14,7 +14,7 @@
     <meta property="og:image" content="https://apicost.app/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","name":"o3 API Pricing – Cost per 1M Tokens & Calculator","url":"https://apicost.app/pricing/o3/","dateModified":"2026-10-28"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://apicost.app/"},{"@type":"ListItem","position":2,"name":"Pricing","item":"https://apicost.app/pricing/"},{"@type":"ListItem","position":3,"name":"OpenAI","item":"https://apicost.app/pricing/openai/"},{"@type":"ListItem","position":4,"name":"o3","item":"https://apicost.app/pricing/o3/"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does the o3 API cost?","acceptedAnswer":{"@type":"Answer","text":"OpenAI charges $2 per million input tokens and $8 per million output tokens for o3, and $0.5 per million cached input tokens. A typical request of 1,000 input and 500 output tokens costs $0.006, or $0.003 through the batch API."}},{"@type":"Question","name":"Is there a cheaper way to use o3?","acceptedAnswer":{"@type":"Answer","text":"Yes. The OpenAI batch API runs requests within 24 hours for $1 per million input tokens and $4 per million output tokens. Prompt caching lowers the price of repeated input to $0.5 per million tokens."}}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","name":"o3 API Pricing – Cost per 1M Tokens & Calculator","url":"https://apicost.app/pricing/o3/","dateModified":"2026-10-28"},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does the o3 API cost?","acceptedAnswer":{"@type":"Answer","text":"OpenAI charges $2 per million input tokens and $8 per million output tokens for o3, and $0.5 per million cached input tokens. A typical request of 1,000 input and 500 output tokens costs $0.006, or $0.003 through the batch API."}},{"@type":"Question","name":"Is there a cheaper way to use o3?","acceptedAnswer":{"@type":"Answer","text":"Yes. The OpenAI batch API runs requests within 24 hours for $1 per million input tokens and $4 per million output tokens. Prompt caching lowers the price of repeated input to $0.5 per million tokens."}}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://apicost.app/"},{"@type":"ListItem","position":2,"name":"Pricing","item":"https://apicost.app/pricing/"},{"@type":"ListItem","position":3,"name":"OpenAI","item":"https://apicost.app/pricing/openai/"},{"@type":"ListItem","position":4,"name":"o3","item":"https://apicost.app/pricing/o3/"}]}]}</script>
     <style>
 :root { --bg: #f6f7f9; --surface: #fff; --surface-2: #f1f3f6; --border: #e2e5ea; --text: #14171c; --muted: #5d6573; --accent: #0b7a52; --accent-strong: #08643f; --accent-soft: #e3f4ec; --focus: #2f6fed; --shadow: 0 1px 2px rgba(20,23,28,.04), 0 8px 24px rgba(20,23,28,.06); color-scheme: light; }
 @media (prefers-color-scheme: dark) { :root { --bg: #0f1115; --surface: #171a20; --surface-2: #1f232b; --border: #2b3039; --text: #eceff3; --muted: #9aa3b2; --accent: #3fd39a; --accent-strong: #6be3b4; --accent-soft: #143428; --focus: #7aa7ff; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25); color-scheme: dark; } }
@@ -32,6 +32,7 @@ a { color: var(--accent); } a:hover { color: var(--accent-strong); }
 .crumbs { font-size: .85rem; color: var(--muted); padding-top: 20px; } .crumbs a { color: var(--muted); }
 h1, h2 { overflow-wrap: anywhere; }
 h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.15; letter-spacing: -.02em; margin: 14px 0 10px; }
+main > h1:first-child { margin-top: 36px; }
 h2 { font-size: 1.35rem; letter-spacing: -.01em; margin: 40px 0 12px; }
 .lead { color: var(--muted); font-size: 1.05rem; max-width: 720px; margin: 0; }
 .badge { display: inline-flex; gap: 6px; font-size: .8rem; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 3px 10px; font-weight: 600; margin-top: 14px; }
@@ -39,7 +40,7 @@ h2 { font-size: 1.35rem; letter-spacing: -.01em; margin: 40px 0 12px; }
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: .92rem; }
 th, td { padding: 10px 14px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border); }
-th:first-child, td:first-child { text-align: left; }
+th:first-child, td:first-child, .left { text-align: left; }
 tbody tr:last-child td { border-bottom: 0; }
 th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; }
@@ -108,16 +109,16 @@ footer { margin-top: 56px; padding: 28px 0 40px; border-top: 1px solid var(--bor
 
       <h2>Models with a similar price</h2>
 <div class="card table-wrap"><table class="num">
-  <thead><tr><th scope="col">Model</th><th scope="col" style="text-align:left">Provider</th><th scope="col">Input / 1M</th><th scope="col">Cached input / 1M</th><th scope="col">Output / 1M</th><th scope="col">Typical request</th></tr></thead>
+  <thead><tr><th scope="col">Model</th><th scope="col" class="left">Provider</th><th scope="col">Input / 1M</th><th scope="col">Cached input / 1M</th><th scope="col">Output / 1M</th><th scope="col">Typical request</th></tr></thead>
   <tbody>
-<tr><td><a href="/pricing/mistral-medium/"><strong>mistral-medium</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td>$0.00525</td></tr>
-<tr><td><a href="/pricing/mistral-medium-3/"><strong>mistral-medium-3</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td>$0.00525</td></tr>
-<tr><td><a href="/pricing/gpt-4.1/"><strong>gpt-4.1</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$2</td><td>$0.5</td><td>$8</td><td>$0.006</td></tr>
-<tr><td><a href="/pricing/gemini-3.5-flash/"><strong>gemini-3.5-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$1.5</td><td>$0.15</td><td>$9</td><td>$0.006</td></tr>
-<tr><td><a href="/pricing/gemini-omni-1.1-flash/"><strong>gemini-omni-1.1-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$1.5</td><td>–</td><td>$9</td><td>$0.006</td></tr>
-<tr><td><a href="/pricing/gpt-5/"><strong>gpt-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$1.25</td><td>$0.125</td><td>$10</td><td>$0.00625</td></tr>
-<tr><td><a href="/pricing/gpt-5.1/"><strong>gpt-5.1</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$1.25</td><td>$0.125</td><td>$10</td><td>$0.00625</td></tr>
-<tr><td><a href="/pricing/gemini-2.5-pro/"><strong>gemini-2.5-pro</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$1.25</td><td>$0.125</td><td>$10</td><td>$0.00625</td></tr>
+<tr><td><a href="/pricing/mistral-medium/"><strong>mistral-medium</strong></a></td><td class="left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td>$0.00525</td></tr>
+<tr><td><a href="/pricing/mistral-medium-3/"><strong>mistral-medium-3</strong></a></td><td class="left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td>$0.00525</td></tr>
+<tr><td><a href="/pricing/gpt-4.1/"><strong>gpt-4.1</strong></a></td><td class="left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$2</td><td>$0.5</td><td>$8</td><td>$0.006</td></tr>
+<tr><td><a href="/pricing/gemini-3.5-flash/"><strong>gemini-3.5-flash</strong></a></td><td class="left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$1.5</td><td>$0.15</td><td>$9</td><td>$0.006</td></tr>
+<tr><td><a href="/pricing/gemini-omni-1.1-flash/"><strong>gemini-omni-1.1-flash</strong></a></td><td class="left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$1.5</td><td>–</td><td>$9</td><td>$0.006</td></tr>
+<tr><td><a href="/pricing/gpt-5/"><strong>gpt-5</strong></a></td><td class="left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$1.25</td><td>$0.125</td><td>$10</td><td>$0.00625</td></tr>
+<tr><td><a href="/pricing/gpt-5.1/"><strong>gpt-5.1</strong></a></td><td class="left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$1.25</td><td>$0.125</td><td>$10</td><td>$0.00625</td></tr>
+<tr><td><a href="/pricing/gemini-2.5-pro/"><strong>gemini-2.5-pro</strong></a></td><td class="left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$1.25</td><td>$0.125</td><td>$10</td><td>$0.00625</td></tr>
   </tbody>
 </table></div>
 

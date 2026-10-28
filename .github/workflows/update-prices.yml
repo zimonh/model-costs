@@ -12,10 +12,13 @@ jobs:
   # apicost.app is served from a checkout on the zimonh.nl server that pulls
   # main every hour. Fail (and so email the owner) when the live site still
   # serves different prices than main, which means that pull stopped working.
+  # Once the site is confirmed current, tell search engines what changed.
   check-live:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
       - name: Live prices match main
         run: |
           curl -fsS https://apicost.app/prices.json -o live.json
@@ -27,6 +30,8 @@ jobs:
             }
             console.log("Live site is up to date");
           '
+      - name: Submit pages changed in the last day to IndexNow
+        run: node scripts/indexnow.mjs $(git log --since="26 hours ago" --name-only --format= | sort -u)
 
   update:
     runs-on: ubuntu-latest
@@ -36,10 +41,11 @@ jobs:
         with:
           node-version: 22
       - run: node scripts/update-prices.mjs
-      - run: node scripts/build-pages.mjs
+      - run: node scripts/build-site.mjs
+      - run: node scripts/check-site.mjs
       - name: Commit when prices changed
         run: |
-          git add prices.json index.html sitemap.xml pricing
+          git add prices.json index.html 404.html sitemap.xml llms.txt pricing
           # Every page derives from prices.json, so only its prices decide; the dates alone change daily.
           if git diff --cached --quiet -I '"updated"' -- prices.json; then
             echo "No price changes"

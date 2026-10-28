@@ -32,6 +32,7 @@ a { color: var(--accent); } a:hover { color: var(--accent-strong); }
 .crumbs { font-size: .85rem; color: var(--muted); padding-top: 20px; } .crumbs a { color: var(--muted); }
 h1, h2 { overflow-wrap: anywhere; }
 h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.15; letter-spacing: -.02em; margin: 14px 0 10px; }
+main > h1:first-child { margin-top: 36px; }
 h2 { font-size: 1.35rem; letter-spacing: -.01em; margin: 40px 0 12px; }
 .lead { color: var(--muted); font-size: 1.05rem; max-width: 720px; margin: 0; }
 .badge { display: inline-flex; gap: 6px; font-size: .8rem; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 3px 10px; font-weight: 600; margin-top: 14px; }
@@ -39,7 +40,7 @@ h2 { font-size: 1.35rem; letter-spacing: -.01em; margin: 40px 0 12px; }
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: .92rem; }
 th, td { padding: 10px 14px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border); }
-th:first-child, td:first-child { text-align: left; }
+th:first-child, td:first-child, .left { text-align: left; }
 tbody tr:last-child td { border-bottom: 0; }
 th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; }

@@ -1,19 +1,12 @@
 // Builds prices.json from LiteLLM's maintained price list, which links each
-// provider's own pricing page. Run by .github/workflows/update-prices.yml.
+// provider's own pricing page. scripts/build-site.mjs renders the site from it.
+// Run by .github/workflows/update-prices.yml.
 // Usage: node scripts/update-prices.mjs [source.json]
 import { readFile, writeFile } from "node:fs/promises";
+import { PROVIDERS } from "./site.mjs";
 
 const SOURCE =
   "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json";
-
-const PROVIDERS = {
-  openai: "OpenAI",
-  anthropic: "Anthropic",
-  gemini: "Google Gemini",
-  mistral: "Mistral",
-  deepseek: "DeepSeek",
-  xai: "xAI",
-};
 
 // Snapshot ids like gpt-4o-2024-08-06 or claude-3-5-sonnet-20241022.
 const DATED = /-(\d{4}-\d{2}-\d{2}|\d{8}|\d{4})$/;
@@ -52,7 +45,7 @@ for (const [key, m] of Object.entries(source)) {
       cachedInput: perMillion(m.cache_read_input_token_cost_batches),
       output: perMillion(m.output_cost_per_token_batches),
     },
-    // Used by the per-model pages (scripts/build-pages.mjs), not by the calculator.
+    // Used by the per-model pages, not by the calculator.
     maxInputTokens: m.max_input_tokens ?? null,
     maxOutputTokens: m.max_output_tokens ?? null,
     vision: m.supports_vision === true,
@@ -77,50 +70,8 @@ const models = [...byName.values()].sort(
 // A broken or renamed upstream file would otherwise publish an empty site.
 if (models.length < 40) throw new Error(`Only ${models.length} models in the LiteLLM list, refusing to publish`);
 
-const out = { updated: today, source: SOURCE, providers: PROVIDERS, models };
+// prices.json keeps the plain { id: name } map the calculator reads.
+const providers = Object.fromEntries(Object.entries(PROVIDERS).map(([key, p]) => [key, p.name]));
+const out = { updated: today, source: SOURCE, providers, models };
 await writeFile(new URL("../prices.json", import.meta.url), JSON.stringify(out, null, 1) + "\n");
 console.log(`prices.json: ${models.length} models`);
-
-// Pre-render the price table into index.html so search engines and visitors
-// without JavaScript see the prices. The page re-renders it from prices.json.
-const rate = (n) => (n == null ? "–" : "$" + Number(n.toPrecision(4)));
-const escape = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
-// Aliases like gpt-5-latest have no page of their own, see scripts/build-pages.mjs.
-const detailLink = (name) =>
-  name.endsWith("-latest") ? "" : ` <a class="detail" href="/pricing/${name}/" aria-label="${escape(name)} pricing details">details</a>`;
-const rows = models
-  .map((m) => {
-    const p = m.standard;
-    const cost = (p.input * 1000 + p.output * 500) / 1e6;
-    return `<tr data-name="${escape(m.name)}"><td><strong>${escape(m.name)}</strong>${detailLink(m.name)}</td><td>${PROVIDERS[m.provider]}</td><td>${rate(p.input)}</td><td>${rate(p.cachedInput)}</td><td>${rate(p.output)}</td><td class="cost">$${Number(cost.toPrecision(3))}</td></tr>`;
-  })
-  .join("\n");
-// Worked examples for the "How much does the ChatGPT API cost?" section: every
-// variant of the three newest GPT versions, plus gpt-4o and gpt-4o-mini, which
-// people still search for by name.
-const gptVersion = (name) => Number(name.match(/^gpt-(\d+(?:\.\d+)?)(-|$)/)?.[1]);
-const openai = models.filter((m) => m.provider === "openai" && !m.name.endsWith("-latest"));
-const newest = [...new Set(openai.map((m) => gptVersion(m.name)).filter((v) => v >= 5))].sort((a, b) => b - a).slice(0, 3);
-const exampleModels = [
-  ...openai.filter((m) => newest.includes(gptVersion(m.name))).sort((a, b) => gptVersion(b.name) - gptVersion(a.name)),
-  ...["gpt-4o", "gpt-4o-mini"].map((name) => byName.get(name)).filter(Boolean),
-];
-const usd = (n) => "$" + (n >= 0.1 ? n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : Number(n.toPrecision(3)));
-const examples = exampleModels
-  .map((m) => {
-    const p = m.standard;
-    const cost = (p.input * 1000 + p.output * 500) / 1e6;
-    return `<tr><td><a href="/pricing/${m.name}/"><strong>${escape(m.name)}</strong></a></td><td>${rate(p.input)}</td><td>${rate(p.output)}</td><td>${usd(cost)}</td><td>${usd(cost * 1000)}</td></tr>`;
-  })
-  .join("\n");
-
-const indexUrl = new URL("../index.html", import.meta.url);
-const html = await readFile(indexUrl, "utf8");
-await writeFile(
-  indexUrl,
-  html
-    .replace(/<!-- prices:start -->[\s\S]*<!-- prices:end -->/, `<!-- prices:start -->\n${rows}\n<!-- prices:end -->`)
-    .replace(/<!-- examples:start -->[\s\S]*<!-- examples:end -->/, `<!-- examples:start -->\n${examples}\n<!-- examples:end -->`)
-    .replace(/"dateModified": "[^"]*"/, `"dateModified": "${today}"`)
-    .replace(/© \d{4} apicost\.app/, `© ${today.slice(0, 4)} apicost.app`)
-);
