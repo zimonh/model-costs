@@ -1,0 +1,28 @@
+name: Check
+
+# Every push goes live within the hour, so catch a broken site before that:
+# rebuild from prices.json, check links and structured data, and make sure the
+# committed pages match what the templates produce.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/build-site.mjs
+      - run: node scripts/check-site.mjs
+      - name: Committed pages match the build
+        run: |
+          git add -A
+          if ! git diff --cached --quiet; then
+            git diff --cached --stat
+            echo "::error::The committed site differs from what scripts/build-site.mjs generates. Run it and commit the result."
+            exit 1
+          fi

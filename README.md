@@ -36,4 +36,6 @@ python3 -m http.server   # then open http://localhost:8000
 2. The zimonh.nl server has a checkout of this repo and runs `git pull` every hour, at :07. nginx serves it at apicost.app.
 3. The next run first checks that apicost.app serves the same `prices.json` as `main`. If it doesn't, the job fails and GitHub emails the owner, so a stuck server gets noticed. Once the check passes, it submits the pages that changed to IndexNow.
 
+Every push to `main` also runs `.github/workflows/check.yml`. It rebuilds the site, checks it, and fails when the committed pages differ from what the templates produce.
+
 To change the calculator or the page templates, edit `index.html` or `scripts/build-site.mjs`, run the scripts, and push. The site updates within the hour.
