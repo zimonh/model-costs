@@ -83,9 +83,36 @@ const rows = models
     return `<tr data-name="${escape(m.name)}"><td><strong>${escape(m.name)}</strong></td><td>${PROVIDERS[m.provider]}</td><td>${rate(p.input)}</td><td>${rate(p.cachedInput)}</td><td>${rate(p.output)}</td><td class="cost">$${Number(cost.toPrecision(3))}</td></tr>`;
   })
   .join("\n");
+// Worked examples for the "How much does the ChatGPT API cost?" section: every
+// variant of the three newest GPT versions, plus gpt-4o and gpt-4o-mini, which
+// people still search for by name.
+const gptVersion = (name) => Number(name.match(/^gpt-(\d+(?:\.\d+)?)(-|$)/)?.[1]);
+const openai = models.filter((m) => m.provider === "openai" && !m.name.endsWith("-latest"));
+const newest = [...new Set(openai.map((m) => gptVersion(m.name)).filter((v) => v >= 5))].sort((a, b) => b - a).slice(0, 3);
+const exampleModels = [
+  ...openai.filter((m) => newest.includes(gptVersion(m.name))).sort((a, b) => gptVersion(b.name) - gptVersion(a.name)),
+  ...["gpt-4o", "gpt-4o-mini"].map((name) => byName.get(name)).filter(Boolean),
+];
+const usd = (n) => "$" + (n >= 0.1 ? n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : Number(n.toPrecision(3)));
+const examples = exampleModels
+  .map((m) => {
+    const p = m.standard;
+    const cost = (p.input * 1000 + p.output * 500) / 1e6;
+    return `<tr><td><strong>${escape(m.name)}</strong></td><td>${rate(p.input)}</td><td>${rate(p.output)}</td><td>${usd(cost)}</td><td>${usd(cost * 1000)}</td></tr>`;
+  })
+  .join("\n");
+
 const indexUrl = new URL("../index.html", import.meta.url);
 const html = await readFile(indexUrl, "utf8");
 await writeFile(
   indexUrl,
-  html.replace(/<!-- prices:start -->[\s\S]*<!-- prices:end -->/, `<!-- prices:start -->\n${rows}\n<!-- prices:end -->`)
+  html
+    .replace(/<!-- prices:start -->[\s\S]*<!-- prices:end -->/, `<!-- prices:start -->\n${rows}\n<!-- prices:end -->`)
+    .replace(/<!-- examples:start -->[\s\S]*<!-- examples:end -->/, `<!-- examples:start -->\n${examples}\n<!-- examples:end -->`)
+    .replace(/"dateModified": "[^"]*"/, `"dateModified": "${today}"`)
 );
+
+// Tell search engines when the prices last changed.
+const sitemapUrl = new URL("../sitemap.xml", import.meta.url);
+const sitemap = await readFile(sitemapUrl, "utf8");
+await writeFile(sitemapUrl, sitemap.replace(/<lastmod>[^<]*<\/lastmod>|(?=\s*<changefreq>)/, `<lastmod>${today}</lastmod>`));

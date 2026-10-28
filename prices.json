@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-27",
+ "updated": "2026-10-28",
  "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
  "providers": {
   "openai": "OpenAI",
@@ -896,6 +896,21 @@
    }
   },
   {
+   "name": "deepseek-v4-1-flash-1017",
+   "provider": "mistral",
+   "source": "https://docs.mistral.ai/models/deepseek-v4-flash-1017",
+   "standard": {
+    "input": 0.3,
+    "cachedInput": 0.007,
+    "output": 1.2
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   }
+  },
+  {
    "name": "devstral-latest",
    "provider": "mistral",
    "source": "https://mistral.ai/news/devstral-2-vibe-cli",
@@ -1185,9 +1200,9 @@
    "provider": "mistral",
    "source": "https://docs.mistral.ai/models/mistral-large-4",
    "standard": {
-    "input": 0.68,
-    "cachedInput": 0.068,
-    "output": 2.09
+    "input": 1.36,
+    "cachedInput": 0.14,
+    "output": 4.18
    },
    "batch": {
     "input": null,
@@ -1200,9 +1215,9 @@
    "provider": "mistral",
    "source": "https://docs.mistral.ai/models/mistral-large-4",
    "standard": {
-    "input": 0.68,
-    "cachedInput": 0.068,
-    "output": 2.09
+    "input": 1.36,
+    "cachedInput": 0.14,
+    "output": 4.18
    },
    "batch": {
     "input": null,
@@ -1580,9 +1595,9 @@
     "output": 6
    },
    "batch": {
-    "input": null,
-    "cachedInput": null,
-    "output": null
+    "input": 1.6,
+    "cachedInput": 0.4,
+    "output": 4.8
    }
   },
   {
@@ -1736,7 +1751,7 @@
    }
   },
   {
-   "name": "grok-code-fast-1",
+   "name": "grok-code-fast-1-0825",
    "provider": "xai",
    "source": "https://api.x.ai/v1/language-models",
    "standard": {

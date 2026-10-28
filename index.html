@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LLM API Cost Calculator – OpenAI, Claude, Gemini &amp; Grok pricing | apicost.app</title>
+    <title>ChatGPT API Cost Calculator – GPT, Claude &amp; Gemini Pricing</title>
     <meta
       name="description"
-      content="Free LLM API cost calculator. Paste a prompt and see what it costs on GPT, Claude, Gemini, Mistral, DeepSeek and Grok. Compare token prices side by side, with batch and cached-input rates. Prices updated daily."
+      content="Free ChatGPT API cost and pricing calculator. Paste a prompt to count tokens and see what it costs on GPT, Claude, Gemini, Mistral, DeepSeek and Grok. Batch and cached-input rates, prices updated daily."
     />
     <link rel="canonical" href="https://apicost.app/" />
     <meta name="robots" content="index, follow" />
@@ -15,7 +15,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://apicost.app/" />
     <meta property="og:site_name" content="apicost.app" />
-    <meta property="og:title" content="LLM API Cost Calculator – compare GPT, Claude, Gemini and Grok prices" />
+    <meta property="og:title" content="ChatGPT API Cost Calculator – compare GPT, Claude, Gemini and Grok prices" />
     <meta property="og:description" content="Paste a prompt, pick a model, see the cost. Token prices for OpenAI, Anthropic, Google, Mistral, DeepSeek and xAI, updated daily." />
     <meta property="og:image" content="https://apicost.app/og-image.png" />
     <meta property="og:image:width" content="1200" />
@@ -23,7 +23,7 @@
     <meta property="og:image:alt" content="LLM API Cost Calculator: compare OpenAI, Anthropic, Gemini, Mistral, DeepSeek and xAI token prices" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://apicost.app/og-image.png" />
-    <meta name="twitter:title" content="LLM API Cost Calculator – apicost.app" />
+    <meta name="twitter:title" content="ChatGPT API Cost Calculator – apicost.app" />
     <meta name="twitter:description" content="Compare API token prices for GPT, Claude, Gemini, Mistral, DeepSeek and Grok. Updated daily." />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
     <script type="application/ld+json">
@@ -31,19 +31,36 @@
         "@context": "https://schema.org",
         "@graph": [
           {
+            "@type": "WebSite",
+            "name": "apicost.app",
+            "url": "https://apicost.app/"
+          },
+          {
             "@type": "WebApplication",
-            "name": "LLM API Cost Calculator",
+            "name": "ChatGPT API Cost Calculator",
+            "alternateName": ["LLM API Cost Calculator", "OpenAI API Cost Calculator"],
             "url": "https://apicost.app/",
             "applicationCategory": "DeveloperApplication",
             "operatingSystem": "Any",
             "browserRequirements": "Requires JavaScript",
             "isAccessibleForFree": true,
+            "dateModified": "2026-10-28",
             "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
             "description": "Calculate and compare API costs for OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models from real text, with batch and cached-input pricing."
           },
           {
             "@type": "FAQPage",
             "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How much does the ChatGPT API cost?",
+                "acceptedAnswer": { "@type": "Answer", "text": "The ChatGPT (OpenAI) API is billed per token, with separate prices for input and output tokens. Prices range from a few cents per million tokens for the smallest models to tens of dollars for the largest. A token is roughly 4 characters of English text. Paste your prompt into the calculator to see the exact cost per request." }
+              },
+              {
+                "@type": "Question",
+                "name": "Is the API included in ChatGPT Plus?",
+                "acceptedAnswer": { "@type": "Answer", "text": "No. A ChatGPT Plus or Pro subscription covers the ChatGPT app only. The OpenAI API is billed separately, pay as you go, through the OpenAI platform." }
+              },
               {
                 "@type": "Question",
                 "name": "How is the API cost calculated?",
@@ -242,6 +259,10 @@
       .prices tbody tr:hover { background: var(--surface-2); }
       .prices tbody tr.selected { background: var(--accent-soft); }
       .prices .cost { font-weight: 600; }
+      table.examples { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+      .examples th, .examples td { padding: 10px 14px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border); }
+      .examples th:first-child, .examples td:first-child { text-align: left; }
+      .examples th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 600; }
       .provider-cell { display: inline-flex; align-items: center; gap: 8px; }
 
       /* FAQ and footer */
@@ -273,6 +294,7 @@
         <nav class="nav" aria-label="Main">
           <a href="#calculator">Calculator</a>
           <a href="#prices">Compare prices</a>
+          <a href="#chatgpt-api-cost" class="hide-sm">ChatGPT API cost</a>
           <a href="#faq" class="hide-sm">FAQ</a>
           <a href="https://github.com/zimonh/model-costs" class="hide-sm">GitHub</a>
         </nav>
@@ -282,9 +304,9 @@
     <main class="wrap">
       <div class="hero">
         <div class="badge"><span aria-hidden="true">●</span> <span id="updated-badge">Prices updated daily</span></div>
-        <h1>LLM API Cost Calculator</h1>
+        <h1>ChatGPT &amp; LLM API Cost Calculator</h1>
         <p>
-          Paste a prompt, pick a model and see what it costs. Compare API token prices for OpenAI GPT, Anthropic Claude,
+          Paste a prompt, pick a model and see what it costs. Count tokens and compare API prices for OpenAI GPT, Anthropic Claude,
           Google Gemini, Mistral, DeepSeek and xAI Grok. Runs in your browser, no sign-up, no ads.
         </p>
       </div>
@@ -460,6 +482,7 @@
 <tr data-name="codestral-2508"><td><strong>codestral-2508</strong></td><td>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.9</td><td class="cost">$0.00075</td></tr>
 <tr data-name="codestral-latest"><td><strong>codestral-latest</strong></td><td>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.9</td><td class="cost">$0.00075</td></tr>
 <tr data-name="codestral-mamba-latest"><td><strong>codestral-mamba-latest</strong></td><td>Mistral</td><td>$0.25</td><td>$0.025</td><td>$0.25</td><td class="cost">$0.000375</td></tr>
+<tr data-name="deepseek-v4-1-flash-1017"><td><strong>deepseek-v4-1-flash-1017</strong></td><td>Mistral</td><td>$0.3</td><td>$0.007</td><td>$1.2</td><td class="cost">$0.0009</td></tr>
 <tr data-name="devstral-latest"><td><strong>devstral-latest</strong></td><td>Mistral</td><td>$0.4</td><td>$0.04</td><td>$2</td><td class="cost">$0.0014</td></tr>
 <tr data-name="devstral-medium-latest"><td><strong>devstral-medium-latest</strong></td><td>Mistral</td><td>$0.4</td><td>$0.04</td><td>$2</td><td class="cost">$0.0014</td></tr>
 <tr data-name="devstral-small-latest"><td><strong>devstral-small-latest</strong></td><td>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.3</td><td class="cost">$0.00025</td></tr>
@@ -479,8 +502,8 @@
 <tr data-name="mistral-code-fim-latest"><td><strong>mistral-code-fim-latest</strong></td><td>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.9</td><td class="cost">$0.00075</td></tr>
 <tr data-name="mistral-code-latest"><td><strong>mistral-code-latest</strong></td><td>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.9</td><td class="cost">$0.00075</td></tr>
 <tr data-name="mistral-large-3"><td><strong>mistral-large-3</strong></td><td>Mistral</td><td>$0.5</td><td>$0.05</td><td>$1.5</td><td class="cost">$0.00125</td></tr>
-<tr data-name="mistral-large-4"><td><strong>mistral-large-4</strong></td><td>Mistral</td><td>$0.68</td><td>$0.068</td><td>$2.09</td><td class="cost">$0.00172</td></tr>
-<tr data-name="mistral-large-4-0"><td><strong>mistral-large-4-0</strong></td><td>Mistral</td><td>$0.68</td><td>$0.068</td><td>$2.09</td><td class="cost">$0.00172</td></tr>
+<tr data-name="mistral-large-4"><td><strong>mistral-large-4</strong></td><td>Mistral</td><td>$1.36</td><td>$0.14</td><td>$4.18</td><td class="cost">$0.00345</td></tr>
+<tr data-name="mistral-large-4-0"><td><strong>mistral-large-4-0</strong></td><td>Mistral</td><td>$1.36</td><td>$0.14</td><td>$4.18</td><td class="cost">$0.00345</td></tr>
 <tr data-name="mistral-large-2512"><td><strong>mistral-large-2512</strong></td><td>Mistral</td><td>$0.5</td><td>$0.05</td><td>$1.5</td><td class="cost">$0.00125</td></tr>
 <tr data-name="mistral-large-latest"><td><strong>mistral-large-latest</strong></td><td>Mistral</td><td>$0.5</td><td>$0.05</td><td>$1.5</td><td class="cost">$0.00125</td></tr>
 <tr data-name="mistral-medium"><td><strong>mistral-medium</strong></td><td>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td class="cost">$0.00525</td></tr>
@@ -516,8 +539,45 @@
 <tr data-name="grok-build-0.1"><td><strong>grok-build-0.1</strong></td><td>xAI</td><td>$1</td><td>$0.2</td><td>$2</td><td class="cost">$0.002</td></tr>
 <tr data-name="grok-build-latest"><td><strong>grok-build-latest</strong></td><td>xAI</td><td>$2</td><td>$0.3</td><td>$6</td><td class="cost">$0.005</td></tr>
 <tr data-name="grok-code-fast"><td><strong>grok-code-fast</strong></td><td>xAI</td><td>$1</td><td>$0.2</td><td>$2</td><td class="cost">$0.002</td></tr>
-<tr data-name="grok-code-fast-1"><td><strong>grok-code-fast-1</strong></td><td>xAI</td><td>$1</td><td>$0.2</td><td>$2</td><td class="cost">$0.002</td></tr>
+<tr data-name="grok-code-fast-1-0825"><td><strong>grok-code-fast-1-0825</strong></td><td>xAI</td><td>$1</td><td>$0.2</td><td>$2</td><td class="cost">$0.002</td></tr>
 <!-- prices:end -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="chatgpt-api-cost" aria-labelledby="chatgpt-api-cost-title">
+        <h2 id="chatgpt-api-cost-title">How much does the ChatGPT API cost?</h2>
+        <p class="section-intro">
+          OpenAI bills the API per token, separately from a ChatGPT subscription. A token is about 4 characters of English text,
+          so 1,000 tokens is roughly 750 words. The table shows what common OpenAI models cost for a typical chat request of
+          1,000 input and 500 output tokens.
+        </p>
+        <div class="card table-wrap">
+          <table class="examples num">
+            <thead>
+              <tr>
+                <th scope="col">Model</th>
+                <th scope="col">Input / 1M</th>
+                <th scope="col">Output / 1M</th>
+                <th scope="col">1 request</th>
+                <th scope="col">1,000 requests</th>
+              </tr>
+            </thead>
+            <tbody>
+<!-- examples:start -->
+<tr><td><strong>gpt-6.1-sol</strong></td><td>$2</td><td>$10</td><td>$0.007</td><td>$7.00</td></tr>
+<tr><td><strong>gpt-6.1-terra</strong></td><td>$1</td><td>$5</td><td>$0.0035</td><td>$3.50</td></tr>
+<tr><td><strong>gpt-6-astra</strong></td><td>$10</td><td>$50</td><td>$0.035</td><td>$35.00</td></tr>
+<tr><td><strong>gpt-6-luna</strong></td><td>$0.1</td><td>$0.5</td><td>$0.00035</td><td>$0.35</td></tr>
+<tr><td><strong>gpt-6-sol</strong></td><td>$2</td><td>$10</td><td>$0.007</td><td>$7.00</td></tr>
+<tr><td><strong>gpt-5.6</strong></td><td>$4</td><td>$20</td><td>$0.014</td><td>$14.00</td></tr>
+<tr><td><strong>gpt-5.6-luna</strong></td><td>$0.2</td><td>$1.2</td><td>$0.0008</td><td>$0.80</td></tr>
+<tr><td><strong>gpt-5.6-sol</strong></td><td>$4</td><td>$20</td><td>$0.014</td><td>$14.00</td></tr>
+<tr><td><strong>gpt-5.6-terra</strong></td><td>$2</td><td>$12</td><td>$0.008</td><td>$8.00</td></tr>
+<tr><td><strong>gpt-4o</strong></td><td>$2.5</td><td>$10</td><td>$0.0075</td><td>$7.50</td></tr>
+<tr><td><strong>gpt-4o-mini</strong></td><td>$0.15</td><td>$0.6</td><td>$0.00045</td><td>$0.45</td></tr>
+<!-- examples:end -->
             </tbody>
           </table>
         </div>
@@ -526,6 +586,14 @@
       <section id="faq" class="faq" aria-labelledby="faq-title">
         <h2 id="faq-title">FAQ</h2>
         <details open>
+          <summary>How much does the ChatGPT API cost?</summary>
+          <p>The ChatGPT (OpenAI) API is billed per token, with separate prices for input and output tokens. Prices range from a few cents per million tokens for the smallest models to tens of dollars for the largest. A token is roughly 4 characters of English text. Paste your prompt into the <a href="#calculator">calculator</a> to see the exact cost per request.</p>
+        </details>
+        <details>
+          <summary>Is the API included in ChatGPT Plus?</summary>
+          <p>No. A ChatGPT Plus or Pro subscription covers the ChatGPT app only. The OpenAI API is billed separately, pay as you go, through the <a href="https://platform.openai.com/">OpenAI platform</a>.</p>
+        </details>
+        <details>
           <summary>How is the API cost calculated?</summary>
           <p>Cost = input tokens × input price + output tokens × output price. Prices are per 1 million tokens, in US dollars. Multiply by the number of requests to get the total.</p>
         </details>
