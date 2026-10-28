@@ -288,6 +288,7 @@
         .nav a[href="#calculator"] { display: none; }
       }
     </style>
+    <script src="/analytics.js" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -618,7 +619,7 @@
         </details>
         <details>
           <summary>Is my text sent anywhere?</summary>
-          <p>No. Everything runs in your browser. The page only downloads the price list.</p>
+          <p>No. Everything runs in your browser. The page only downloads the price list. If you allow analytics, Google Analytics counts which model you pick and the rounded size of a calculation, never your text. See <a href="/privacy/">privacy</a>.</p>
         </details>
       </section>
     </main>
@@ -639,7 +640,7 @@
           Guides: <a href="/token-counter/">Token counter</a> · <a href="/pricing/cheapest/">Cheapest LLM APIs</a> ·
           <a href="/pricing/batch-api/">Batch API pricing</a> · <a href="/pricing/prompt-caching/">Prompt caching pricing</a>
         </p>
-        <p>© 2026 apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a></p>
+        <p>© 2026 apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a> · <a href="/privacy/">Privacy</a><span class="cookie-settings" hidden> · <a href="#cookie-settings">Cookie settings</a></span></p>
       </div>
     </footer>
 
@@ -659,6 +660,45 @@
 
       const $ = (id) => document.getElementById(id);
       const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+      // ---------- Analytics ----------
+
+      // window.track comes from /analytics.js and does nothing before the visitor allows analytics.
+      // Token counts go out as ranges, and the pasted text never does.
+      const track = (name, params) => window.track?.(name, params);
+      const tokenRange = (n) => (n < 1e3 ? "0-1k" : n < 1e4 ? "1k-10k" : n < 1e5 ? "10k-100k" : n < 1e6 ? "100k-1m" : "1m+");
+
+      // One calculate_cost per settled change: 1.5 s after the last edit, and only when the result differs from the last one sent.
+      let calcTimer;
+      let lastCalc = "";
+      function trackCalculation() {
+        clearTimeout(calcTimer);
+        calcTimer = setTimeout(() => {
+          const m = state.model;
+          const params = {
+            model: m.name,
+            provider: m.provider,
+            input_tokens: tokenRange(state.inputTokens),
+            output_tokens: tokenRange(state.outputTokens),
+            pricing: state.pricing,
+            cached: state.cached ? "yes" : "no",
+          };
+          const key = JSON.stringify(params);
+          if (key === lastCalc) return;
+          lastCalc = key;
+          track("calculate_cost", params);
+        }, 1500);
+      }
+
+      // Called by every control the visitor changes; loading a shared link alone counts as no calculation.
+      function changed() {
+        update();
+        trackCalculation();
+      }
+
+      function trackModel(model, from) {
+        track("select_content", { content_type: "model", item_id: model.name, provider: model.provider, from });
+      }
 
       const state = {
         data: null,
@@ -750,6 +790,7 @@
           const chip = e.target.closest(".chip");
           if (!chip) return;
           state[key] = chip.dataset.provider === "all" ? null : chip.dataset.provider;
+          track("select_content", { content_type: "provider", item_id: chip.dataset.provider, from: key === "pickerProvider" ? "picker" : "table" });
           renderChips(container, key);
           if (key === "pickerProvider") {
             renderOptions();
@@ -853,7 +894,8 @@
       function selectModel(model) {
         state.model = model;
         closePicker();
-        update();
+        trackModel(model, "picker");
+        changed();
       }
 
       function setupPicker() {
@@ -945,7 +987,8 @@
           const row = e.target.closest("tr[data-name]");
           if (!row || e.target.closest("a")) return; // the details link opens the model page
           state.model = state.data.models.find((m) => m.name === row.dataset.name);
-          update();
+          trackModel(state.model, "table");
+          changed();
           $("calculator").scrollIntoView({ behavior: "smooth", block: "start" });
         };
       }
@@ -1029,31 +1072,32 @@
           $(`${kind}-text`).oninput = () => {
             state[`${kind}Tokens`] = countTokens($(`${kind}-text`).value);
             $(`${kind}-tokens`).value = state[`${kind}Tokens`];
-            if (state.model) update();
+            if (state.model) changed();
           };
           $(`${kind}-tokens`).oninput = () => {
             state[`${kind}Tokens`] = Math.max(0, parseInt($(`${kind}-tokens`).value) || 0);
-            if (state.model) update();
+            if (state.model) changed();
           };
         }
         $("requests").oninput = () => {
           state.requests = Math.max(1, parseInt($("requests").value) || 1);
-          if (state.model) update();
+          if (state.model) changed();
         };
         document.querySelectorAll('input[name="pricing"]').forEach((radio) => {
           radio.onchange = () => {
             state.pricing = radio.value;
-            if (state.model) update();
+            if (state.model) changed();
           };
         });
         $("cached").onchange = () => {
           state.cached = $("cached").checked;
-          if (state.model) update();
+          if (state.model) changed();
         };
         $("copy-link").onclick = async () => {
           try {
             await navigator.clipboard.writeText(location.href);
             $("copy-link").textContent = "Copied!";
+            track("share", { method: "copy_link", content_type: "calculation", item_id: state.model?.name });
           } catch {
             $("copy-link").textContent = "Copy failed";
           }

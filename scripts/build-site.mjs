@@ -1,6 +1,7 @@
 // Renders the site from prices.json:
 //   index.html          the pre-rendered price and example tables, dates
 //   pricing/            one page per model and provider, plus an index
+//   privacy/            the privacy page, which lists the analytics events
 //   404.html, sitemap.xml, llms.txt
 // Search engines and AI assistants land on the static pages; the calculator
 // itself lives on the home page. Run after scripts/update-prices.mjs.
@@ -127,6 +128,7 @@ function layout({ path, title, description, crumbs = [], body, script = "", json
     <link rel="icon" href="${ICON}" />
     <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>
     <style>${CSS}</style>
+    <script src="/analytics.js" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -147,7 +149,7 @@ ${body}
       <div class="wrap">
         <p>Prices per 1 million tokens in US dollars, from the open <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list. Updated ${longDate}.</p>
         <p>Check the provider's own pricing page before relying on a number. Providers bill by their own token counts.</p>
-        <p>© ${updated.slice(0, 4)} apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a></p>
+        <p>© ${updated.slice(0, 4)} apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a> · <a href="${TOPICS.privacy}">Privacy</a><span class="cookie-settings" hidden> · <a href="#cookie-settings">Cookie settings</a></span></p>
       </div>
     </footer>${script ? `\n    <script>${script}    </script>` : ""}
   </body>
@@ -366,6 +368,7 @@ const TOPICS = {
   batch: "/pricing/batch-api/",
   caching: "/pricing/prompt-caching/",
   tokenCounter: "/token-counter/",
+  privacy: "/privacy/",
 };
 for (const m of models) {
   if (Object.values(TOPICS).includes(modelPath(m))) throw new Error(`Model ${m.name} collides with a topic page`);
@@ -583,8 +586,40 @@ ${costRows(1000)}
           (m) => \`<tr><td><a href="/pricing/\${m.name}/"><strong>\${m.name}</strong></a></td><td>\${usd((n * m.input) / 1e6)}</td><td>\${usd((n * m.output) / 1e6)}</td></tr>\`
         ).join("");
       }
-      $("text").addEventListener("input", render);
+      // One token_count per settled edit (see /analytics.js): the token range, never the text.
+      let countTimer, lastCount = "";
+      $("text").addEventListener("input", () => {
+        render();
+        clearTimeout(countTimer);
+        countTimer = setTimeout(() => {
+          const text = $("text").value;
+          if (!text) return;
+          const n = window.tokenizer ? tokenizer.count(text) : Math.ceil(text.length / 4);
+          const tokens = n < 1e3 ? "0-1k" : n < 1e4 ? "1k-10k" : n < 1e5 ? "10k-100k" : n < 1e6 ? "100k-1m" : "1m+";
+          if (tokens === lastCount) return;
+          lastCount = tokens;
+          window.track?.("token_count", { tokens });
+        }, 1500);
+      });
       $("text").addEventListener("focus", loadTokenizer, { once: true });
+`,
+  });
+}
+
+function privacyPage() {
+  return layout({
+    path: TOPICS.privacy,
+    title: "Privacy – apicost.app",
+    description: "What apicost.app collects: nothing until you allow Google Analytics, and never the text you paste.",
+    crumbs: [["Home", "/"], ["Privacy", TOPICS.privacy]],
+    body: `
+      <h1>Privacy</h1>
+      <p class="lead">The calculator and token counter run in your browser. The text you paste never leaves your device.</p>
+      <h2>Analytics, only if you allow it</h2>
+      <p>If you press <strong>Allow</strong> in the cookie banner, the site loads Google Analytics, which sets a cookie and counts page views and a few actions: which model and provider you pick, the rounded size of a calculation (such as "1k-10k" input tokens), batch or cached pricing, token counts in the same ranges, copying a link, and clicks to other sites such as a provider's pricing page. It never receives your text, and we run no ads. If you press <strong>No thanks</strong>, or don't choose, Google Analytics isn't loaded at all.</p>
+      <p>You can change your choice at any time under <a href="#cookie-settings">Cookie settings</a> at the bottom of every page. Choosing No thanks stops the counting and removes the analytics cookies.</p>
+      <h2>Everything else</h2>
+      <p>The site has no accounts, no forms and no ads. The server keeps standard access logs to keep the site running.</p>
 `,
   });
 }
@@ -666,6 +701,7 @@ const pages = new Map([
   [TOPICS.batch, batchPage()],
   [TOPICS.caching, cachingPage()],
   [TOPICS.tokenCounter, tokenCounterPage()],
+  [TOPICS.privacy, privacyPage()],
   ...providerKeys.map((key) => [providerPath(key), providerPage(key)]),
   ...models.map((m) => [modelPath(m), modelPage(m)]),
 ]);
@@ -673,6 +709,7 @@ const pages = new Map([
 // Start from scratch so models that left the price list lose their page.
 await rm(new URL("pricing/", root), { recursive: true, force: true });
 await rm(new URL("token-counter/", root), { recursive: true, force: true });
+await rm(new URL("privacy/", root), { recursive: true, force: true });
 for (const [path, html] of pages) {
   const dir = new URL("." + path, root);
   await mkdir(dir, { recursive: true });

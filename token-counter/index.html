@@ -63,6 +63,7 @@ h3 { font-size: 1.05rem; margin: 24px 0 4px; } h3 + p { margin: 0; color: var(--
 .counts { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 14px; } .counts .v { font-size: 1.6rem; font-weight: 700; margin-right: 6px; } .counts .k { color: var(--muted); }
 @media (max-width: 560px) { .nav .hide-sm { display: none; } }
 </style>
+    <script src="/analytics.js" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -124,7 +125,7 @@ h3 { font-size: 1.05rem; margin: 24px 0 4px; } h3 + p { margin: 0; color: var(--
       <div class="wrap">
         <p>Prices per 1 million tokens in US dollars, from the open <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list. Updated October 28, 2026.</p>
         <p>Check the provider's own pricing page before relying on a number. Providers bill by their own token counts.</p>
-        <p>© 2026 apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a></p>
+        <p>© 2026 apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a> · <a href="/privacy/">Privacy</a><span class="cookie-settings" hidden> · <a href="#cookie-settings">Cookie settings</a></span></p>
       </div>
     </footer>
     <script>
@@ -158,7 +159,21 @@ h3 { font-size: 1.05rem; margin: 24px 0 4px; } h3 + p { margin: 0; color: var(--
           (m) => `<tr><td><a href="/pricing/${m.name}/"><strong>${m.name}</strong></a></td><td>${usd((n * m.input) / 1e6)}</td><td>${usd((n * m.output) / 1e6)}</td></tr>`
         ).join("");
       }
-      $("text").addEventListener("input", render);
+      // One token_count per settled edit (see /analytics.js): the token range, never the text.
+      let countTimer, lastCount = "";
+      $("text").addEventListener("input", () => {
+        render();
+        clearTimeout(countTimer);
+        countTimer = setTimeout(() => {
+          const text = $("text").value;
+          if (!text) return;
+          const n = window.tokenizer ? tokenizer.count(text) : Math.ceil(text.length / 4);
+          const tokens = n < 1e3 ? "0-1k" : n < 1e4 ? "1k-10k" : n < 1e5 ? "10k-100k" : n < 1e6 ? "100k-1m" : "1m+";
+          if (tokens === lastCount) return;
+          lastCount = tokens;
+          window.track?.("token_count", { tokens });
+        }, 1500);
+      });
       $("text").addEventListener("focus", loadTokenizer, { once: true });
     </script>
   </body>
