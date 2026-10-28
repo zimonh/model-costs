@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLM API Pricing – Compare Every Model per 1M Tokens</title>
+    <meta name="description" content="API prices per million tokens for 91 models from OpenAI, Anthropic, Google Gemini, Mistral, DeepSeek and xAI. Updated October 28, 2026." />
+    <link rel="canonical" href="https://apicost.app/pricing/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://apicost.app/pricing/" />
+    <meta property="og:site_name" content="apicost.app" />
+    <meta property="og:title" content="LLM API Pricing – Compare Every Model per 1M Tokens" />
+    <meta property="og:description" content="API prices per million tokens for 91 models from OpenAI, Anthropic, Google Gemini, Mistral, DeepSeek and xAI. Updated October 28, 2026." />
+    <meta property="og:image" content="https://apicost.app/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","name":"LLM API Pricing – Compare Every Model per 1M Tokens","url":"https://apicost.app/pricing/","dateModified":"2026-10-28"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://apicost.app/"},{"@type":"ListItem","position":2,"name":"Pricing","item":"https://apicost.app/pricing/"}]}]}</script>
+    <style>
+:root { --bg: #f6f7f9; --surface: #fff; --surface-2: #f1f3f6; --border: #e2e5ea; --text: #14171c; --muted: #5d6573; --accent: #0b7a52; --accent-strong: #08643f; --accent-soft: #e3f4ec; --focus: #2f6fed; --shadow: 0 1px 2px rgba(20,23,28,.04), 0 8px 24px rgba(20,23,28,.06); color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --bg: #0f1115; --surface: #171a20; --surface-2: #1f232b; --border: #2b3039; --text: #eceff3; --muted: #9aa3b2; --accent: #3fd39a; --accent-strong: #6be3b4; --accent-soft: #143428; --focus: #7aa7ff; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25); color-scheme: dark; } }
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+a { color: var(--accent); } a:hover { color: var(--accent-strong); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.site-header { border-bottom: 1px solid var(--border); background: var(--surface); }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 16px; }
+.brand { font-weight: 700; color: var(--text); text-decoration: none; }
+.nav { display: flex; gap: 18px; font-size: .92rem; } .nav a { color: var(--muted); text-decoration: none; } .nav a:hover { color: var(--text); }
+.crumbs { font-size: .85rem; color: var(--muted); padding-top: 20px; } .crumbs a { color: var(--muted); }
+h1, h2 { overflow-wrap: anywhere; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.15; letter-spacing: -.02em; margin: 14px 0 10px; }
+h2 { font-size: 1.35rem; letter-spacing: -.01em; margin: 40px 0 12px; }
+.lead { color: var(--muted); font-size: 1.05rem; max-width: 720px; margin: 0; }
+.badge { display: inline-flex; gap: 6px; font-size: .8rem; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 3px 10px; font-weight: 600; margin-top: 14px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+th, td { padding: 10px 14px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border); }
+th:first-child, td:first-child { text-align: left; }
+tbody tr:last-child td { border-bottom: 0; }
+th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; }
+.stat { padding: 16px 18px; } .stat .k { font-size: .8rem; color: var(--muted); } .stat .v { font-size: 1.5rem; font-weight: 700; }
+.cta { display: inline-block; margin-top: 20px; background: var(--accent); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 18px; border-radius: 10px; }
+.cta:hover { background: var(--accent-strong); color: #fff; }
+@media (prefers-color-scheme: dark) { .cta, .cta:hover { color: #0f1115; } }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; background: var(--p); }
+.links { columns: 3 220px; padding: 0; list-style: none; margin: 0; } .links li { padding: 3px 0; break-inside: avoid; }
+.providers { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.providers a { display: block; padding: 16px 18px; text-decoration: none; color: var(--text); } .providers a:hover { border-color: var(--accent); }
+.providers .muted { font-size: .88rem; }
+p.note { font-size: .85rem; color: var(--muted); max-width: 760px; }
+footer { margin-top: 56px; padding: 28px 0 40px; border-top: 1px solid var(--border); font-size: .82rem; color: var(--muted); } footer p { margin: 0 0 8px; }
+@media (max-width: 560px) { .nav .hide-sm { display: none; } }
+</style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">💸 apicost.app</a>
+        <nav class="nav" aria-label="Main">
+          <a href="/#calculator">Calculator</a>
+          <a href="/pricing/">Pricing by model</a>
+          <a href="/#faq" class="hide-sm">FAQ</a>
+        </nav>
+      </div>
+    </header>
+    <main class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › Pricing</nav>
+
+      <h1>LLM API pricing by model</h1>
+      <p class="lead">Prices per million tokens for 91 models from OpenAI, Anthropic, Google Gemini, Mistral, DeepSeek and xAI, updated daily.</p>
+      <h2>By provider</h2>
+      <div class="providers"><a class="card" href="/pricing/openai/"><span class="dot" style="--p:#10a37f"></span><strong>OpenAI ChatGPT / GPT</strong><div class="muted">23 models</div></a><a class="card" href="/pricing/anthropic/"><span class="dot" style="--p:#d97757"></span><strong>Anthropic Claude</strong><div class="muted">16 models</div></a><a class="card" href="/pricing/gemini/"><span class="dot" style="--p:#4285f4"></span><strong>Google Gemini Gemini</strong><div class="muted">13 models</div></a><a class="card" href="/pricing/mistral/"><span class="dot" style="--p:#fa520f"></span><strong>Mistral</strong><div class="muted">20 models</div></a><a class="card" href="/pricing/deepseek/"><span class="dot" style="--p:#4d6bfe"></span><strong>DeepSeek</strong><div class="muted">7 models</div></a><a class="card" href="/pricing/xai/"><span class="dot" style="--p:#8b8f98"></span><strong>xAI Grok</strong><div class="muted">12 models</div></a></div>
+      <h2>All models</h2>
+<div class="card table-wrap"><table class="num">
+  <thead><tr><th scope="col">Model</th><th scope="col" style="text-align:left">Provider</th><th scope="col">Input / 1M</th><th scope="col">Cached input / 1M</th><th scope="col">Output / 1M</th><th scope="col">Typical request</th></tr></thead>
+  <tbody>
+<tr><td><a href="/pricing/labs-leanstral-1-5-1/"><strong>labs-leanstral-1-5-1</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0</td><td>–</td><td>$0</td><td>$0</td></tr>
+<tr><td><a href="/pricing/ministral-3-3b-2512/"><strong>ministral-3-3b-2512</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.1</td><td>$0.00015</td></tr>
+<tr><td><a href="/pricing/ministral-3b-2512/"><strong>ministral-3b-2512</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.1</td><td>$0.00015</td></tr>
+<tr><td><a href="/pricing/ministral-3-8b-2512/"><strong>ministral-3-8b-2512</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.15</td><td>$0.015</td><td>$0.15</td><td>$0.000225</td></tr>
+<tr><td><a href="/pricing/ministral-8b-2512/"><strong>ministral-8b-2512</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.15</td><td>$0.015</td><td>$0.15</td><td>$0.000225</td></tr>
+<tr><td><a href="/pricing/gpt-5-nano/"><strong>gpt-5-nano</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.05</td><td>$0.005</td><td>$0.4</td><td>$0.00025</td></tr>
+<tr><td><a href="/pricing/mistral-small/"><strong>mistral-small</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.1</td><td>$0.01</td><td>$0.3</td><td>$0.00025</td></tr>
+<tr><td><a href="/pricing/deepseek-coder/"><strong>deepseek-coder</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4d6bfe"></span>DeepSeek</td><td>$0.14</td><td>$0.014</td><td>$0.28</td><td>$0.00028</td></tr>
+<tr><td><a href="/pricing/gemini-2.5-flash-lite/"><strong>gemini-2.5-flash-lite</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.1</td><td>$0.01</td><td>$0.4</td><td>$0.0003</td></tr>
+<tr><td><a href="/pricing/ministral-3-14b-2512/"><strong>ministral-3-14b-2512</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.2</td><td>$0.02</td><td>$0.2</td><td>$0.0003</td></tr>
+<tr><td><a href="/pricing/ministral-14b-2512/"><strong>ministral-14b-2512</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.2</td><td>$0.02</td><td>$0.2</td><td>$0.0003</td></tr>
+<tr><td><a href="/pricing/gpt-6-luna/"><strong>gpt-6-luna</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.1</td><td>$0.01</td><td>$0.5</td><td>$0.00035</td></tr>
+<tr><td><a href="/pricing/claude-haiku-5-5/"><strong>claude-haiku-5-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$0.1</td><td>$0.01</td><td>$0.5</td><td>$0.00035</td></tr>
+<tr><td><a href="/pricing/mistral-tiny/"><strong>mistral-tiny</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.25</td><td>$0.025</td><td>$0.25</td><td>$0.000375</td></tr>
+<tr><td><a href="/pricing/gpt-4o-mini/"><strong>gpt-4o-mini</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.15</td><td>$0.075</td><td>$0.6</td><td>$0.00045</td></tr>
+<tr><td><a href="/pricing/open-mistral-nemo/"><strong>open-mistral-nemo</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.3</td><td>$0.00045</td></tr>
+<tr><td><a href="/pricing/deepseek-v3.2/"><strong>deepseek-v3.2</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4d6bfe"></span>DeepSeek</td><td>$0.28</td><td>$0.028</td><td>$0.4</td><td>$0.00048</td></tr>
+<tr><td><a href="/pricing/codestral-2508/"><strong>codestral-2508</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.3</td><td>$0.03</td><td>$0.9</td><td>$0.00075</td></tr>
+<tr><td><a href="/pricing/gpt-5.6-luna/"><strong>gpt-5.6-luna</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.2</td><td>$0.02</td><td>$1.2</td><td>$0.0008</td></tr>
+<tr><td><a href="/pricing/deepseek-v3/"><strong>deepseek-v3</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4d6bfe"></span>DeepSeek</td><td>$0.27</td><td>$0.07</td><td>$1.1</td><td>$0.00082</td></tr>
+<tr><td><a href="/pricing/gpt-5.4-nano/"><strong>gpt-5.4-nano</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.2</td><td>$0.02</td><td>$1.25</td><td>$0.000825</td></tr>
+<tr><td><a href="/pricing/deepseek-v4-1-flash-1017/"><strong>deepseek-v4-1-flash-1017</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.3</td><td>$0.007</td><td>$1.2</td><td>$0.0009</td></tr>
+<tr><td><a href="/pricing/deepseek-flash/"><strong>deepseek-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4d6bfe"></span>DeepSeek</td><td>$0.3</td><td>$0.006</td><td>$1.2</td><td>$0.0009</td></tr>
+<tr><td><a href="/pricing/deepseek-v4-flash/"><strong>deepseek-v4-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4d6bfe"></span>DeepSeek</td><td>$0.3</td><td>$0.006</td><td>$1.2</td><td>$0.0009</td></tr>
+<tr><td><a href="/pricing/gemini-3.1-flash-lite/"><strong>gemini-3.1-flash-lite</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.25</td><td>$0.025</td><td>$1.5</td><td>$0.001</td></tr>
+<tr><td><a href="/pricing/gpt-4.1-mini/"><strong>gpt-4.1-mini</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.4</td><td>$0.1</td><td>$1.6</td><td>$0.0012</td></tr>
+<tr><td><a href="/pricing/gpt-5-mini/"><strong>gpt-5-mini</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.25</td><td>$0.025</td><td>$2</td><td>$0.00125</td></tr>
+<tr><td><a href="/pricing/mistral-large-3/"><strong>mistral-large-3</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.5</td><td>$0.05</td><td>$1.5</td><td>$0.00125</td></tr>
+<tr><td><a href="/pricing/mistral-large-2512/"><strong>mistral-large-2512</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$0.5</td><td>$0.05</td><td>$1.5</td><td>$0.00125</td></tr>
+<tr><td><a href="/pricing/gemini-2.5-flash/"><strong>gemini-2.5-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.3</td><td>$0.03</td><td>$2.5</td><td>$0.00155</td></tr>
+<tr><td><a href="/pricing/gemini-3.5-flash-lite/"><strong>gemini-3.5-flash-lite</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.3</td><td>$0.03</td><td>$2.5</td><td>$0.00155</td></tr>
+<tr><td><a href="/pricing/deepseek-r1/"><strong>deepseek-r1</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4d6bfe"></span>DeepSeek</td><td>$0.55</td><td>$0.14</td><td>$2.19</td><td>$0.00164</td></tr>
+<tr><td><a href="/pricing/gemini-3-flash-preview/"><strong>gemini-3-flash-preview</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.5</td><td>$0.05</td><td>$3</td><td>$0.002</td></tr>
+<tr><td><a href="/pricing/grok-build-0.1/"><strong>grok-build-0.1</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1</td><td>$0.2</td><td>$2</td><td>$0.002</td></tr>
+<tr><td><a href="/pricing/grok-code-fast/"><strong>grok-code-fast</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1</td><td>$0.2</td><td>$2</td><td>$0.002</td></tr>
+<tr><td><a href="/pricing/grok-code-fast-1-0825/"><strong>grok-code-fast-1-0825</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1</td><td>$0.2</td><td>$2</td><td>$0.002</td></tr>
+<tr><td><a href="/pricing/grok-4.3/"><strong>grok-4.3</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/grok-4.20/"><strong>grok-4.20</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/grok-4.20-0309-non-reasoning/"><strong>grok-4.20-0309-non-reasoning</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/grok-4.20-0309-reasoning/"><strong>grok-4.20-0309-reasoning</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/grok-4.20-non-reasoning/"><strong>grok-4.20-non-reasoning</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/grok-4.20-reasoning/"><strong>grok-4.20-reasoning</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/gemini-3.6-flash/"><strong>gemini-3.6-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.75</td><td>$0.075</td><td>$3.75</td><td>$0.00263</td></tr>
+<tr><td><a href="/pricing/gemini-3.7-flash/"><strong>gemini-3.7-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.75</td><td>$0.075</td><td>$3.75</td><td>$0.00263</td></tr>
+<tr><td><a href="/pricing/gemini-3.8-flash/"><strong>gemini-3.8-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.75</td><td>$0.075</td><td>$3.75</td><td>$0.00263</td></tr>
+<tr><td><a href="/pricing/gpt-5.4-mini/"><strong>gpt-5.4-mini</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$0.75</td><td>$0.075</td><td>$4.5</td><td>$0.003</td></tr>
+<tr><td><a href="/pricing/deepseek-v4-pro/"><strong>deepseek-v4-pro</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4d6bfe"></span>DeepSeek</td><td>$1.32</td><td>$0.044</td><td>$3.96</td><td>$0.0033</td></tr>
+<tr><td><a href="/pricing/mistral-large-4/"><strong>mistral-large-4</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$1.36</td><td>$0.14</td><td>$4.18</td><td>$0.00345</td></tr>
+<tr><td><a href="/pricing/mistral-large-4-0/"><strong>mistral-large-4-0</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$1.36</td><td>$0.14</td><td>$4.18</td><td>$0.00345</td></tr>
+<tr><td><a href="/pricing/gpt-6.1-terra/"><strong>gpt-6.1-terra</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$1</td><td>$0.05</td><td>$5</td><td>$0.0035</td></tr>
+<tr><td><a href="/pricing/claude-haiku-4-5/"><strong>claude-haiku-4-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$1</td><td>$0.1</td><td>$5</td><td>$0.0035</td></tr>
+<tr><td><a href="/pricing/grok-4.5/"><strong>grok-4.5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$2</td><td>$0.3</td><td>$6</td><td>$0.005</td></tr>
+<tr><td><a href="/pricing/grok-4.6/"><strong>grok-4.6</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$2</td><td>$0.5</td><td>$6</td><td>$0.005</td></tr>
+<tr><td><a href="/pricing/grok-4.7/"><strong>grok-4.7</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$2</td><td>$0.5</td><td>$6</td><td>$0.005</td></tr>
+<tr><td><a href="/pricing/mistral-medium/"><strong>mistral-medium</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td>$0.00525</td></tr>
+<tr><td><a href="/pricing/mistral-medium-3/"><strong>mistral-medium-3</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td>$0.00525</td></tr>
+<tr><td><a href="/pricing/mistral-medium-3-5/"><strong>mistral-medium-3-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td>$0.00525</td></tr>
+<tr><td><a href="/pricing/mistral-medium-3.5/"><strong>mistral-medium-3.5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#fa520f"></span>Mistral</td><td>$1.5</td><td>$0.15</td><td>$7.5</td><td>$0.00525</td></tr>
+<tr><td><a href="/pricing/gpt-4.1/"><strong>gpt-4.1</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$2</td><td>$0.5</td><td>$8</td><td>$0.006</td></tr>
+<tr><td><a href="/pricing/o3/"><strong>o3</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$2</td><td>$0.5</td><td>$8</td><td>$0.006</td></tr>
+<tr><td><a href="/pricing/gemini-3.5-flash/"><strong>gemini-3.5-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$1.5</td><td>$0.15</td><td>$9</td><td>$0.006</td></tr>
+<tr><td><a href="/pricing/gemini-omni-1.1-flash/"><strong>gemini-omni-1.1-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$1.5</td><td>–</td><td>$9</td><td>$0.006</td></tr>
+<tr><td><a href="/pricing/gpt-5/"><strong>gpt-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$1.25</td><td>$0.125</td><td>$10</td><td>$0.00625</td></tr>
+<tr><td><a href="/pricing/gpt-5.1/"><strong>gpt-5.1</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$1.25</td><td>$0.125</td><td>$10</td><td>$0.00625</td></tr>
+<tr><td><a href="/pricing/gemini-2.5-pro/"><strong>gemini-2.5-pro</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$1.25</td><td>$0.125</td><td>$10</td><td>$0.00625</td></tr>
+<tr><td><a href="/pricing/gpt-6-sol/"><strong>gpt-6-sol</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$2</td><td>$0.2</td><td>$10</td><td>$0.007</td></tr>
+<tr><td><a href="/pricing/gpt-6.1-sol/"><strong>gpt-6.1-sol</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$2</td><td>$0.1</td><td>$10</td><td>$0.007</td></tr>
+<tr><td><a href="/pricing/claude-sonnet-5/"><strong>claude-sonnet-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$2</td><td>$0.2</td><td>$10</td><td>$0.007</td></tr>
+<tr><td><a href="/pricing/claude-sonnet-5-5/"><strong>claude-sonnet-5-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$2</td><td>$0.1</td><td>$10</td><td>$0.007</td></tr>
+<tr><td><a href="/pricing/gemini-4-argon/"><strong>gemini-4-argon</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$2</td><td>$0.1</td><td>$10</td><td>$0.007</td></tr>
+<tr><td><a href="/pricing/gpt-4o/"><strong>gpt-4o</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$2.5</td><td>$1.25</td><td>$10</td><td>$0.0075</td></tr>
+<tr><td><a href="/pricing/gpt-5.6-terra/"><strong>gpt-5.6-terra</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$2</td><td>$0.2</td><td>$12</td><td>$0.008</td></tr>
+<tr><td><a href="/pricing/gemini-3.1-pro-preview/"><strong>gemini-3.1-pro-preview</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$2</td><td>$0.2</td><td>$12</td><td>$0.008</td></tr>
+<tr><td><a href="/pricing/gpt-5.2/"><strong>gpt-5.2</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$1.75</td><td>$0.175</td><td>$14</td><td>$0.00875</td></tr>
+<tr><td><a href="/pricing/gpt-5.4/"><strong>gpt-5.4</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$2.5</td><td>$0.25</td><td>$15</td><td>$0.01</td></tr>
+<tr><td><a href="/pricing/claude-sonnet-4-5/"><strong>claude-sonnet-4-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$3</td><td>$0.3</td><td>$15</td><td>$0.0105</td></tr>
+<tr><td><a href="/pricing/claude-sonnet-4-6/"><strong>claude-sonnet-4-6</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$3</td><td>$0.3</td><td>$15</td><td>$0.0105</td></tr>
+<tr><td><a href="/pricing/gpt-5.6/"><strong>gpt-5.6</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$4</td><td>$0.4</td><td>$20</td><td>$0.014</td></tr>
+<tr><td><a href="/pricing/gpt-5.6-sol/"><strong>gpt-5.6-sol</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$4</td><td>$0.4</td><td>$20</td><td>$0.014</td></tr>
+<tr><td><a href="/pricing/claude-opus-5-5/"><strong>claude-opus-5-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$4</td><td>$0.2</td><td>$20</td><td>$0.014</td></tr>
+<tr><td><a href="/pricing/claude-opus-4-5/"><strong>claude-opus-4-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$5</td><td>$0.5</td><td>$25</td><td>$0.0175</td></tr>
+<tr><td><a href="/pricing/claude-opus-4-6/"><strong>claude-opus-4-6</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$5</td><td>$0.5</td><td>$25</td><td>$0.0175</td></tr>
+<tr><td><a href="/pricing/claude-opus-4-7/"><strong>claude-opus-4-7</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$5</td><td>$0.5</td><td>$25</td><td>$0.0175</td></tr>
+<tr><td><a href="/pricing/claude-opus-4-8/"><strong>claude-opus-4-8</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$5</td><td>$0.5</td><td>$25</td><td>$0.0175</td></tr>
+<tr><td><a href="/pricing/claude-opus-5/"><strong>claude-opus-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$5</td><td>$0.5</td><td>$25</td><td>$0.0175</td></tr>
+<tr><td><a href="/pricing/gpt-5.5/"><strong>gpt-5.5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$5</td><td>$0.5</td><td>$30</td><td>$0.02</td></tr>
+<tr><td><a href="/pricing/gpt-6-astra/"><strong>gpt-6-astra</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#10a37f"></span>OpenAI</td><td>$10</td><td>$1</td><td>$50</td><td>$0.035</td></tr>
+<tr><td><a href="/pricing/claude-fable-5/"><strong>claude-fable-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$10</td><td>$1</td><td>$50</td><td>$0.035</td></tr>
+<tr><td><a href="/pricing/claude-fable-5-1/"><strong>claude-fable-5-1</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$10</td><td>$0.25</td><td>$50</td><td>$0.035</td></tr>
+<tr><td><a href="/pricing/claude-mythos-5/"><strong>claude-mythos-5</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$10</td><td>$1</td><td>$50</td><td>$0.035</td></tr>
+<tr><td><a href="/pricing/claude-mythos-5-1/"><strong>claude-mythos-5-1</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#d97757"></span>Anthropic</td><td>$10</td><td>$0.25</td><td>$50</td><td>$0.035</td></tr>
+  </tbody>
+</table></div>
+      <a class="cta" href="/#calculator">Calculate the cost of your own prompt →</a>
+
+    </main>
+    <footer>
+      <div class="wrap">
+        <p>Prices per 1 million tokens in US dollars, from the open <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list. Updated October 28, 2026.</p>
+        <p>Check the provider's own pricing page before relying on a number. Providers bill by their own token counts.</p>
+        <p>© 2026 apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

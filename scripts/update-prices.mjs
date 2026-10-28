@@ -52,6 +52,12 @@ for (const [key, m] of Object.entries(source)) {
       cachedInput: perMillion(m.cache_read_input_token_cost_batches),
       output: perMillion(m.output_cost_per_token_batches),
     },
+    // Used by the per-model pages (scripts/build-pages.mjs), not by the calculator.
+    maxInputTokens: m.max_input_tokens ?? null,
+    maxOutputTokens: m.max_output_tokens ?? null,
+    vision: m.supports_vision === true,
+    tools: m.supports_function_calling === true,
+    reasoning: m.supports_reasoning === true,
   });
 }
 
@@ -68,6 +74,9 @@ const models = [...byName.values()].sort(
     a.name.localeCompare(b.name, "en", { numeric: true })
 );
 
+// A broken or renamed upstream file would otherwise publish an empty site.
+if (models.length < 40) throw new Error(`Only ${models.length} models in the LiteLLM list, refusing to publish`);
+
 const out = { updated: today, source: SOURCE, providers: PROVIDERS, models };
 await writeFile(new URL("../prices.json", import.meta.url), JSON.stringify(out, null, 1) + "\n");
 console.log(`prices.json: ${models.length} models`);
@@ -76,11 +85,14 @@ console.log(`prices.json: ${models.length} models`);
 // without JavaScript see the prices. The page re-renders it from prices.json.
 const rate = (n) => (n == null ? "–" : "$" + Number(n.toPrecision(4)));
 const escape = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+// Aliases like gpt-5-latest have no page of their own, see scripts/build-pages.mjs.
+const detailLink = (name) =>
+  name.endsWith("-latest") ? "" : ` <a class="detail" href="/pricing/${name}/" aria-label="${escape(name)} pricing details">details</a>`;
 const rows = models
   .map((m) => {
     const p = m.standard;
     const cost = (p.input * 1000 + p.output * 500) / 1e6;
-    return `<tr data-name="${escape(m.name)}"><td><strong>${escape(m.name)}</strong></td><td>${PROVIDERS[m.provider]}</td><td>${rate(p.input)}</td><td>${rate(p.cachedInput)}</td><td>${rate(p.output)}</td><td class="cost">$${Number(cost.toPrecision(3))}</td></tr>`;
+    return `<tr data-name="${escape(m.name)}"><td><strong>${escape(m.name)}</strong>${detailLink(m.name)}</td><td>${PROVIDERS[m.provider]}</td><td>${rate(p.input)}</td><td>${rate(p.cachedInput)}</td><td>${rate(p.output)}</td><td class="cost">$${Number(cost.toPrecision(3))}</td></tr>`;
   })
   .join("\n");
 // Worked examples for the "How much does the ChatGPT API cost?" section: every
@@ -98,7 +110,7 @@ const examples = exampleModels
   .map((m) => {
     const p = m.standard;
     const cost = (p.input * 1000 + p.output * 500) / 1e6;
-    return `<tr><td><strong>${escape(m.name)}</strong></td><td>${rate(p.input)}</td><td>${rate(p.output)}</td><td>${usd(cost)}</td><td>${usd(cost * 1000)}</td></tr>`;
+    return `<tr><td><a href="/pricing/${m.name}/"><strong>${escape(m.name)}</strong></a></td><td>${rate(p.input)}</td><td>${rate(p.output)}</td><td>${usd(cost)}</td><td>${usd(cost * 1000)}</td></tr>`;
   })
   .join("\n");
 
@@ -110,9 +122,5 @@ await writeFile(
     .replace(/<!-- prices:start -->[\s\S]*<!-- prices:end -->/, `<!-- prices:start -->\n${rows}\n<!-- prices:end -->`)
     .replace(/<!-- examples:start -->[\s\S]*<!-- examples:end -->/, `<!-- examples:start -->\n${examples}\n<!-- examples:end -->`)
     .replace(/"dateModified": "[^"]*"/, `"dateModified": "${today}"`)
+    .replace(/© \d{4} apicost\.app/, `© ${today.slice(0, 4)} apicost.app`)
 );
-
-// Tell search engines when the prices last changed.
-const sitemapUrl = new URL("../sitemap.xml", import.meta.url);
-const sitemap = await readFile(sitemapUrl, "utf8");
-await writeFile(sitemapUrl, sitemap.replace(/<lastmod>[^<]*<\/lastmod>|(?=\s*<changefreq>)/, `<lastmod>${today}</lastmod>`));

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>grok-4.20-0309-reasoning API Pricing – Cost per 1M Tokens &#38; Calculator</title>
+    <meta name="description" content="grok-4.20-0309-reasoning API pricing: $1.25 per 1M input tokens, $2.5 per 1M output tokens, $1 / $2 with batch. See what a request costs and compare grok-4.20-0309-reasoning with similar models. Updated October 28, 2026." />
+    <link rel="canonical" href="https://apicost.app/pricing/grok-4.20-0309-reasoning/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://apicost.app/pricing/grok-4.20-0309-reasoning/" />
+    <meta property="og:site_name" content="apicost.app" />
+    <meta property="og:title" content="grok-4.20-0309-reasoning API Pricing – Cost per 1M Tokens &#38; Calculator" />
+    <meta property="og:description" content="grok-4.20-0309-reasoning API pricing: $1.25 per 1M input tokens, $2.5 per 1M output tokens, $1 / $2 with batch. See what a request costs and compare grok-4.20-0309-reasoning with similar models. Updated October 28, 2026." />
+    <meta property="og:image" content="https://apicost.app/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","name":"grok-4.20-0309-reasoning API Pricing – Cost per 1M Tokens & Calculator","url":"https://apicost.app/pricing/grok-4.20-0309-reasoning/","dateModified":"2026-10-28"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://apicost.app/"},{"@type":"ListItem","position":2,"name":"Pricing","item":"https://apicost.app/pricing/"},{"@type":"ListItem","position":3,"name":"xAI","item":"https://apicost.app/pricing/xai/"},{"@type":"ListItem","position":4,"name":"grok-4.20-0309-reasoning","item":"https://apicost.app/pricing/grok-4.20-0309-reasoning/"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does the grok-4.20-0309-reasoning API cost?","acceptedAnswer":{"@type":"Answer","text":"xAI charges $1.25 per million input tokens and $2.5 per million output tokens for grok-4.20-0309-reasoning, and $0.2 per million cached input tokens. A typical request of 1,000 input and 500 output tokens costs $0.0025, or $0.002 through the batch API."}},{"@type":"Question","name":"Is there a cheaper way to use grok-4.20-0309-reasoning?","acceptedAnswer":{"@type":"Answer","text":"Yes. The xAI batch API runs requests within 24 hours for $1 per million input tokens and $2 per million output tokens. Prompt caching lowers the price of repeated input to $0.2 per million tokens."}}]}]}</script>
+    <style>
+:root { --bg: #f6f7f9; --surface: #fff; --surface-2: #f1f3f6; --border: #e2e5ea; --text: #14171c; --muted: #5d6573; --accent: #0b7a52; --accent-strong: #08643f; --accent-soft: #e3f4ec; --focus: #2f6fed; --shadow: 0 1px 2px rgba(20,23,28,.04), 0 8px 24px rgba(20,23,28,.06); color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --bg: #0f1115; --surface: #171a20; --surface-2: #1f232b; --border: #2b3039; --text: #eceff3; --muted: #9aa3b2; --accent: #3fd39a; --accent-strong: #6be3b4; --accent-soft: #143428; --focus: #7aa7ff; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25); color-scheme: dark; } }
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+a { color: var(--accent); } a:hover { color: var(--accent-strong); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.site-header { border-bottom: 1px solid var(--border); background: var(--surface); }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 16px; }
+.brand { font-weight: 700; color: var(--text); text-decoration: none; }
+.nav { display: flex; gap: 18px; font-size: .92rem; } .nav a { color: var(--muted); text-decoration: none; } .nav a:hover { color: var(--text); }
+.crumbs { font-size: .85rem; color: var(--muted); padding-top: 20px; } .crumbs a { color: var(--muted); }
+h1, h2 { overflow-wrap: anywhere; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.15; letter-spacing: -.02em; margin: 14px 0 10px; }
+h2 { font-size: 1.35rem; letter-spacing: -.01em; margin: 40px 0 12px; }
+.lead { color: var(--muted); font-size: 1.05rem; max-width: 720px; margin: 0; }
+.badge { display: inline-flex; gap: 6px; font-size: .8rem; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 3px 10px; font-weight: 600; margin-top: 14px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+th, td { padding: 10px 14px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border); }
+th:first-child, td:first-child { text-align: left; }
+tbody tr:last-child td { border-bottom: 0; }
+th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; }
+.stat { padding: 16px 18px; } .stat .k { font-size: .8rem; color: var(--muted); } .stat .v { font-size: 1.5rem; font-weight: 700; }
+.cta { display: inline-block; margin-top: 20px; background: var(--accent); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 18px; border-radius: 10px; }
+.cta:hover { background: var(--accent-strong); color: #fff; }
+@media (prefers-color-scheme: dark) { .cta, .cta:hover { color: #0f1115; } }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; background: var(--p); }
+.links { columns: 3 220px; padding: 0; list-style: none; margin: 0; } .links li { padding: 3px 0; break-inside: avoid; }
+.providers { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.providers a { display: block; padding: 16px 18px; text-decoration: none; color: var(--text); } .providers a:hover { border-color: var(--accent); }
+.providers .muted { font-size: .88rem; }
+p.note { font-size: .85rem; color: var(--muted); max-width: 760px; }
+footer { margin-top: 56px; padding: 28px 0 40px; border-top: 1px solid var(--border); font-size: .82rem; color: var(--muted); } footer p { margin: 0 0 8px; }
+@media (max-width: 560px) { .nav .hide-sm { display: none; } }
+</style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">💸 apicost.app</a>
+        <nav class="nav" aria-label="Main">
+          <a href="/#calculator">Calculator</a>
+          <a href="/pricing/">Pricing by model</a>
+          <a href="/#faq" class="hide-sm">FAQ</a>
+        </nav>
+      </div>
+    </header>
+    <main class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/pricing/">Pricing</a> › <a href="/pricing/xai/">xAI</a> › grok-4.20-0309-reasoning</nav>
+
+      <h1>grok-4.20-0309-reasoning API pricing</h1>
+      <p class="lead">xAI charges $1.25 per million input tokens and $2.5 per million output tokens for grok-4.20-0309-reasoning, and $0.2 per million cached input tokens. A typical request of 1,000 input and 500 output tokens costs $0.0025, or $0.002 through the batch API.</p>
+      <div class="badge">Prices updated October 28, 2026</div>
+
+      <div class="stats">
+        <div class="card stat"><div class="k">Input / 1M tokens</div><div class="v num">$1.25</div></div>
+        <div class="card stat"><div class="k">Output / 1M tokens</div><div class="v num">$2.5</div></div>
+        <div class="card stat"><div class="k">Cached input / 1M tokens</div><div class="v num">$0.2</div></div>
+        <div class="card stat"><div class="k">Typical request</div><div class="v num">$0.0025</div></div>
+      </div>
+      <a class="cta" href="/?model=grok-4.20-0309-reasoning#calculator">Calculate the cost of your prompt →</a>
+
+      <h2>grok-4.20-0309-reasoning price per million tokens</h2>
+      <div class="card table-wrap"><table class="num">
+        <thead><tr><th scope="col">Token type</th><th scope="col">Standard</th><th scope="col">Batch API</th></tr></thead>
+        <tbody>
+<tr><td>Input</td><td>$1.25</td><td>$1</td></tr>
+<tr><td>Cached input</td><td>$0.2</td><td>$0.16</td></tr>
+<tr><td>Output</td><td>$2.5</td><td>$2</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">grok-4.20-0309-reasoning supports a 1M-token context window, up to 1M output tokens, image input, tool calling and reasoning.</p>
+
+      <h2>What grok-4.20-0309-reasoning costs per request</h2>
+      <div class="card table-wrap"><table class="num">
+        <thead><tr><th scope="col">Request</th><th scope="col">1 request</th><th scope="col">1,000 requests</th><th scope="col">1M requests</th></tr></thead>
+        <tbody>
+<tr><td>Short chat message <span class="muted">(300 in, 200 out)</span></td><td>$0.000875</td><td>$0.88</td><td>$875.00</td></tr>
+<tr><td>Typical request <span class="muted">(1K in, 500 out)</span></td><td>$0.0025</td><td>$2.50</td><td>$2,500.00</td></tr>
+<tr><td>Long document summary <span class="muted">(20K in, 1K out)</span></td><td>$0.0275</td><td>$27.50</td><td>$27,500.00</td></tr>
+<tr><td>Coding agent step <span class="muted">(50K in, 2K out)</span></td><td>$0.0675</td><td>$67.50</td><td>$67,500.00</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">At standard rates. A token is about 4 characters of English text, so 1,000 tokens is roughly 750 words. xAI counts tokens with its own tokenizer, so the same text can be a different number of tokens.</p>
+
+      <h2>Models with a similar price</h2>
+<div class="card table-wrap"><table class="num">
+  <thead><tr><th scope="col">Model</th><th scope="col" style="text-align:left">Provider</th><th scope="col">Input / 1M</th><th scope="col">Cached input / 1M</th><th scope="col">Output / 1M</th><th scope="col">Typical request</th></tr></thead>
+  <tbody>
+<tr><td><a href="/pricing/grok-4.3/"><strong>grok-4.3</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/grok-4.20/"><strong>grok-4.20</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/grok-4.20-0309-non-reasoning/"><strong>grok-4.20-0309-non-reasoning</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/grok-4.20-non-reasoning/"><strong>grok-4.20-non-reasoning</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/grok-4.20-reasoning/"><strong>grok-4.20-reasoning</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#8b8f98"></span>xAI</td><td>$1.25</td><td>$0.2</td><td>$2.5</td><td>$0.0025</td></tr>
+<tr><td><a href="/pricing/gemini-3.6-flash/"><strong>gemini-3.6-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.75</td><td>$0.075</td><td>$3.75</td><td>$0.00263</td></tr>
+<tr><td><a href="/pricing/gemini-3.7-flash/"><strong>gemini-3.7-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.75</td><td>$0.075</td><td>$3.75</td><td>$0.00263</td></tr>
+<tr><td><a href="/pricing/gemini-3.8-flash/"><strong>gemini-3.8-flash</strong></a></td><td style="text-align:left"><span class="dot" style="--p:#4285f4"></span>Google Gemini</td><td>$0.75</td><td>$0.075</td><td>$3.75</td><td>$0.00263</td></tr>
+  </tbody>
+</table></div>
+
+      <h2>Other xAI models</h2>
+      <ul class="links"><li><a href="/pricing/grok-4.3/">grok-4.3</a> <span class="muted num">$1.25 / $2.5</span></li><li><a href="/pricing/grok-4.5/">grok-4.5</a> <span class="muted num">$2 / $6</span></li><li><a href="/pricing/grok-4.6/">grok-4.6</a> <span class="muted num">$2 / $6</span></li><li><a href="/pricing/grok-4.7/">grok-4.7</a> <span class="muted num">$2 / $6</span></li><li><a href="/pricing/grok-4.20/">grok-4.20</a> <span class="muted num">$1.25 / $2.5</span></li><li><a href="/pricing/grok-4.20-0309-non-reasoning/">grok-4.20-0309-non-reasoning</a> <span class="muted num">$1.25 / $2.5</span></li><li><a href="/pricing/grok-4.20-non-reasoning/">grok-4.20-non-reasoning</a> <span class="muted num">$1.25 / $2.5</span></li><li><a href="/pricing/grok-4.20-reasoning/">grok-4.20-reasoning</a> <span class="muted num">$1.25 / $2.5</span></li><li><a href="/pricing/grok-build-0.1/">grok-build-0.1</a> <span class="muted num">$1 / $2</span></li><li><a href="/pricing/grok-code-fast/">grok-code-fast</a> <span class="muted num">$1 / $2</span></li><li><a href="/pricing/grok-code-fast-1-0825/">grok-code-fast-1-0825</a> <span class="muted num">$1 / $2</span></li></ul>
+      <p class="note">Source: <a href="https://api.x.ai/v1/language-models" rel="nofollow">xAI pricing</a>.</p>
+
+    </main>
+    <footer>
+      <div class="wrap">
+        <p>Prices per 1 million tokens in US dollars, from the open <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list. Updated October 28, 2026.</p>
+        <p>Check the provider's own pricing page before relying on a number. Providers bill by their own token counts.</p>
+        <p>© 2026 apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -9,6 +9,25 @@ permissions:
   contents: write
 
 jobs:
+  # apicost.app is served from a checkout on the zimonh.nl server that pulls
+  # main every hour. Fail (and so email the owner) when the live site still
+  # serves different prices than main, which means that pull stopped working.
+  check-live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Live prices match main
+        run: |
+          curl -fsS https://apicost.app/prices.json -o live.json
+          node -e '
+            const strip = (f) => { const d = JSON.parse(require("fs").readFileSync(f, "utf8")); delete d.updated; return JSON.stringify(d); };
+            if (strip("live.json") !== strip("prices.json")) {
+              console.log("::error::apicost.app serves older prices than main. Check the hourly git pull on the server.");
+              process.exit(1);
+            }
+            console.log("Live site is up to date");
+          '
+
   update:
     runs-on: ubuntu-latest
     steps:
@@ -17,10 +36,12 @@ jobs:
         with:
           node-version: 22
       - run: node scripts/update-prices.mjs
+      - run: node scripts/build-pages.mjs
       - name: Commit when prices changed
         run: |
-          git add prices.json index.html sitemap.xml
-          if git diff --cached --quiet -I '"updated"' -I dateModified -I lastmod; then
+          git add prices.json index.html sitemap.xml pricing
+          # Every page derives from prices.json, so only its prices decide; the dates alone change daily.
+          if git diff --cached --quiet -I '"updated"' -- prices.json; then
             echo "No price changes"
             exit 0
           fi

@@ -23,7 +23,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 400000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-4.1",
@@ -38,7 +43,12 @@
     "input": 1,
     "cachedInput": null,
     "output": 4
-   }
+   },
+   "maxInputTokens": 1047576,
+   "maxOutputTokens": 32768,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "gpt-4.1-mini",
@@ -53,7 +63,12 @@
     "input": 0.2,
     "cachedInput": null,
     "output": 0.8
-   }
+   },
+   "maxInputTokens": 1047576,
+   "maxOutputTokens": 32768,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "gpt-4o",
@@ -68,7 +83,12 @@
     "input": 1.25,
     "cachedInput": null,
     "output": 5
-   }
+   },
+   "maxInputTokens": 128000,
+   "maxOutputTokens": 16384,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "gpt-4o-mini",
@@ -83,7 +103,12 @@
     "input": 0.075,
     "cachedInput": null,
     "output": 0.3
-   }
+   },
+   "maxInputTokens": 128000,
+   "maxOutputTokens": 16384,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "gpt-5",
@@ -98,7 +123,12 @@
     "input": 0.625,
     "cachedInput": 0.0625,
     "output": 5
-   }
+   },
+   "maxInputTokens": 272000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5-mini",
@@ -113,7 +143,12 @@
     "input": 0.125,
     "cachedInput": 0.0125,
     "output": 1
-   }
+   },
+   "maxInputTokens": 272000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5-nano",
@@ -128,7 +163,12 @@
     "input": 0.025,
     "cachedInput": 0.0025,
     "output": 0.2
-   }
+   },
+   "maxInputTokens": 272000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5.1",
@@ -143,7 +183,12 @@
     "input": 0.625,
     "cachedInput": 0.0625,
     "output": 5
-   }
+   },
+   "maxInputTokens": 272000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5.2",
@@ -158,7 +203,12 @@
     "input": 0.875,
     "cachedInput": 0.0875,
     "output": 7
-   }
+   },
+   "maxInputTokens": 272000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5.4",
@@ -173,7 +223,12 @@
     "input": 1.25,
     "cachedInput": 0.13,
     "output": 7.5
-   }
+   },
+   "maxInputTokens": 1050000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5.4-mini",
@@ -188,7 +243,12 @@
     "input": 0.375,
     "cachedInput": 0.0375,
     "output": 2.25
-   }
+   },
+   "maxInputTokens": 272000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5.4-nano",
@@ -203,7 +263,12 @@
     "input": 0.1,
     "cachedInput": 0.01,
     "output": 0.625
-   }
+   },
+   "maxInputTokens": 272000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5.5",
@@ -218,7 +283,12 @@
     "input": 2.5,
     "cachedInput": 0.25,
     "output": 15
-   }
+   },
+   "maxInputTokens": 1050000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5.6",
@@ -233,7 +303,12 @@
     "input": 2,
     "cachedInput": 0.2,
     "output": 10
-   }
+   },
+   "maxInputTokens": 922000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5.6-luna",
@@ -248,7 +323,12 @@
     "input": 0.1,
     "cachedInput": 0.01,
     "output": 0.6
-   }
+   },
+   "maxInputTokens": 922000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5.6-sol",
@@ -263,7 +343,12 @@
     "input": 2,
     "cachedInput": 0.2,
     "output": 10
-   }
+   },
+   "maxInputTokens": 922000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-5.6-terra",
@@ -278,7 +363,12 @@
     "input": 1,
     "cachedInput": 0.1,
     "output": 6
-   }
+   },
+   "maxInputTokens": 922000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-6-astra",
@@ -293,7 +383,12 @@
     "input": 5,
     "cachedInput": 0.5,
     "output": 25
-   }
+   },
+   "maxInputTokens": 922000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-6-luna",
@@ -308,7 +403,12 @@
     "input": 0.05,
     "cachedInput": 0.005,
     "output": 0.25
-   }
+   },
+   "maxInputTokens": 922000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-6-sol",
@@ -323,7 +423,12 @@
     "input": 1,
     "cachedInput": 0.1,
     "output": 5
-   }
+   },
+   "maxInputTokens": 922000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-6.1-sol",
@@ -338,7 +443,12 @@
     "input": 1,
     "cachedInput": 0.05,
     "output": 5
-   }
+   },
+   "maxInputTokens": 922000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gpt-6.1-terra",
@@ -353,7 +463,12 @@
     "input": 0.5,
     "cachedInput": 0.025,
     "output": 2.5
-   }
+   },
+   "maxInputTokens": 922000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "o3",
@@ -368,7 +483,12 @@
     "input": 1,
     "cachedInput": null,
     "output": 4
-   }
+   },
+   "maxInputTokens": 200000,
+   "maxOutputTokens": 100000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-fable-5",
@@ -383,7 +503,12 @@
     "input": 5,
     "cachedInput": 0.5,
     "output": 25
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-fable-5-1",
@@ -398,7 +523,12 @@
     "input": 5,
     "cachedInput": 0.125,
     "output": 25
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-haiku-4-5",
@@ -413,7 +543,12 @@
     "input": 0.5,
     "cachedInput": 0.05,
     "output": 2.5
-   }
+   },
+   "maxInputTokens": 200000,
+   "maxOutputTokens": 64000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-haiku-5-5",
@@ -428,7 +563,12 @@
     "input": 0.05,
     "cachedInput": 0.005,
     "output": 0.25
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-mythos-5",
@@ -443,7 +583,12 @@
     "input": 5,
     "cachedInput": 0.5,
     "output": 25
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-mythos-5-1",
@@ -458,7 +603,12 @@
     "input": 5,
     "cachedInput": 0.125,
     "output": 25
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-opus-4-5",
@@ -473,7 +623,12 @@
     "input": 2.5,
     "cachedInput": 0.25,
     "output": 12.5
-   }
+   },
+   "maxInputTokens": 200000,
+   "maxOutputTokens": 64000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-opus-4-6",
@@ -488,7 +643,12 @@
     "input": 2.5,
     "cachedInput": 0.25,
     "output": 12.5
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-opus-4-7",
@@ -503,7 +663,12 @@
     "input": 2.5,
     "cachedInput": 0.25,
     "output": 12.5
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-opus-4-8",
@@ -518,7 +683,12 @@
     "input": 2.5,
     "cachedInput": 0.25,
     "output": 12.5
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-opus-5",
@@ -533,7 +703,12 @@
     "input": 2.5,
     "cachedInput": 0.25,
     "output": 12.5
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-opus-5-5",
@@ -548,7 +723,12 @@
     "input": 2,
     "cachedInput": 0.1,
     "output": 10
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-sonnet-4-5",
@@ -563,7 +743,12 @@
     "input": 1.5,
     "cachedInput": 0.15,
     "output": 7.5
-   }
+   },
+   "maxInputTokens": 200000,
+   "maxOutputTokens": 64000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-sonnet-4-6",
@@ -578,7 +763,12 @@
     "input": 1.5,
     "cachedInput": 0.15,
     "output": 7.5
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-sonnet-5",
@@ -593,7 +783,12 @@
     "input": 1,
     "cachedInput": 0.1,
     "output": 5
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "claude-sonnet-5-5",
@@ -608,7 +803,12 @@
     "input": 1,
     "cachedInput": 0.05,
     "output": 5
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-2.5-flash",
@@ -623,7 +823,12 @@
     "input": 0.15,
     "cachedInput": 0.03,
     "output": 1.25
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-2.5-flash-lite",
@@ -638,7 +843,12 @@
     "input": 0.05,
     "cachedInput": 0.01,
     "output": 0.2
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-2.5-pro",
@@ -653,7 +863,12 @@
     "input": 0.625,
     "cachedInput": 0.125,
     "output": 5
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-3-flash-preview",
@@ -668,7 +883,12 @@
     "input": 0.25,
     "cachedInput": 0.05,
     "output": 1.5
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-3.1-flash-lite",
@@ -683,7 +903,12 @@
     "input": 0.125,
     "cachedInput": 0.0125,
     "output": 0.75
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-3.1-pro-preview",
@@ -698,7 +923,12 @@
     "input": 1,
     "cachedInput": 0.2,
     "output": 6
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-3.5-flash",
@@ -713,7 +943,12 @@
     "input": 0.75,
     "cachedInput": 0.075,
     "output": 4.5
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-3.5-flash-lite",
@@ -728,7 +963,12 @@
     "input": 0.15,
     "cachedInput": 0.02,
     "output": 1.25
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-3.6-flash",
@@ -743,7 +983,12 @@
     "input": 0.375,
     "cachedInput": 0.0375,
     "output": 1.875
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-3.7-flash",
@@ -758,7 +1003,12 @@
     "input": 0.375,
     "cachedInput": 0.0375,
     "output": 1.875
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-3.8-flash",
@@ -773,7 +1023,12 @@
     "input": 0.375,
     "cachedInput": 0.0375,
     "output": 1.875
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-4-argon",
@@ -788,7 +1043,12 @@
     "input": 1,
     "cachedInput": 0.05,
     "output": 5
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 1048576,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-flash-latest",
@@ -803,7 +1063,12 @@
     "input": 0.375,
     "cachedInput": null,
     "output": 1.875
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-flash-lite-latest",
@@ -818,7 +1083,12 @@
     "input": 0.15,
     "cachedInput": null,
     "output": 1.25
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "gemini-omni-1.1-flash",
@@ -833,7 +1103,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": false,
+   "reasoning": true
   },
   {
    "name": "gemini-pro-latest",
@@ -848,7 +1123,12 @@
     "input": 1,
     "cachedInput": null,
     "output": 6
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "codestral-2508",
@@ -863,7 +1143,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 128000,
+   "maxOutputTokens": 128000,
+   "vision": false,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "codestral-latest",
@@ -878,7 +1163,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 128000,
+   "maxOutputTokens": 128000,
+   "vision": false,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "codestral-mamba-latest",
@@ -893,7 +1183,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 256000,
+   "maxOutputTokens": 256000,
+   "vision": false,
+   "tools": false,
+   "reasoning": false
   },
   {
    "name": "deepseek-v4-1-flash-1017",
@@ -908,7 +1203,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 131072,
+   "vision": false,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "devstral-latest",
@@ -923,7 +1223,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 256000,
+   "maxOutputTokens": 256000,
+   "vision": false,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "devstral-medium-latest",
@@ -938,7 +1243,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 256000,
+   "maxOutputTokens": 256000,
+   "vision": false,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "devstral-small-latest",
@@ -953,7 +1263,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 256000,
+   "maxOutputTokens": 256000,
+   "vision": false,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "labs-leanstral-1-5-1",
@@ -968,7 +1283,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 131072,
+   "vision": false,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "magistral-medium-latest",
@@ -983,7 +1303,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "magistral-small-latest",
@@ -998,7 +1323,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "ministral-3-3b-2512",
@@ -1013,7 +1343,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 131072,
+   "maxOutputTokens": 131072,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "ministral-3-8b-2512",
@@ -1028,7 +1363,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "ministral-3-14b-2512",
@@ -1043,7 +1383,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "ministral-3b-2512",
@@ -1058,7 +1403,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 131072,
+   "maxOutputTokens": 131072,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "ministral-3b-latest",
@@ -1073,7 +1423,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 131072,
+   "maxOutputTokens": 131072,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "ministral-8b-2512",
@@ -1088,7 +1443,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "ministral-8b-latest",
@@ -1103,7 +1463,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "ministral-14b-2512",
@@ -1118,7 +1483,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "ministral-14b-latest",
@@ -1133,7 +1503,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "mistral-code-agent-latest",
@@ -1148,7 +1523,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 256000,
+   "maxOutputTokens": 256000,
+   "vision": false,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "mistral-code-fim-latest",
@@ -1163,7 +1543,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 128000,
+   "maxOutputTokens": 128000,
+   "vision": false,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "mistral-code-latest",
@@ -1178,7 +1563,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 128000,
+   "maxOutputTokens": 128000,
+   "vision": false,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "mistral-large-3",
@@ -1193,7 +1583,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "mistral-large-4",
@@ -1208,7 +1603,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 1048576,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "mistral-large-4-0",
@@ -1223,7 +1623,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 1048576,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "mistral-large-2512",
@@ -1238,7 +1643,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "mistral-large-latest",
@@ -1253,7 +1663,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "mistral-medium",
@@ -1268,7 +1683,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "mistral-medium-3",
@@ -1283,7 +1703,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "mistral-medium-3-5",
@@ -1298,7 +1723,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "mistral-medium-3.5",
@@ -1313,7 +1743,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "mistral-medium-latest",
@@ -1328,7 +1763,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "mistral-small",
@@ -1343,7 +1783,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 32000,
+   "maxOutputTokens": 8191,
+   "vision": false,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "mistral-small-latest",
@@ -1358,7 +1803,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 262144,
+   "maxOutputTokens": 262144,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "mistral-tiny",
@@ -1373,7 +1823,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 32000,
+   "maxOutputTokens": 8191,
+   "vision": false,
+   "tools": false,
+   "reasoning": false
   },
   {
    "name": "open-mistral-nemo",
@@ -1388,7 +1843,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 128000,
+   "maxOutputTokens": 128000,
+   "vision": false,
+   "tools": false,
+   "reasoning": false
   },
   {
    "name": "pixtral-large-latest",
@@ -1403,7 +1863,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 128000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "deepseek-coder",
@@ -1418,7 +1883,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 128000,
+   "maxOutputTokens": 4096,
+   "vision": false,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "deepseek-flash",
@@ -1433,7 +1903,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 393216,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "deepseek-r1",
@@ -1448,7 +1923,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 65536,
+   "maxOutputTokens": 8192,
+   "vision": false,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "deepseek-v3",
@@ -1463,7 +1943,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 65536,
+   "maxOutputTokens": 8192,
+   "vision": false,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "deepseek-v3.2",
@@ -1478,7 +1963,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 163840,
+   "maxOutputTokens": 163840,
+   "vision": false,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "deepseek-v4-flash",
@@ -1493,7 +1983,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 393216,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "deepseek-v4-pro",
@@ -1508,7 +2003,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 393216,
+   "vision": false,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-4.3",
@@ -1523,7 +2023,12 @@
     "input": 1,
     "cachedInput": 0.16,
     "output": 2
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 1000000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-4.3-latest",
@@ -1538,7 +2043,12 @@
     "input": 1,
     "cachedInput": 0.16,
     "output": 2
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 1000000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-4.5",
@@ -1553,7 +2063,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 500000,
+   "maxOutputTokens": 500000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-4.5-latest",
@@ -1568,7 +2083,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 500000,
+   "maxOutputTokens": 500000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-4.6",
@@ -1583,7 +2103,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 500000,
+   "maxOutputTokens": 500000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-4.7",
@@ -1598,7 +2123,12 @@
     "input": 1.6,
     "cachedInput": 0.4,
     "output": 4.8
-   }
+   },
+   "maxInputTokens": 500000,
+   "maxOutputTokens": 500000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-4.20",
@@ -1613,7 +2143,12 @@
     "input": 1,
     "cachedInput": 0.16,
     "output": 2
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 1000000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-4.20-0309-non-reasoning",
@@ -1628,7 +2163,12 @@
     "input": 1,
     "cachedInput": 0.16,
     "output": 2
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 1000000,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "grok-4.20-0309-reasoning",
@@ -1643,7 +2183,12 @@
     "input": 1,
     "cachedInput": 0.16,
     "output": 2
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 1000000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-4.20-non-reasoning",
@@ -1658,7 +2203,12 @@
     "input": 1,
     "cachedInput": 0.16,
     "output": 2
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 1000000,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "grok-4.20-non-reasoning-latest",
@@ -1673,7 +2223,12 @@
     "input": 1,
     "cachedInput": 0.16,
     "output": 2
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 1000000,
+   "vision": true,
+   "tools": true,
+   "reasoning": false
   },
   {
    "name": "grok-4.20-reasoning",
@@ -1688,7 +2243,12 @@
     "input": 1,
     "cachedInput": 0.16,
     "output": 2
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 1000000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-4.20-reasoning-latest",
@@ -1703,7 +2263,12 @@
     "input": 1,
     "cachedInput": 0.16,
     "output": 2
-   }
+   },
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 1000000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-build-0.1",
@@ -1718,7 +2283,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 256000,
+   "maxOutputTokens": 256000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-build-latest",
@@ -1733,7 +2303,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 500000,
+   "maxOutputTokens": 500000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-code-fast",
@@ -1748,7 +2323,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 256000,
+   "maxOutputTokens": 256000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   },
   {
    "name": "grok-code-fast-1-0825",
@@ -1763,7 +2343,12 @@
     "input": null,
     "cachedInput": null,
     "output": null
-   }
+   },
+   "maxInputTokens": 256000,
+   "maxOutputTokens": 256000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
   }
  ]
 }
