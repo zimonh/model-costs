@@ -2,23 +2,30 @@
 //   index.html          the pre-rendered price and example tables, dates
 //   pricing/            one page per model and provider, plus an index
 //   privacy/            the privacy page, which lists the analytics events
-//   404.html, sitemap.xml, llms.txt
+//   404.html, sitemap.xml, llms.txt, llms-full.txt, prices.csv
 // Search engines and AI assistants land on the static pages; the calculator
 // itself lives on the home page. Run after scripts/update-prices.mjs.
 // Usage: node scripts/build-site.mjs
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import {
   SITE, PROVIDERS, TYPICAL, providerTitle, hasPage, modelPath, providerPath,
-  cost, typicalCost, escape, rate, usd, tokens, list,
+  cost, typicalCost, escape, rate, usd, tokens, list, displayName, findAliases, withoutDates,
 } from "./site.mjs";
 
 const root = new URL("../", import.meta.url);
 const data = JSON.parse(await readFile(new URL("prices.json", root), "utf8"));
 const { updated } = data;
-const models = data.models.filter(hasPage);
+// Every model with a page, and `models`: the ones whose page is canonical. The
+// others share their prices with a primary model (see findAliases) and only
+// link to it, so lists, the sitemap and llms.txt show each price once.
+const allModels = data.models.filter(hasPage);
+const aliasOf = findAliases(allModels);
+const models = allModels.filter((m) => !aliasOf.has(m.name));
+const aliasesOf = (m) => allModels.filter((o) => aliasOf.get(o.name) === m);
 const providerKeys = Object.keys(PROVIDERS).filter((key) => models.some((m) => m.provider === key));
 const byTypicalCost = (a, b) => (typicalCost(a) ?? Infinity) - (typicalCost(b) ?? Infinity);
 const longDate = new Date(updated + "T00:00:00Z").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+const shortDate = new Date(updated + "T00:00:00Z").toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
 
 // Typical requests for the per-model cost table, as input and output tokens.
 const SCENARIOS = [
@@ -94,12 +101,23 @@ h3 { font-size: 1.05rem; margin: 24px 0 4px; } h3 + p { margin: 0; color: var(--
 @media (max-width: 560px) { .nav .hide-sm { display: none; } }
 `;
 
-const ICON = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>`;
+// Who publishes the site, referenced from every page's structured data.
+const PUBLISHER = {
+  "@type": "Organization",
+  "@id": `${SITE}/#organization`,
+  name: "apicost.app",
+  url: `${SITE}/`,
+  logo: `${SITE}/favicon.svg`,
+  sameAs: ["https://github.com/zimonh/model-costs"],
+};
+const WEBSITE = { "@type": "WebSite", "@id": `${SITE}/#website`, name: "apicost.app", url: `${SITE}/`, inLanguage: "en", publisher: { "@id": PUBLISHER["@id"] } };
 
-// `crumbs` is a list of [name, path]; the last one is this page.
-function layout({ path, title, description, crumbs = [], body, script = "", jsonLd = [], index = true }) {
+// `crumbs` is a list of [name, path]; the last one is this page. `canonical` is
+// another page's path when this one duplicates it (an alias model).
+function layout({ path, title, description, crumbs = [], body, script = "", jsonLd = [], index = true, canonical = path }) {
   const url = SITE + path;
-  const graph = [{ "@type": "WebPage", name: title, url, dateModified: updated }, ...jsonLd];
+  const page = { "@type": "WebPage", "@id": url, name: title, description, url, inLanguage: "en", isPartOf: { "@id": WEBSITE["@id"] }, publisher: { "@id": PUBLISHER["@id"] }, dateModified: updated };
+  const graph = [page, WEBSITE, PUBLISHER, ...jsonLd];
   if (crumbs.length) {
     graph.push({
       "@type": "BreadcrumbList",
@@ -117,15 +135,22 @@ function layout({ path, title, description, crumbs = [], body, script = "", json
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${escape(title)}</title>
     <meta name="description" content="${escape(description)}" />
-    ${index ? `<link rel="canonical" href="${url}" />` : `<meta name="robots" content="noindex" />`}
+    ${index ? `<link rel="canonical" href="${SITE + canonical}" />` : `<meta name="robots" content="noindex" />`}
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="${url}" />
+    <meta property="og:url" content="${SITE + canonical}" />
     <meta property="og:site_name" content="apicost.app" />
     <meta property="og:title" content="${escape(title)}" />
     <meta property="og:description" content="${escape(description)}" />
     <meta property="og:image" content="${SITE}/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="apicost.app: LLM API prices per 1M tokens for OpenAI, Anthropic, Google, Mistral, DeepSeek and xAI" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" href="${ICON}" />
+    <meta name="twitter:title" content="${escape(title)}" />
+    <meta name="twitter:description" content="${escape(description)}" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>
     <style>${CSS}</style>
     <script src="/analytics.js" defer></script>
@@ -166,7 +191,7 @@ function priceTable(rows, { provider = true } = {}) {
   const body = rows
     .map(
       (m) =>
-        `<tr><td><a href="${modelPath(m)}"><strong>${escape(m.name)}</strong></a></td>` +
+        `<tr><td><a href="${modelPath(m)}"><strong>${escape(displayName(m.name))}</strong></a></td>` +
         (provider ? `<td class="left">${dot(m.provider)}${escape(PROVIDERS[m.provider].name)}</td>` : "") +
         `<td>${rate(m.standard.input)}</td><td>${rate(m.standard.cachedInput)}</td><td>${rate(m.standard.output)}</td><td>${usd(typicalCost(m))}</td></tr>`
     )
@@ -181,10 +206,34 @@ ${body}
 
 // ---------- Pages ----------
 
+// How b's typical request compares with a's: "2.5× the price of GPT-5", "4× cheaper than GPT-5".
+function priceRatio(a, b) {
+  const r = typicalCost(b) / typicalCost(a);
+  const name = displayName(a.name);
+  if (r > 0.9 && r < 1.1) return `about the same price as ${name}`;
+  const x = (n) => `${Number(n.toPrecision(2))}×`;
+  return r > 1 ? `${x(r)} the price of ${name}` : `${x(1 / r)} cheaper than ${name}`;
+}
+
+// Providers people compare across, in the order their models are compared.
+const RIVALS = ["openai", "anthropic", "gemini", "deepseek", "xai", "mistral"];
+
+// The share of priced models whose typical request costs more than this one's.
+const pricedModels = models.filter((m) => typicalCost(m) > 0);
+const cheaperThan = (m) => pricedModels.filter((o) => typicalCost(o) > typicalCost(m)).length / pricedModels.length;
+
+function faqSection(faq) {
+  return `
+      <h2>${faq.length > 1 ? "Questions" : "Question"} and answers</h2>
+      ${faq.map(([q, a]) => `<h3>${escape(q)}</h3>\n      <p>${escape(a)}</p>`).join("\n      ")}`;
+}
+
 function modelPage(m) {
+  const primary = aliasOf.get(m.name);
   const s = m.standard;
   const b = m.batch;
   const company = PROVIDERS[m.provider].name;
+  const name = displayName(m.name);
   const hasBatch = b.input != null && b.output != null;
   const typical = typicalCost(m);
 
@@ -197,7 +246,7 @@ function modelPage(m) {
   ].filter(Boolean);
 
   const intro =
-    `${company} charges ${rate(s.input)} per million input tokens and ${rate(s.output)} per million output tokens for ${m.name}` +
+    `${company} charges ${rate(s.input)} per million input tokens and ${rate(s.output)} per million output tokens for ${name} (${m.name})` +
     (s.cachedInput != null ? `, and ${rate(s.cachedInput)} per million cached input tokens` : "") +
     `. A typical request of 1,000 input and 500 output tokens costs ${usd(typical)}` +
     (hasBatch ? `, or ${usd(cost(b, TYPICAL.input, TYPICAL.output))} through the batch API.` : ".");
@@ -208,7 +257,41 @@ function modelPage(m) {
     : s.cachedInput != null
       ? `Prompt caching lowers the price of input that repeats across requests to ${rate(s.cachedInput)} per million tokens.`
       : null;
-  const faq = [[`How much does the ${m.name} API cost?`, intro], ...(cheaper ? [[`Is there a cheaper way to use ${m.name}?`, cheaper]] : [])];
+
+  // The closest-priced model from each other big provider: the comparisons people search for.
+  const rivals =
+    typical > 0
+      ? RIVALS.filter((key) => key !== m.provider)
+          .map((key) => pricedModels.filter((o) => o.provider === key).sort((x, y) => priceDistance(typicalCost(x), typical) - priceDistance(typicalCost(y), typical))[0])
+          .filter(Boolean)
+          .slice(0, 3)
+      : [];
+  // "costs $3 input and $15 output per million tokens, so a typical request is $0.0105: 1.6× the price of GPT-5."
+  const comparison = (o) =>
+    `costs ${rate(o.standard.input)} input and ${rate(o.standard.output)} output per million tokens, ` +
+    `so a typical request is ${usd(typicalCost(o))}: ${priceRatio(m, o)}.`;
+  const verdict = (o) => {
+    const r = typicalCost(o) / typical;
+    return r >= 1.1 ? "Yes. " : r <= 0.9 ? "No. " : "They cost about the same. ";
+  };
+  const compare = (o) => `${displayName(o.name)} from ${PROVIDERS[o.provider].name} ${comparison(o)}`;
+  const position =
+    typical > 0
+      ? `For a typical request, ${name} is cheaper than ${Math.round(cheaperThan(m) * 100)}% of the other models on apicost.app.`
+      : null;
+
+  const context = m.maxInputTokens
+    ? `${name} accepts up to ${m.maxInputTokens.toLocaleString("en-US")} input tokens, roughly ${Math.round((m.maxInputTokens * 0.75) / 1000).toLocaleString("en-US")},000 words of English` +
+      (m.maxOutputTokens ? `, and writes up to ${m.maxOutputTokens.toLocaleString("en-US")} output tokens per response.` : ".") +
+      ` Filling the whole context window once costs ${usd(cost(s, m.maxInputTokens, 0))} in input tokens.`
+    : null;
+
+  const faq = [
+    [`How much does the ${name} API cost?`, intro],
+    ...(cheaper ? [[`Is there a cheaper way to use ${name}?`, cheaper]] : []),
+    ...(context ? [[`What is the context window of ${name}?`, context]] : []),
+    ...(rivals[0] ? [[`Is ${name} cheaper than ${displayName(rivals[0].name)}?`, verdict(rivals[0]) + compare(rivals[0])]] : []),
+  ];
 
   const rateRows = [
     ["Input", s.input, b.input],
@@ -227,23 +310,31 @@ function modelPage(m) {
 
   // The models closest in price, from any provider, make a fair comparison.
   const similar = models
-    .filter((o) => o !== m && typicalCost(o) != null)
+    .filter((o) => o !== m && o !== primary && typicalCost(o) != null)
     .sort((x, y) => priceDistance(typicalCost(x), typical) - priceDistance(typicalCost(y), typical))
     .slice(0, 8)
     .sort(byTypicalCost);
   const siblings = models.filter((o) => o.provider === m.provider && o !== m);
+  const aliases = aliasesOf(m);
+  const aliasNote = primary
+    ? `<p class="note">${escape(m.name)} has the same prices as <a href="${modelPath(primary)}">${escape(displayName(primary.name))}</a> (${escape(primary.name)}), so that page is the main one for both.</p>`
+    : aliases.length
+      ? `<p class="note">The same prices apply to the model ids ${list(aliases.map((a) => `<code>${escape(a.name)}</code>`))}.</p>`
+      : "";
 
   return layout({
     path: modelPath(m),
-    title: `${m.name} API Pricing – Cost per 1M Tokens & Calculator`,
+    canonical: primary ? modelPath(primary) : modelPath(m),
+    // Alias spellings can share a display name (mistral-medium-3.5 / 3-5), so their titles carry the id.
+    title: `${primary ? m.name : name} API Pricing – ${rate(s.input)} Input, ${rate(s.output)} Output per 1M Tokens`,
     description:
-      `${m.name} API pricing: ${rate(s.input)} per 1M input tokens, ${rate(s.output)} per 1M output tokens` +
-      (hasBatch ? `, ${rate(b.input)} / ${rate(b.output)} with batch` : "") +
-      `. See what a request costs and compare ${m.name} with similar models. Updated ${longDate}.`,
-    crumbs: [["Home", "/"], ["Pricing", "/pricing/"], [company, providerPath(m.provider)], [m.name, modelPath(m)]],
+      `${name} API costs ${rate(s.input)} per 1M input tokens and ${rate(s.output)} per 1M output tokens` +
+      (hasBatch ? ` (${rate(b.input)} / ${rate(b.output)} with batch)` : s.cachedInput != null ? ` (${rate(s.cachedInput)} cached input)` : "") +
+      `. A typical request costs ${usd(typical)}. Updated ${shortDate}.`,
+    crumbs: [["Home", "/"], ["Pricing", "/pricing/"], [company, providerPath(m.provider)], [name, modelPath(m)]],
     jsonLd: [faqLd(faq)],
     body: `
-      <h1>${escape(m.name)} API pricing</h1>
+      <h1>${escape(name)} API pricing</h1>
       <p class="lead">${escape(intro)}</p>
       <div class="badge">Prices updated ${longDate}</div>
 
@@ -254,17 +345,18 @@ function modelPage(m) {
         <div class="card stat"><div class="k">Typical request</div><div class="v num">${usd(typical)}</div></div>
       </div>
       <a class="cta" href="/?model=${encodeURIComponent(m.name)}#calculator">Calculate the cost of your prompt →</a>
+      ${aliasNote}
 
-      <h2>${escape(m.name)} price per million tokens</h2>
+      <h2>${escape(name)} price per million tokens</h2>
       <div class="card table-wrap"><table class="num">
         <thead><tr><th scope="col">Token type</th><th scope="col">Standard</th>${hasBatch ? '<th scope="col">Batch API</th>' : ""}</tr></thead>
         <tbody>
 ${rateRows}
         </tbody>
       </table></div>
-      ${features.length ? `<p class="note">${escape(m.name)} supports ${list(features)}.</p>` : ""}
+      <p class="note">API model id: <code>${escape(m.name)}</code>.${features.length ? ` ${escape(name)} supports ${list(features)}.` : ""}</p>
 
-      <h2>What ${escape(m.name)} costs per request</h2>
+      <h2>What ${escape(name)} costs per request</h2>
       <div class="card table-wrap"><table class="num">
         <thead><tr><th scope="col">Request</th><th scope="col">1 request</th><th scope="col">1,000 requests</th><th scope="col">1M requests</th></tr></thead>
         <tbody>
@@ -274,46 +366,78 @@ ${scenarioRows}
       <p class="note">At standard rates. A token is about 4 characters of English text, so 1,000 tokens is roughly 750 words.${
         m.provider === "openai" ? "" : ` ${escape(company)} counts tokens with its own tokenizer, so the same text can be a different number of tokens.`
       }</p>
+${
+  rivals.length
+    ? `
+      <h2>How ${escape(name)} compares</h2>
+      <ul>
+        ${position ? `<li>${escape(position)}</li>` : ""}
+        ${rivals.map((o) => `<li><a href="${modelPath(o)}">${escape(displayName(o.name))}</a> from ${escape(PROVIDERS[o.provider].name)} ${escape(comparison(o))}</li>`).join("\n        ")}
+      </ul>`
+    : ""
+}
 
       <h2>Models with a similar price</h2>
 ${priceTable(similar)}
 
       <h2>Other ${escape(company)} models</h2>
-      <ul class="links">${siblings.map((o) => `<li><a href="${modelPath(o)}">${escape(o.name)}</a> <span class="muted num">${rate(o.standard.input)} / ${rate(o.standard.output)}</span></li>`).join("")}</ul>
-      ${m.source ? `<p class="note">Source: <a href="${escape(m.source)}" rel="nofollow">${escape(company)} pricing</a>.</p>` : ""}
+      <ul class="links">${siblings.map((o) => `<li><a href="${modelPath(o)}">${escape(displayName(o.name))}</a> <span class="muted num">${rate(o.standard.input)} / ${rate(o.standard.output)}</span></li>`).join("")}</ul>
+      <p class="note">All ${escape(company)} prices side by side: <a href="${providerPath(m.provider)}">${escape(providerTitle(m.provider))} API pricing</a>. Ways to pay less: <a href="${TOPICS.batch}">batch API</a>, <a href="${TOPICS.caching}">prompt caching</a>, <a href="${TOPICS.cheapest}">the cheapest models</a>.</p>
+${faqSection(faq)}
+      ${m.source ? `<p class="note">Source: <a href="${escape(m.source)}" rel="nofollow">${escape(company)} pricing</a>, via the LiteLLM price list.</p>` : ""}
 `,
   });
 }
 
 function providerPage(key) {
   const rows = models.filter((m) => m.provider === key).sort(byTypicalCost);
-  const cheapest = rows[0];
+  const priced = rows.filter((m) => typicalCost(m) > 0);
+  const cheapest = priced[0] ?? rows[0];
   const priciest = rows[rows.length - 1];
   const { name, brand } = PROVIDERS[key];
+  const title = providerTitle(key);
+  const quote = (m) => `${displayName(m.name)} at ${rate(m.standard.input)} input and ${rate(m.standard.output)} output`;
   const intro =
     `${name} API prices for all ${rows.length} ${brand} models, per million tokens. ` +
-    `The cheapest is ${cheapest.name} at ${rate(cheapest.standard.input)} input and ${rate(cheapest.standard.output)} output; ` +
-    `the most expensive is ${priciest.name} at ${rate(priciest.standard.input)} input and ${rate(priciest.standard.output)} output.`;
+    `The cheapest is ${quote(cheapest)}; the most expensive is ${quote(priciest)}.`;
+  const batched = rows.filter((m) => m.batch.input != null && m.batch.output != null);
+  const cached = rows.filter((m) => m.standard.cachedInput != null);
+  const faq = [
+    [`How much does the ${title} API cost?`, `${name} charges per million tokens, with separate prices for input and output. ${intro.split(". ").slice(1).join(". ")} A typical request of 1,000 input and 500 output tokens costs between ${usd(typicalCost(cheapest))} and ${usd(typicalCost(priciest))}.`],
+    [`What is the cheapest ${brand} model?`, `${displayName(cheapest.name)} (${cheapest.name}), at ${rate(cheapest.standard.input)} per million input tokens and ${rate(cheapest.standard.output)} per million output tokens.`],
+    [
+      `Does ${name} offer batch or cached pricing?`,
+      (batched.length ? `${batched.length === rows.length ? `All ${rows.length}` : `${batched.length} of the ${rows.length}`} models have a batch API price, processed within 24 hours at a lower rate. ` : `${name} lists no batch API prices. `) +
+        (cached.length ? `${cached.length} models charge less for cached input that repeats across requests.` : "No cached-input prices are listed."),
+    ],
+  ];
 
   return layout({
     path: providerPath(key),
-    title: `${providerTitle(key)} API Pricing – All Models per 1M Tokens`,
-    description: `${intro} Updated ${longDate}.`,
+    title: `${title} API Pricing – All ${rows.length} Models per 1M Tokens`,
+    description:
+      `${title} API prices for all ${rows.length} models per 1M tokens, from ${displayName(cheapest.name)} (${rate(cheapest.standard.input)} / ${rate(cheapest.standard.output)}) ` +
+      `to ${displayName(priciest.name)} (${rate(priciest.standard.input)} / ${rate(priciest.standard.output)}). Updated ${shortDate}.`,
     crumbs: [["Home", "/"], ["Pricing", "/pricing/"], [name, providerPath(key)]],
+    jsonLd: [faqLd(faq)],
     body: `
-      <h1>${escape(providerTitle(key))} API pricing</h1>
+      <h1>${escape(title)} API pricing</h1>
       <p class="lead">${escape(intro)}</p>
       <div class="badge">Prices updated ${longDate}</div>
       <h2>${escape(name)} model prices</h2>
 ${priceTable(rows, { provider: false })}
       <p class="note">Sorted by the cost of a typical request of 1,000 input and 500 output tokens. Open a model for batch prices, context window and example costs.</p>
       <a class="cta" href="/#calculator">Calculate the cost of your own prompt →</a>
+${faqSection(faq)}
+      <h2>Other providers</h2>
+      <div class="providers">${providerCards(false, key)}</div>
 `,
   });
 }
 
-const providerCards = (withCount) =>
+const providerCards = (withCount, except) =>
   providerKeys
+    .filter((key) => key !== except)
     .map((key) => {
       const count = withCount ? `<div class="muted">${models.filter((m) => m.provider === key).length} models</div>` : "";
       return `<a class="card" href="${providerPath(key)}">${dot(key)}<strong>${escape(providerTitle(key))}</strong>${count}</a>`;
@@ -322,20 +446,38 @@ const providerCards = (withCount) =>
 
 function indexPage() {
   const companies = list(providerKeys.map((k) => PROVIDERS[k].name));
+  const dataset = {
+    "@type": "Dataset",
+    name: "LLM API prices per 1M tokens",
+    description: `Input, cached input and output prices per million tokens, standard and batch, with context window sizes, for ${models.length} models from ${companies}. Updated daily from the LiteLLM price list.`,
+    url: SITE + "/pricing/",
+    creator: { "@id": PUBLISHER["@id"] },
+    dateModified: updated,
+    isBasedOn: "https://github.com/BerriAI/litellm",
+    keywords: ["LLM API pricing", "token prices", "OpenAI API pricing", "Claude API pricing", "Gemini API pricing"],
+    distribution: [
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${SITE}/prices.json` },
+      { "@type": "DataDownload", encodingFormat: "text/csv", contentUrl: `${SITE}/prices.csv` },
+      { "@type": "DataDownload", encodingFormat: "text/markdown", contentUrl: `${SITE}/llms-full.txt` },
+    ],
+  };
   return layout({
     path: "/pricing/",
     title: "LLM API Pricing – Compare Every Model per 1M Tokens",
-    description: `API prices per million tokens for ${models.length} models from ${companies}. Updated ${longDate}.`,
+    description: `API prices per million tokens for ${models.length} models from ${companies}, sorted by what a typical request costs. Updated ${shortDate}.`,
     crumbs: [["Home", "/"], ["Pricing", "/pricing/"]],
+    jsonLd: [dataset],
     body: `
       <h1>LLM API pricing by model</h1>
       <p class="lead">Prices per million tokens for ${models.length} models from ${escape(companies)}, updated daily.</p>
+      <div class="badge">Prices updated ${longDate}</div>
       <h2>By provider</h2>
       <div class="providers">${providerCards(true)}</div>
       <h2>Guides</h2>
 ${guideLinks}
       <h2>All models</h2>
 ${priceTable([...models].sort(byTypicalCost))}
+      <p class="note">Download the whole list as <a href="/prices.csv">CSV</a>, <a href="/prices.json">JSON</a> or <a href="/llms-full.txt">Markdown</a>, built from the open LiteLLM price list.</p>
       <a class="cta" href="/#calculator">Calculate the cost of your own prompt →</a>
 `,
   });
@@ -399,7 +541,7 @@ function cheapestPage() {
   return layout({
     path: TOPICS.cheapest,
     title: "Cheapest LLM API – The Lowest-Cost GPT, Claude & Gemini Models",
-    description: `${answer} Updated ${longDate}.`,
+    description: `The cheapest LLM API is ${displayName(top.name)}: ${rate(top.standard.input)} input, ${rate(top.standard.output)} output per 1M tokens. The cheapest model per provider and feature. Updated ${shortDate}.`,
     crumbs: [["Home", "/"], ["Pricing", "/pricing/"], ["Cheapest LLM APIs", TOPICS.cheapest]],
     jsonLd: [faqLd([["What is the cheapest LLM API?", answer]])],
     body: `
@@ -419,6 +561,7 @@ ${capabilityRows}
       </table></div>
       <p class="note">Ranked by the cost of a typical request of 1,000 input and 500 output tokens at standard rates. Models listed at $0 are left out. The batch API and prompt caching make most models cheaper still, see <a href="${TOPICS.batch}">batch API pricing</a> and <a href="${TOPICS.caching}">prompt caching pricing</a>.</p>
       <a class="cta" href="/#calculator">Calculate the cost of your own prompt →</a>
+${faqSection([["What is the cheapest LLM API?", answer]])}
 `,
   });
 }
@@ -441,17 +584,16 @@ function batchPage() {
     )
     .join("\n");
 
+  const faq = [
+    ["What is a batch API?", "A batch API lets you send many requests at once as a file. The provider processes them within 24 hours, when it has spare capacity, and charges less per token than for real-time requests."],
+    ["How much cheaper is the batch API?", intro],
+  ];
   return layout({
     path: TOPICS.batch,
     title: "Batch API Pricing – OpenAI, Claude & Gemini Batch Discounts Compared",
-    description: `${intro} Compare batch prices per 1M tokens for every model. Updated ${longDate}.`,
+    description: `Batch API prices per 1M tokens for ${batched.length} models from ${companies}: typically ${percent(median(batched.map((b) => b.saving)))} cheaper, results within 24 hours. Updated ${shortDate}.`,
     crumbs: [["Home", "/"], ["Pricing", "/pricing/"], ["Batch API pricing", TOPICS.batch]],
-    jsonLd: [
-      faqLd([
-        ["What is a batch API?", "A batch API lets you send many requests at once as a file. The provider processes them within 24 hours, when it has spare capacity, and charges less per token than for real-time requests."],
-        ["How much cheaper is the batch API?", intro],
-      ]),
-    ],
+    jsonLd: [faqLd(faq)],
     body: `
       <h1>Batch API pricing compared</h1>
       <p class="lead">${escape(intro)} Use it for work that doesn't need an instant answer: evaluations, classification, embeddings of a backlog, nightly reports.</p>
@@ -465,6 +607,7 @@ ${rows}
       </table></div>
       <p class="note">Sorted by batch price. Saving and cost are for requests of 1,000 input and 500 output tokens.</p>
       <a class="cta" href="/?pricing=batch#calculator">Calculate a batch job →</a>
+${faqSection(faq)}
 `,
   });
 }
@@ -485,17 +628,16 @@ function cachingPage() {
     )
     .join("\n");
 
+  const faq = [
+    ["What is prompt caching?", "When many requests start with the same text, the provider can keep that part of the prompt processed and reuse it. You pay a lower cached-input price for those tokens."],
+    ["How much does prompt caching save?", intro],
+  ];
   return layout({
     path: TOPICS.caching,
-    title: "Prompt Caching Pricing – Cached Input Token Prices for GPT, Claude & Gemini",
-    description: `${intro} Compare cached input prices per 1M tokens. Updated ${longDate}.`,
+    title: "Prompt Caching Pricing – Cached Input Prices for GPT, Claude & Gemini",
+    description: `Cached input prices per 1M tokens for ${cached.length} GPT, Claude, Gemini and other models: repeated prompt tokens cost typically ${percent(median(cached.map((c) => c.discount)))} less. Updated ${shortDate}.`,
     crumbs: [["Home", "/"], ["Pricing", "/pricing/"], ["Prompt caching pricing", TOPICS.caching]],
-    jsonLd: [
-      faqLd([
-        ["What is prompt caching?", "When many requests start with the same text, the provider can keep that part of the prompt processed and reuse it. You pay a lower cached-input price for those tokens."],
-        ["How much does prompt caching save?", intro],
-      ]),
-    ],
+    jsonLd: [faqLd(faq)],
     body: `
       <h1>Prompt caching pricing compared</h1>
       <p class="lead">${escape(intro)}</p>
@@ -509,6 +651,7 @@ ${rows}
       </table></div>
       <p class="note">Some providers also charge for writing to the cache or for how long it is kept; check the provider's pricing page for those. To cache, put the part that repeats (instructions, examples, documents) at the start of the prompt.</p>
       <a class="cta" href="/?cached=1#calculator">Calculate with cached input →</a>
+${faqSection(faq)}
 `,
   });
 }
@@ -654,6 +797,37 @@ function renderHome(html) {
     })
     .join("\n");
 
+  // The answer to the question the home page ranks for, with today's numbers.
+  const openai = models.filter((m) => m.provider === "openai" && typicalCost(m) > 0).sort(byTypicalCost);
+  const quoted = [...new Set([popularGpt[0], ...["gpt-5", "gpt-5-mini", "gpt-4o"].map((n) => openai.find((m) => m.name === n))])].filter(Boolean);
+  const gpt5 = quoted.find((m) => m.name === "gpt-5") ?? quoted[0];
+  const chatgptCost =
+    `The ChatGPT (OpenAI) API is billed per token, with separate prices for input and output. ` +
+    quoted.map((m) => `${displayName(m.name)} costs ${rate(m.standard.input)} per million input tokens and ${rate(m.standard.output)} per million output tokens`).join("; ") +
+    `. The cheapest OpenAI model is ${displayName(openai[0].name)} at ${rate(openai[0].standard.input)} / ${rate(openai[0].standard.output)}, ` +
+    `the most expensive ${displayName(openai.at(-1).name)} at ${rate(openai.at(-1).standard.input)} / ${rate(openai.at(-1).standard.output)}. ` +
+    `A typical request of 1,000 input and 500 output tokens costs ${usd(typicalCost(gpt5))} on ${displayName(gpt5.name)}. Prices as of ${longDate}.`;
+
+  // A few named links per provider, highest version first, so the model pages are linked by name.
+  // The version is the first number in the name that isn't a 4-digit snapshot date.
+  const version = (m) => Number(displayName(m.name).match(/(?<![\d.])(?!\d{4}\b)\d+(?:\.\d+)?(?![\dB])/)?.[0] ?? 0);
+  const modelLinks = providerKeys
+    .map((key) => {
+      const newest = models
+        .filter((m) => m.provider === key)
+        .sort((a, b) => version(b) - version(a) || a.name.length - b.name.length)
+        .slice(0, 6);
+      return (
+        `        <p><a href="${providerPath(key)}"><strong>${escape(providerTitle(key))}</strong></a>: ` +
+        newest.map((m) => `<a href="${modelPath(m)}">${escape(displayName(m.name))} pricing</a>`).join(" · ") +
+        `</p>`
+      );
+    })
+    .join("\n");
+
+  const description =
+    `Paste a prompt and see what it costs on the ChatGPT API. Free token counter and prices for ${data.models.length} GPT, Claude, Gemini and Grok models. Updated ${shortDate}.`;
+
   const block = (name, content) => (s) => {
     const marker = new RegExp(`<!-- ${name}:start -->[\\s\\S]*<!-- ${name}:end -->`);
     if (!marker.test(s)) throw new Error(`index.html lost its <!-- ${name}:start/end --> markers`);
@@ -662,34 +836,102 @@ function renderHome(html) {
   return [
     block("prices", priceRows),
     block("examples", exampleRows),
+    block("models", modelLinks),
+    (s) => s.replace(/<!-- chatgpt-cost:start -->[\s\S]*?<!-- chatgpt-cost:end -->/, `<!-- chatgpt-cost:start -->${escape(chatgptCost)}<!-- chatgpt-cost:end -->`),
+    (s) => s.replace(/("name": "How much does the ChatGPT API cost\?",\s*"acceptedAnswer": \{ "@type": "Answer", "text": )"[^"]*"/, (_, head) => head + JSON.stringify(chatgptCost)),
+    (s) => s.replace(/(name="description"\s+content=")[^"]*"/, (_, head) => head + escape(description) + '"'),
+    (s) => s.replace(/(<span id="updated-badge">)[^<]*/, `$1${data.models.length} models · prices updated ${longDate}`),
+    (s) => s.replace(/(<p id="footer-updated">)[\s\S]*?(<\/p>)/, `$1Prices from the <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, last changed ${longDate}. Refreshed daily.$2`),
     (s) => s.replace(/"dateModified": "[^"]*"/, `"dateModified": "${updated}"`),
     (s) => s.replace(/© \d{4} apicost\.app/, `© ${updated.slice(0, 4)} apicost.app`),
   ].reduce((s, step) => step(s), html);
 }
 
-// ---------- llms.txt ----------
+// ---------- llms.txt, llms-full.txt, prices.csv ----------
 
-// A plain-text map of the site for AI assistants, see https://llmstxt.org.
+// For AI assistants and answer engines, see https://llmstxt.org: llms.txt maps
+// the site, llms-full.txt holds every price as a Markdown table they can quote.
+const SUMMARY =
+  `Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for ${data.models.length} OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, ` +
+  `standard and batch, updated daily from the open LiteLLM price list. Last price change: ${updated}.`;
+
 function llmsTxt() {
   const section = (key) =>
     `## ${providerTitle(key)} API pricing\n\n` +
+    `- [All ${PROVIDERS[key].name} models](${SITE}${providerPath(key)}): every ${PROVIDERS[key].brand} model's price side by side\n` +
     models
       .filter((m) => m.provider === key)
-      .map((m) => `- [${m.name}](${SITE}${modelPath(m)}): ${rate(m.standard.input)} input, ${rate(m.standard.output)} output per 1M tokens`)
+      .map((m) => `- [${displayName(m.name)} (${m.name})](${SITE}${modelPath(m)}): ${rate(m.standard.input)} input, ${rate(m.standard.output)} output per 1M tokens`)
       .join("\n");
   return `# apicost.app
 
-> Free LLM API cost calculator and price list. Paste a prompt to count tokens and see what it costs on OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models. Prices per 1 million tokens in US dollars, updated daily from the LiteLLM price list. Last update: ${updated}.
+> ${SUMMARY}
+
+When quoting a price, cite the model's page (https://apicost.app/pricing/<model-id>/) and the date above. Providers bill by their own token counts; their own pricing page is the final word.
+
+## Tools and data
 
 - [Calculator](${SITE}/): count tokens and calculate the cost of a prompt, with batch and cached-input pricing
 - [All model prices](${SITE}/pricing/): every model sorted by the cost of a typical request
+- [Full price table](${SITE}/llms-full.txt): every model's prices and context window as one Markdown table
+- [prices.csv](${SITE}/prices.csv): the same table as CSV
+- [prices.json](${SITE}/prices.json): all prices as JSON, per 1M tokens, standard and batch
 - [Token counter](${SITE}${TOPICS.tokenCounter}): count tokens with OpenAI's o200k tokenizer, in the browser
+
+## Guides
+
 - [Cheapest LLM APIs](${SITE}${TOPICS.cheapest}): the lowest-cost models overall, per provider and per feature
 - [Batch API pricing](${SITE}${TOPICS.batch}): batch prices and savings for every model that offers a batch API
 - [Prompt caching pricing](${SITE}${TOPICS.caching}): cached input prices and discounts
-- [prices.json](${SITE}/prices.json): all prices as JSON, per 1M tokens, standard and batch
 
 ${providerKeys.map(section).join("\n\n")}
+
+## Optional
+
+- [Privacy](${SITE}${TOPICS.privacy}): no tracking until a visitor allows analytics; pasted text never leaves the browser
+- [Source code](https://github.com/zimonh/model-costs): how the site and its price list are built
+`;
+}
+
+// Every model with a price, aliases included, as rows for llms-full.txt and prices.csv.
+const COLUMNS = [
+  ["model", (m) => m.name],
+  ["name", (m) => displayName(m.name)],
+  ["provider", (m) => PROVIDERS[m.provider].name],
+  ["input_per_1m_usd", (m) => m.standard.input],
+  ["cached_input_per_1m_usd", (m) => m.standard.cachedInput],
+  ["output_per_1m_usd", (m) => m.standard.output],
+  ["batch_input_per_1m_usd", (m) => m.batch.input],
+  ["batch_output_per_1m_usd", (m) => m.batch.output],
+  ["context_window_tokens", (m) => m.maxInputTokens],
+  ["max_output_tokens", (m) => m.maxOutputTokens],
+  ["url", (m) => (hasPage(m) ? SITE + modelPath(aliasOf.get(m.name) ?? m) : "")],
+];
+
+function pricesCsv() {
+  const cell = (v) => (v == null ? "" : /[",\n]/.test(String(v)) ? `"${String(v).replaceAll('"', '""')}"` : String(v));
+  return [COLUMNS.map(([k]) => k).join(","), ...data.models.map((m) => COLUMNS.map(([, get]) => cell(get(m))).join(","))].join("\n") + "\n";
+}
+
+function llmsFullTxt() {
+  const money = (n) => (n == null ? "–" : rate(n));
+  const table = (key) =>
+    `## ${providerTitle(key)}\n\n` +
+    `| Model | Model id | Input / 1M | Cached input / 1M | Output / 1M | Batch input / output | Context window | Typical request |\n|---|---|---|---|---|---|---|---|\n` +
+    data.models
+      .filter((m) => m.provider === key)
+      .map((m) => {
+        const batch = m.batch.input != null ? `${money(m.batch.input)} / ${money(m.batch.output)}` : "–";
+        return `| ${hasPage(m) ? `[${displayName(m.name)}](${SITE}${modelPath(aliasOf.get(m.name) ?? m)})` : displayName(m.name)} | ${m.name} | ${money(m.standard.input)} | ${money(m.standard.cachedInput)} | ${money(m.standard.output)} | ${batch} | ${m.maxInputTokens ? tokens(m.maxInputTokens) : "–"} | ${usd(typicalCost(m))} |`;
+      })
+      .join("\n");
+  return `# apicost.app: LLM API prices per 1M tokens
+
+> ${SUMMARY}
+
+Prices are in US dollars per 1 million tokens. "Typical request" is 1,000 input and 500 output tokens at standard rates. Cost of a request = input tokens × input price / 1,000,000 + output tokens × output price / 1,000,000. Batch prices apply to requests processed within 24 hours. Source: ${SITE}/pricing/ (also as ${SITE}/prices.csv and ${SITE}/prices.json). Prices as of ${longDate}.
+
+${providerKeys.map(table).join("\n\n")}
 `;
 }
 
@@ -703,29 +945,48 @@ const pages = new Map([
   [TOPICS.tokenCounter, tokenCounterPage()],
   [TOPICS.privacy, privacyPage()],
   ...providerKeys.map((key) => [providerPath(key), providerPage(key)]),
-  ...models.map((m) => [modelPath(m), modelPage(m)]),
+  ...allModels.map((m) => [modelPath(m), modelPage(m)]),
 ]);
+
+// The sitemap's lastmod is the day a page last changed, not the day prices did:
+// a date that moves on every page every day teaches Google to ignore it. A page
+// keeps its previous lastmod when only its dates changed.
+const file = (path) => new URL("." + path + (path.endsWith("/") ? "index.html" : ""), root);
+const read = (url) => readFile(url, "utf8").catch(() => null);
+const previous = new Map(
+  [...((await read(new URL("sitemap.xml", root))) ?? "").matchAll(/<loc>([^<]*)<\/loc>\s*<lastmod>([^<]*)<\/lastmod>/g)].map(([, loc, mod]) => [loc.slice(SITE.length), mod])
+);
+const today = new Date().toISOString().slice(0, 10);
+const home = new URL("index.html", root);
+const homeHtml = renderHome(await readFile(home, "utf8"));
+const lastmod = new Map();
+for (const [path, html] of [["/", homeHtml], ...pages]) {
+  const old = await read(file(path));
+  lastmod.set(path, old && previous.has(path) && withoutDates(old) === withoutDates(html) ? previous.get(path) : today);
+}
 
 // Start from scratch so models that left the price list lose their page.
 await rm(new URL("pricing/", root), { recursive: true, force: true });
 await rm(new URL("token-counter/", root), { recursive: true, force: true });
 await rm(new URL("privacy/", root), { recursive: true, force: true });
 for (const [path, html] of pages) {
-  const dir = new URL("." + path, root);
-  await mkdir(dir, { recursive: true });
-  await writeFile(new URL("index.html", dir), html);
+  await mkdir(new URL("." + path, root), { recursive: true });
+  await writeFile(file(path), html);
 }
 
-const home = new URL("index.html", root);
-await writeFile(home, renderHome(await readFile(home, "utf8")));
+await writeFile(home, homeHtml);
 await writeFile(new URL("404.html", root), notFoundPage());
 await writeFile(new URL("llms.txt", root), llmsTxt());
+await writeFile(new URL("llms-full.txt", root), llmsFullTxt());
+await writeFile(new URL("prices.csv", root), pricesCsv());
+// Only canonical pages: alias models point at their primary page.
+const listed = ["/", ...pages.keys()].filter((path) => !allModels.some((m) => aliasOf.has(m.name) && modelPath(m) === path));
 await writeFile(
   new URL("sitemap.xml", root),
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${["/", ...pages.keys()].map((u) => `  <url>\n    <loc>${SITE}${u}</loc>\n    <lastmod>${updated}</lastmod>\n  </url>`).join("\n")}
+${listed.map((u) => `  <url>\n    <loc>${SITE}${u}</loc>\n    <lastmod>${lastmod.get(u)}</lastmod>\n  </url>`).join("\n")}
 </urlset>
 `
 );
-console.log(`site: home, ${pages.size} pages, 404, sitemap, llms.txt`);
+console.log(`site: home, ${pages.size} pages (${aliasOf.size} aliases), 404, sitemap (${listed.length} URLs), llms.txt, llms-full.txt, prices.csv`);

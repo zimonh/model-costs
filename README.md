@@ -12,8 +12,10 @@ The site is static files, with no build tool and no dependencies beyond Node 22.
 |---|---|---|
 | `index.html` | The calculator. Hand-written, except the blocks between `<!-- prices:start -->` / `<!-- examples:start -->` markers. | you + `build-site.mjs` |
 | `prices.json` | Every model's price per 1M tokens, read by the calculator. | `update-prices.mjs` |
-| `pricing/` | One page per model and provider, plus an index. | `build-site.mjs` |
-| `404.html`, `sitemap.xml`, `llms.txt` | Not-found page, sitemap, and a site map for AI assistants. | `build-site.mjs` |
+| `pricing/` | One page per model and provider, plus an index. Models listed under several ids at the same price (snapshots, `-reasoning` variants) get one canonical page; the other ids' pages point at it. | `build-site.mjs` |
+| `404.html`, `sitemap.xml`, `llms.txt` | Not-found page, sitemap (canonical pages only, `lastmod` = the day that page last changed), and a site map for AI assistants. | `build-site.mjs` |
+| `llms-full.txt`, `prices.csv` | Every price as one Markdown table and as CSV, for AI assistants and anyone who wants the data. | `build-site.mjs` |
+| `robots.txt`, `favicon.*`, `apple-touch-icon.png` | Crawler rules (AI search crawlers explicitly allowed) and icons. | you |
 | `tokenizer.min.js` | OpenAI's o200k tokenizer, loaded once someone types. | |
 | `9c17….txt` | The IndexNow key, proving to search engines that we own the site. | |
 
@@ -21,7 +23,7 @@ The scripts in `scripts/`:
 
 - `update-prices.mjs` downloads the LiteLLM list and writes `prices.json`. It refuses to write if the list looks broken.
 - `build-site.mjs` renders everything else from `prices.json`.
-- `check-site.mjs` fails when a link, sitemap URL or structured data block is broken, or when two pages share a title.
+- `check-site.mjs` fails when a link, sitemap URL or structured data block is broken, when the sitemap and the canonical pages disagree, when two pages share a title or description, or when FAQ structured data isn't visible on the page.
 - `indexnow.mjs` tells Bing and other IndexNow search engines which pages changed.
 - `site.mjs` holds what they share: the provider list and the price formatting.
 

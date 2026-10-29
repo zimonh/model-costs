@@ -45,7 +45,7 @@ jobs:
       - run: node scripts/check-site.mjs
       - name: Commit when prices changed
         run: |
-          git add prices.json index.html 404.html sitemap.xml llms.txt pricing token-counter
+          git add prices.json prices.csv index.html 404.html sitemap.xml llms.txt llms-full.txt pricing token-counter privacy
           # Every page derives from prices.json, so only its prices decide; the dates alone change daily.
           if git diff --cached --quiet -I '"updated"' -- prices.json; then
             echo "No price changes"

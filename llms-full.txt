@@ -1,0 +1,152 @@
+# apicost.app: LLM API prices per 1M tokens
+
+> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 117 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-10-28.
+
+Prices are in US dollars per 1 million tokens. "Typical request" is 1,000 input and 500 output tokens at standard rates. Cost of a request = input tokens × input price / 1,000,000 + output tokens × output price / 1,000,000. Batch prices apply to requests processed within 24 hours. Source: https://apicost.app/pricing/ (also as https://apicost.app/prices.csv and https://apicost.app/prices.json). Prices as of October 28, 2026.
+
+## OpenAI ChatGPT
+
+| Model | Model id | Input / 1M | Cached input / 1M | Output / 1M | Batch input / output | Context window | Typical request |
+|---|---|---|---|---|---|---|---|
+| Chat Latest | chat-latest | $5 | $0.5 | $30 | – | 400K | $0.02 |
+| [GPT-4.1](https://apicost.app/pricing/gpt-4.1/) | gpt-4.1 | $2 | $0.5 | $8 | $1 / $4 | 1.05M | $0.006 |
+| [GPT-4.1 mini](https://apicost.app/pricing/gpt-4.1-mini/) | gpt-4.1-mini | $0.4 | $0.1 | $1.6 | $0.2 / $0.8 | 1.05M | $0.0012 |
+| [GPT-4o](https://apicost.app/pricing/gpt-4o/) | gpt-4o | $2.5 | $1.25 | $10 | $1.25 / $5 | 128K | $0.0075 |
+| [GPT-4o mini](https://apicost.app/pricing/gpt-4o-mini/) | gpt-4o-mini | $0.15 | $0.075 | $0.6 | $0.075 / $0.3 | 128K | $0.00045 |
+| [GPT-5](https://apicost.app/pricing/gpt-5/) | gpt-5 | $1.25 | $0.125 | $10 | $0.625 / $5 | 272K | $0.00625 |
+| [GPT-5 mini](https://apicost.app/pricing/gpt-5-mini/) | gpt-5-mini | $0.25 | $0.025 | $2 | $0.125 / $1 | 272K | $0.00125 |
+| [GPT-5 nano](https://apicost.app/pricing/gpt-5-nano/) | gpt-5-nano | $0.05 | $0.005 | $0.4 | $0.025 / $0.2 | 272K | $0.00025 |
+| [GPT-5.1](https://apicost.app/pricing/gpt-5.1/) | gpt-5.1 | $1.25 | $0.125 | $10 | $0.625 / $5 | 272K | $0.00625 |
+| [GPT-5.2](https://apicost.app/pricing/gpt-5.2/) | gpt-5.2 | $1.75 | $0.175 | $14 | $0.875 / $7 | 272K | $0.00875 |
+| [GPT-5.4](https://apicost.app/pricing/gpt-5.4/) | gpt-5.4 | $2.5 | $0.25 | $15 | $1.25 / $7.5 | 1.05M | $0.01 |
+| [GPT-5.4 mini](https://apicost.app/pricing/gpt-5.4-mini/) | gpt-5.4-mini | $0.75 | $0.075 | $4.5 | $0.375 / $2.25 | 272K | $0.003 |
+| [GPT-5.4 nano](https://apicost.app/pricing/gpt-5.4-nano/) | gpt-5.4-nano | $0.2 | $0.02 | $1.25 | $0.1 / $0.625 | 272K | $0.000825 |
+| [GPT-5.5](https://apicost.app/pricing/gpt-5.5/) | gpt-5.5 | $5 | $0.5 | $30 | $2.5 / $15 | 1.05M | $0.02 |
+| [GPT-5.6](https://apicost.app/pricing/gpt-5.6/) | gpt-5.6 | $4 | $0.4 | $20 | $2 / $10 | 922K | $0.014 |
+| [GPT-5.6 Luna](https://apicost.app/pricing/gpt-5.6-luna/) | gpt-5.6-luna | $0.2 | $0.02 | $1.2 | $0.1 / $0.6 | 922K | $0.0008 |
+| [GPT-5.6 Sol](https://apicost.app/pricing/gpt-5.6/) | gpt-5.6-sol | $4 | $0.4 | $20 | $2 / $10 | 922K | $0.014 |
+| [GPT-5.6 Terra](https://apicost.app/pricing/gpt-5.6-terra/) | gpt-5.6-terra | $2 | $0.2 | $12 | $1 / $6 | 922K | $0.008 |
+| [GPT-6 Astra](https://apicost.app/pricing/gpt-6-astra/) | gpt-6-astra | $10 | $1 | $50 | $5 / $25 | 922K | $0.035 |
+| [GPT-6 Luna](https://apicost.app/pricing/gpt-6-luna/) | gpt-6-luna | $0.1 | $0.01 | $0.5 | $0.05 / $0.25 | 922K | $0.00035 |
+| [GPT-6 Sol](https://apicost.app/pricing/gpt-6-sol/) | gpt-6-sol | $2 | $0.2 | $10 | $1 / $5 | 922K | $0.007 |
+| [GPT-6.1 Sol](https://apicost.app/pricing/gpt-6.1-sol/) | gpt-6.1-sol | $2 | $0.1 | $10 | $1 / $5 | 922K | $0.007 |
+| [GPT-6.1 Terra](https://apicost.app/pricing/gpt-6.1-terra/) | gpt-6.1-terra | $1 | $0.05 | $5 | $0.5 / $2.5 | 922K | $0.0035 |
+| [o3](https://apicost.app/pricing/o3/) | o3 | $2 | $0.5 | $8 | $1 / $4 | 200K | $0.006 |
+
+## Anthropic Claude
+
+| Model | Model id | Input / 1M | Cached input / 1M | Output / 1M | Batch input / output | Context window | Typical request |
+|---|---|---|---|---|---|---|---|
+| [Claude Fable 5](https://apicost.app/pricing/claude-fable-5/) | claude-fable-5 | $10 | $1 | $50 | $5 / $25 | 1M | $0.035 |
+| [Claude Fable 5.1](https://apicost.app/pricing/claude-fable-5-1/) | claude-fable-5-1 | $10 | $0.25 | $50 | $5 / $25 | 1M | $0.035 |
+| [Claude Haiku 4.5](https://apicost.app/pricing/claude-haiku-4-5/) | claude-haiku-4-5 | $1 | $0.1 | $5 | $0.5 / $2.5 | 200K | $0.0035 |
+| [Claude Haiku 5.5](https://apicost.app/pricing/claude-haiku-5-5/) | claude-haiku-5-5 | $0.1 | $0.01 | $0.5 | $0.05 / $0.25 | 1M | $0.00035 |
+| [Claude Mythos 5](https://apicost.app/pricing/claude-mythos-5/) | claude-mythos-5 | $10 | $1 | $50 | $5 / $25 | 1M | $0.035 |
+| [Claude Mythos 5.1](https://apicost.app/pricing/claude-mythos-5-1/) | claude-mythos-5-1 | $10 | $0.25 | $50 | $5 / $25 | 1M | $0.035 |
+| [Claude Opus 4.5](https://apicost.app/pricing/claude-opus-4-5/) | claude-opus-4-5 | $5 | $0.5 | $25 | $2.5 / $12.5 | 200K | $0.0175 |
+| [Claude Opus 4.6](https://apicost.app/pricing/claude-opus-4-6/) | claude-opus-4-6 | $5 | $0.5 | $25 | $2.5 / $12.5 | 1M | $0.0175 |
+| [Claude Opus 4.7](https://apicost.app/pricing/claude-opus-4-7/) | claude-opus-4-7 | $5 | $0.5 | $25 | $2.5 / $12.5 | 1M | $0.0175 |
+| [Claude Opus 4.8](https://apicost.app/pricing/claude-opus-4-8/) | claude-opus-4-8 | $5 | $0.5 | $25 | $2.5 / $12.5 | 1M | $0.0175 |
+| [Claude Opus 5](https://apicost.app/pricing/claude-opus-5/) | claude-opus-5 | $5 | $0.5 | $25 | $2.5 / $12.5 | 1M | $0.0175 |
+| [Claude Opus 5.5](https://apicost.app/pricing/claude-opus-5-5/) | claude-opus-5-5 | $4 | $0.2 | $20 | $2 / $10 | 1M | $0.014 |
+| [Claude Sonnet 4.5](https://apicost.app/pricing/claude-sonnet-4-5/) | claude-sonnet-4-5 | $3 | $0.3 | $15 | $1.5 / $7.5 | 200K | $0.0105 |
+| [Claude Sonnet 4.6](https://apicost.app/pricing/claude-sonnet-4-6/) | claude-sonnet-4-6 | $3 | $0.3 | $15 | $1.5 / $7.5 | 1M | $0.0105 |
+| [Claude Sonnet 5](https://apicost.app/pricing/claude-sonnet-5/) | claude-sonnet-5 | $2 | $0.2 | $10 | $1 / $5 | 1M | $0.007 |
+| [Claude Sonnet 5.5](https://apicost.app/pricing/claude-sonnet-5-5/) | claude-sonnet-5-5 | $2 | $0.1 | $10 | $1 / $5 | 1M | $0.007 |
+
+## Google Gemini
+
+| Model | Model id | Input / 1M | Cached input / 1M | Output / 1M | Batch input / output | Context window | Typical request |
+|---|---|---|---|---|---|---|---|
+| [Gemini 2.5 Flash](https://apicost.app/pricing/gemini-2.5-flash/) | gemini-2.5-flash | $0.3 | $0.03 | $2.5 | $0.15 / $1.25 | 1.05M | $0.00155 |
+| [Gemini 2.5 Flash Lite](https://apicost.app/pricing/gemini-2.5-flash-lite/) | gemini-2.5-flash-lite | $0.1 | $0.01 | $0.4 | $0.05 / $0.2 | 1.05M | $0.0003 |
+| [Gemini 2.5 Pro](https://apicost.app/pricing/gemini-2.5-pro/) | gemini-2.5-pro | $1.25 | $0.125 | $10 | $0.625 / $5 | 1.05M | $0.00625 |
+| [Gemini 3 Flash Preview](https://apicost.app/pricing/gemini-3-flash-preview/) | gemini-3-flash-preview | $0.5 | $0.05 | $3 | $0.25 / $1.5 | 1.05M | $0.002 |
+| [Gemini 3.1 Flash Lite](https://apicost.app/pricing/gemini-3.1-flash-lite/) | gemini-3.1-flash-lite | $0.25 | $0.025 | $1.5 | $0.125 / $0.75 | 1.05M | $0.001 |
+| [Gemini 3.1 Pro Preview](https://apicost.app/pricing/gemini-3.1-pro-preview/) | gemini-3.1-pro-preview | $2 | $0.2 | $12 | $1 / $6 | 1.05M | $0.008 |
+| [Gemini 3.5 Flash](https://apicost.app/pricing/gemini-3.5-flash/) | gemini-3.5-flash | $1.5 | $0.15 | $9 | $0.75 / $4.5 | 1.05M | $0.006 |
+| [Gemini 3.5 Flash Lite](https://apicost.app/pricing/gemini-3.5-flash-lite/) | gemini-3.5-flash-lite | $0.3 | $0.03 | $2.5 | $0.15 / $1.25 | 1.05M | $0.00155 |
+| [Gemini 3.6 Flash](https://apicost.app/pricing/gemini-3.6-flash/) | gemini-3.6-flash | $0.75 | $0.075 | $3.75 | $0.375 / $1.875 | 1.05M | $0.00263 |
+| [Gemini 3.7 Flash](https://apicost.app/pricing/gemini-3.7-flash/) | gemini-3.7-flash | $0.75 | $0.075 | $3.75 | $0.375 / $1.875 | 1.05M | $0.00263 |
+| [Gemini 3.8 Flash](https://apicost.app/pricing/gemini-3.8-flash/) | gemini-3.8-flash | $0.75 | $0.075 | $3.75 | $0.375 / $1.875 | 1.05M | $0.00263 |
+| [Gemini 4 Argon](https://apicost.app/pricing/gemini-4-argon/) | gemini-4-argon | $2 | $0.1 | $10 | $1 / $5 | 1.05M | $0.007 |
+| Gemini Flash Latest | gemini-flash-latest | $0.75 | $0.075 | $3.75 | $0.375 / $1.875 | 1.05M | $0.00263 |
+| Gemini Flash Lite Latest | gemini-flash-lite-latest | $0.3 | $0.03 | $2.5 | $0.15 / $1.25 | 1.05M | $0.00155 |
+| [Gemini Omni 1.1 Flash](https://apicost.app/pricing/gemini-omni-1.1-flash/) | gemini-omni-1.1-flash | $1.5 | – | $9 | – | 1.05M | $0.006 |
+| Gemini Pro Latest | gemini-pro-latest | $2 | $0.2 | $12 | $1 / $6 | 1.05M | $0.008 |
+
+## Mistral
+
+| Model | Model id | Input / 1M | Cached input / 1M | Output / 1M | Batch input / output | Context window | Typical request |
+|---|---|---|---|---|---|---|---|
+| [Codestral 2508](https://apicost.app/pricing/codestral-2508/) | codestral-2508 | $0.3 | $0.03 | $0.9 | – | 128K | $0.00075 |
+| Codestral Latest | codestral-latest | $0.3 | $0.03 | $0.9 | – | 128K | $0.00075 |
+| Codestral Mamba Latest | codestral-mamba-latest | $0.25 | $0.025 | $0.25 | – | 256K | $0.000375 |
+| [DeepSeek V4 1 Flash 1017](https://apicost.app/pricing/deepseek-v4-1-flash-1017/) | deepseek-v4-1-flash-1017 | $0.3 | $0.007 | $1.2 | – | 1.05M | $0.0009 |
+| Devstral Latest | devstral-latest | $0.4 | $0.04 | $2 | – | 256K | $0.0014 |
+| Devstral Medium Latest | devstral-medium-latest | $0.4 | $0.04 | $2 | – | 256K | $0.0014 |
+| Devstral Small Latest | devstral-small-latest | $0.1 | $0.01 | $0.3 | – | 256K | $0.00025 |
+| [Labs Leanstral 1.5.1](https://apicost.app/pricing/labs-leanstral-1-5-1/) | labs-leanstral-1-5-1 | $0 | – | $0 | – | 262K | $0 |
+| Magistral Medium Latest | magistral-medium-latest | $1.5 | $0.15 | $7.5 | – | 262K | $0.00525 |
+| Magistral Small Latest | magistral-small-latest | $0.15 | $0.015 | $0.6 | – | 262K | $0.00045 |
+| [Ministral 3 3B 2512](https://apicost.app/pricing/ministral-3-3b-2512/) | ministral-3-3b-2512 | $0.1 | $0.01 | $0.1 | – | 131K | $0.00015 |
+| [Ministral 3 8B 2512](https://apicost.app/pricing/ministral-3-8b-2512/) | ministral-3-8b-2512 | $0.15 | $0.015 | $0.15 | – | 262K | $0.000225 |
+| [Ministral 3 14B 2512](https://apicost.app/pricing/ministral-3-14b-2512/) | ministral-3-14b-2512 | $0.2 | $0.02 | $0.2 | – | 262K | $0.0003 |
+| [Ministral 3B 2512](https://apicost.app/pricing/ministral-3b-2512/) | ministral-3b-2512 | $0.1 | $0.01 | $0.1 | – | 131K | $0.00015 |
+| Ministral 3B Latest | ministral-3b-latest | $0.1 | $0.01 | $0.1 | – | 131K | $0.00015 |
+| [Ministral 8B 2512](https://apicost.app/pricing/ministral-8b-2512/) | ministral-8b-2512 | $0.15 | $0.015 | $0.15 | – | 262K | $0.000225 |
+| Ministral 8B Latest | ministral-8b-latest | $0.15 | $0.015 | $0.15 | – | 262K | $0.000225 |
+| [Ministral 14B 2512](https://apicost.app/pricing/ministral-14b-2512/) | ministral-14b-2512 | $0.2 | $0.02 | $0.2 | – | 262K | $0.0003 |
+| Ministral 14B Latest | ministral-14b-latest | $0.2 | $0.02 | $0.2 | – | 262K | $0.0003 |
+| Mistral Code Agent Latest | mistral-code-agent-latest | $0.4 | $0.04 | $2 | – | 256K | $0.0014 |
+| Mistral Code FIM Latest | mistral-code-fim-latest | $0.3 | $0.03 | $0.9 | – | 128K | $0.00075 |
+| Mistral Code Latest | mistral-code-latest | $0.3 | $0.03 | $0.9 | – | 128K | $0.00075 |
+| [Mistral Large 3](https://apicost.app/pricing/mistral-large-3/) | mistral-large-3 | $0.5 | $0.05 | $1.5 | – | 262K | $0.00125 |
+| [Mistral Large 4](https://apicost.app/pricing/mistral-large-4/) | mistral-large-4 | $1.36 | $0.14 | $4.18 | – | 1.05M | $0.00345 |
+| [Mistral Large 4.0](https://apicost.app/pricing/mistral-large-4/) | mistral-large-4-0 | $1.36 | $0.14 | $4.18 | – | 1.05M | $0.00345 |
+| [Mistral Large 2512](https://apicost.app/pricing/mistral-large-2512/) | mistral-large-2512 | $0.5 | $0.05 | $1.5 | – | 262K | $0.00125 |
+| Mistral Large Latest | mistral-large-latest | $0.5 | $0.05 | $1.5 | – | 262K | $0.00125 |
+| [Mistral Medium](https://apicost.app/pricing/mistral-medium/) | mistral-medium | $1.5 | $0.15 | $7.5 | – | 262K | $0.00525 |
+| [Mistral Medium 3](https://apicost.app/pricing/mistral-medium/) | mistral-medium-3 | $1.5 | $0.15 | $7.5 | – | 262K | $0.00525 |
+| [Mistral Medium 3.5](https://apicost.app/pricing/mistral-medium/) | mistral-medium-3-5 | $1.5 | $0.15 | $7.5 | – | 262K | $0.00525 |
+| [Mistral Medium 3.5](https://apicost.app/pricing/mistral-medium/) | mistral-medium-3.5 | $1.5 | $0.15 | $7.5 | – | 262K | $0.00525 |
+| Mistral Medium Latest | mistral-medium-latest | $1.5 | $0.15 | $7.5 | – | 262K | $0.00525 |
+| [Mistral Small](https://apicost.app/pricing/mistral-small/) | mistral-small | $0.1 | $0.01 | $0.3 | – | 32K | $0.00025 |
+| Mistral Small Latest | mistral-small-latest | $0.15 | $0.015 | $0.6 | – | 262K | $0.00045 |
+| [Mistral Tiny](https://apicost.app/pricing/mistral-tiny/) | mistral-tiny | $0.25 | $0.025 | $0.25 | – | 32K | $0.000375 |
+| [Open Mistral Nemo](https://apicost.app/pricing/open-mistral-nemo/) | open-mistral-nemo | $0.3 | $0.03 | $0.3 | – | 128K | $0.00045 |
+| Pixtral Large Latest | pixtral-large-latest | $2 | $0.2 | $6 | – | 128K | $0.005 |
+
+## DeepSeek
+
+| Model | Model id | Input / 1M | Cached input / 1M | Output / 1M | Batch input / output | Context window | Typical request |
+|---|---|---|---|---|---|---|---|
+| [DeepSeek Coder](https://apicost.app/pricing/deepseek-coder/) | deepseek-coder | $0.14 | $0.014 | $0.28 | – | 128K | $0.00028 |
+| [DeepSeek Flash](https://apicost.app/pricing/deepseek-flash/) | deepseek-flash | $0.3 | $0.006 | $1.2 | – | 1M | $0.0009 |
+| [DeepSeek R1](https://apicost.app/pricing/deepseek-r1/) | deepseek-r1 | $0.55 | $0.14 | $2.19 | – | 65.5K | $0.00164 |
+| [DeepSeek V3](https://apicost.app/pricing/deepseek-v3/) | deepseek-v3 | $0.27 | $0.07 | $1.1 | – | 65.5K | $0.00082 |
+| [DeepSeek V3.2](https://apicost.app/pricing/deepseek-v3.2/) | deepseek-v3.2 | $0.28 | $0.028 | $0.4 | – | 164K | $0.00048 |
+| [DeepSeek V4 Flash](https://apicost.app/pricing/deepseek-v4-flash/) | deepseek-v4-flash | $0.3 | $0.006 | $1.2 | – | 1M | $0.0009 |
+| [DeepSeek V4 Pro](https://apicost.app/pricing/deepseek-v4-pro/) | deepseek-v4-pro | $1.32 | $0.044 | $3.96 | – | 1M | $0.0033 |
+
+## xAI Grok
+
+| Model | Model id | Input / 1M | Cached input / 1M | Output / 1M | Batch input / output | Context window | Typical request |
+|---|---|---|---|---|---|---|---|
+| [Grok 4.3](https://apicost.app/pricing/grok-4.3/) | grok-4.3 | $1.25 | $0.2 | $2.5 | $1 / $2 | 1M | $0.0025 |
+| Grok 4.3 Latest | grok-4.3-latest | $1.25 | $0.2 | $2.5 | $1 / $2 | 1M | $0.0025 |
+| [Grok 4.5](https://apicost.app/pricing/grok-4.5/) | grok-4.5 | $2 | $0.3 | $6 | – | 500K | $0.005 |
+| Grok 4.5 Latest | grok-4.5-latest | $2 | $0.3 | $6 | – | 500K | $0.005 |
+| [Grok 4.6](https://apicost.app/pricing/grok-4.6/) | grok-4.6 | $2 | $0.5 | $6 | – | 500K | $0.005 |
+| [Grok 4.7](https://apicost.app/pricing/grok-4.7/) | grok-4.7 | $2 | $0.5 | $6 | $1.6 / $4.8 | 500K | $0.005 |
+| [Grok 4.20](https://apicost.app/pricing/grok-4.20/) | grok-4.20 | $1.25 | $0.2 | $2.5 | $1 / $2 | 1M | $0.0025 |
+| [Grok 4.20 0309 Non Reasoning](https://apicost.app/pricing/grok-4.20/) | grok-4.20-0309-non-reasoning | $1.25 | $0.2 | $2.5 | $1 / $2 | 1M | $0.0025 |
+| [Grok 4.20 0309 Reasoning](https://apicost.app/pricing/grok-4.20/) | grok-4.20-0309-reasoning | $1.25 | $0.2 | $2.5 | $1 / $2 | 1M | $0.0025 |
+| [Grok 4.20 Non Reasoning](https://apicost.app/pricing/grok-4.20/) | grok-4.20-non-reasoning | $1.25 | $0.2 | $2.5 | $1 / $2 | 1M | $0.0025 |
+| Grok 4.20 Non Reasoning Latest | grok-4.20-non-reasoning-latest | $1.25 | $0.2 | $2.5 | $1 / $2 | 1M | $0.0025 |
+| [Grok 4.20 Reasoning](https://apicost.app/pricing/grok-4.20/) | grok-4.20-reasoning | $1.25 | $0.2 | $2.5 | $1 / $2 | 1M | $0.0025 |
+| Grok 4.20 Reasoning Latest | grok-4.20-reasoning-latest | $1.25 | $0.2 | $2.5 | $1 / $2 | 1M | $0.0025 |
+| [Grok Build 0.1](https://apicost.app/pricing/grok-build-0.1/) | grok-build-0.1 | $1 | $0.2 | $2 | – | 256K | $0.002 |
+| Grok Build Latest | grok-build-latest | $2 | $0.3 | $6 | – | 500K | $0.005 |
+| [Grok Code Fast](https://apicost.app/pricing/grok-code-fast/) | grok-code-fast | $1 | $0.2 | $2 | – | 256K | $0.002 |
+| [Grok Code Fast 1 0825](https://apicost.app/pricing/grok-code-fast/) | grok-code-fast-1-0825 | $1 | $0.2 | $2 | – | 256K | $0.002 |

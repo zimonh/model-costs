@@ -1,4 +1,26 @@
+# apicost.app is a public price list: search engines and AI assistants are welcome
+# to crawl, quote and cite it. Machine-readable prices: /llms.txt, /llms-full.txt,
+# /prices.csv and /prices.json.
+
 User-agent: *
+Allow: /
+
+# Search and AI answer crawlers, listed so it's explicit that they may crawl.
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: Applebot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: DuckAssistBot
 Allow: /
 
 Sitemap: https://apicost.app/sitemap.xml

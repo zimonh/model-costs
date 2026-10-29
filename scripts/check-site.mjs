@@ -1,6 +1,9 @@
 // Checks the built site before it is published: every internal link and
-// sitemap URL points at a file, structured data parses, and no two pages
-// share a title. Exits non-zero with a list of problems.
+// sitemap URL points at a file, structured data parses, and the search basics
+// hold: one canonical per page, sitemap = exactly the self-canonical pages,
+// unique titles and descriptions of a sane length, one <h1>, FAQ structured
+// data that matches visible text, and llms.txt links that resolve.
+// Exits non-zero with a list of problems.
 // Usage: node scripts/check-site.mjs
 import { existsSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
@@ -27,6 +30,10 @@ const fileFor = (urlPath) => {
 };
 
 const titles = new Map();
+const descriptions = new Map();
+const selfCanonical = new Set();
+const canonicalTargets = new Map();
+const text = (html) => html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "").replace(/<[^>]+>/g, " ").replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&#(\d+);/g, (_, c) => String.fromCharCode(c)).replace(/\s+/g, " ");
 let pages = 0;
 for await (const file of htmlFiles(root)) {
   const name = "/" + relative(root, file);
@@ -38,26 +45,69 @@ for await (const file of htmlFiles(root)) {
     if (!existsSync(fileFor(href))) problems.push(`${name}: broken link ${href}`);
   }
 
+  const visible = text(html);
   for (const [, json] of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    let ld;
     try {
-      JSON.parse(json);
+      ld = JSON.parse(json);
     } catch (e) {
       problems.push(`${name}: invalid JSON-LD (${e.message})`);
+      continue;
+    }
+    // Google ignores (or penalises) FAQ markup for questions the page doesn't show.
+    for (const node of [ld, ...(ld["@graph"] ?? [])].filter((n) => n["@type"] === "FAQPage")) {
+      for (const q of node.mainEntity) {
+        if (!visible.includes(q.name)) problems.push(`${name}: FAQ question not on the page: ${q.name}`);
+        if (!visible.includes(q.acceptedAnswer.text.slice(0, 60))) problems.push(`${name}: FAQ answer not on the page: ${q.name}`);
+      }
     }
   }
 
-  if (/<meta name="robots" content="noindex"/.test(html)) continue;
-  if (!/<link rel="canonical" href="https:\/\/apicost\.app\//.test(html)) problems.push(`${name}: no canonical URL`);
+  if (/<meta name="robots" content="noindex/.test(html)) continue;
+  const h1s = html.match(/<h1[\s>]/g)?.length ?? 0;
+  if (h1s !== 1) problems.push(`${name}: ${h1s} <h1> elements`);
+  const canonical = html.match(/<link rel="canonical" href="([^"]*)"/)?.[1];
+  if (!canonical?.startsWith(SITE + "/")) problems.push(`${name}: no canonical URL`);
+  const self = SITE + name.replace(/index\.html$/, "");
+  if (canonical === self) selfCanonical.add(self);
+  else canonicalTargets.set(self, canonical);
+  const ogUrl = html.match(/<meta property="og:url" content="([^"]*)"/)?.[1];
+  if (ogUrl !== canonical) problems.push(`${name}: og:url ${ogUrl} differs from canonical ${canonical}`);
+
   const title = html.match(/<title>([^<]*)<\/title>/)?.[1];
   if (!title) problems.push(`${name}: no <title>`);
   else if (titles.has(title)) problems.push(`${name}: same title as ${titles.get(title)}`);
   else titles.set(title, name);
+  const description = html.match(/<meta\s+name="description"\s+content="([^"]*)"/)?.[1];
+  if (!description) problems.push(`${name}: no meta description`);
+  else if (description.length < 50 || description.length > 180) problems.push(`${name}: meta description is ${description.length} characters (want 50–180)`);
+  else if (canonical === self && descriptions.has(description)) problems.push(`${name}: same description as ${descriptions.get(description)}`);
+  else if (canonical === self) descriptions.set(description, name);
 }
 
 const sitemap = await readFile(join(root, "sitemap.xml"), "utf8");
 const urls = [...sitemap.matchAll(/<loc>([^<]*)<\/loc>/g)].map(([, url]) => url);
 for (const url of urls) {
   if (!url.startsWith(SITE + "/") || !existsSync(fileFor(url.slice(SITE.length)))) problems.push(`sitemap.xml: ${url} has no page`);
+  else if (!selfCanonical.has(url)) problems.push(`sitemap.xml: ${url} is not its own canonical`);
+}
+for (const url of selfCanonical) if (!urls.includes(url)) problems.push(`sitemap.xml: missing ${url}`);
+for (const [url, target] of canonicalTargets) if (!selfCanonical.has(target)) problems.push(`${url}: canonical ${target} is not a canonical page`);
+for (const [, mod] of sitemap.matchAll(/<lastmod>([^<]*)<\/lastmod>/g)) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(mod)) problems.push(`sitemap.xml: bad lastmod ${mod}`);
+}
+if ((sitemap.match(/<lastmod>/g) ?? []).length !== urls.length) problems.push("sitemap.xml: not every URL has a lastmod");
+
+// llms.txt and llms-full.txt are read by AI assistants: their links must work too.
+for (const file of ["llms.txt", "llms-full.txt"]) {
+  const body = await readFile(join(root, file), "utf8").catch(() => null);
+  if (body == null) {
+    problems.push(`${file}: missing`);
+    continue;
+  }
+  for (const [, url] of body.matchAll(/\]\((https:\/\/apicost\.app\/[^)]*)\)/g)) {
+    if (!existsSync(fileFor(url.slice(SITE.length)))) problems.push(`${file}: broken link ${url}`);
+  }
 }
 
 if (problems.length) {
