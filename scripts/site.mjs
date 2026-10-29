@@ -4,14 +4,24 @@
 
 export const SITE = "https://apicost.app";
 
-// Keyed by LiteLLM's provider id. `brand` is what people search for.
+// Keyed by LiteLLM's provider id. `brand` is the product name. `search` is what
+// people type before "API pricing" ("claude api pricing", not "anthropic api
+// pricing"), and `owner` the company when that isn't already the search word.
+// `slug` puts the provider page at /pricing/<slug>/ instead of /pricing/<id>/;
+// the id's URL then stays up as an alias pointing at it.
 export const PROVIDERS = {
-  openai: { name: "OpenAI", brand: "ChatGPT", color: "#10a37f" },
-  anthropic: { name: "Anthropic", brand: "Claude", color: "#d97757" },
-  gemini: { name: "Google Gemini", brand: "Gemini", color: "#4285f4" },
-  mistral: { name: "Mistral", brand: "Mistral", color: "#fa520f" },
-  deepseek: { name: "DeepSeek", brand: "DeepSeek", color: "#4d6bfe" },
-  xai: { name: "xAI", brand: "Grok", color: "#8b8f98" },
+  openai: { name: "OpenAI", brand: "ChatGPT", search: "OpenAI", color: "#10a37f" },
+  anthropic: { name: "Anthropic", brand: "Claude", search: "Claude", owner: "Anthropic", slug: "claude", color: "#d97757" },
+  gemini: { name: "Google Gemini", brand: "Gemini", search: "Gemini", owner: "Google", color: "#4285f4" },
+  mistral: { name: "Mistral", brand: "Mistral", search: "Mistral", color: "#fa520f" },
+  deepseek: { name: "DeepSeek", brand: "DeepSeek", search: "DeepSeek", color: "#4d6bfe" },
+  xai: { name: "xAI", brand: "Grok", search: "Grok", owner: "xAI", color: "#8b8f98" },
+};
+
+// "Claude API pricing (Anthropic)", "OpenAI API pricing": the phrase each provider page targets.
+export const providerHeading = (key) => {
+  const { search, owner } = PROVIDERS[key];
+  return `${search} API pricing${owner ? ` (${owner})` : ""}`;
 };
 
 // "Anthropic Claude", but just "Google Gemini" where the name already says it.
@@ -23,7 +33,9 @@ export const providerTitle = (key) => {
 // Aliases like gpt-5-latest point at another model, so they get no page of their own.
 export const hasPage = (model) => !model.name.endsWith("-latest");
 export const modelPath = (model) => `/pricing/${model.name}/`;
-export const providerPath = (key) => `/pricing/${key}/`;
+export const providerPath = (key) => `/pricing/${PROVIDERS[key].slug ?? key}/`;
+// The provider id's own URL when the page moved to a slug (/pricing/anthropic/), else null.
+export const providerAliasPath = (key) => (PROVIDERS[key].slug ? `/pricing/${key}/` : null);
 
 // The request the site quotes everywhere: 1,000 input and 500 output tokens.
 export const TYPICAL = { input: 1000, output: 500 };

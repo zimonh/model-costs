@@ -4,6 +4,8 @@
 
 Prices are in US dollars per 1 million tokens. "Typical request" is 1,000 input and 500 output tokens at standard rates. Cost of a request = input tokens × input price / 1,000,000 + output tokens × output price / 1,000,000. Batch prices apply to requests processed within 24 hours. Source: https://apicost.app/pricing/ (also as https://apicost.app/prices.csv and https://apicost.app/prices.json). Prices as of October 28, 2026.
 
+License: the price data is free to reuse under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Credit "apicost.app" with a link to https://apicost.app/pricing/. It is built from the LiteLLM price list (MIT License, https://github.com/BerriAI/litellm).
+
 ## OpenAI ChatGPT
 
 | Model | Model id | Input / 1M | Cached input / 1M | Output / 1M | Batch input / output | Context window | Typical request |
