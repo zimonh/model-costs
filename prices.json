@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-28",
+ "updated": "2026-11-01",
  "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
  "license": "https://creativecommons.org/licenses/by/4.0/",
  "attribution": "apicost.app (https://apicost.app/pricing/), from the LiteLLM price list (MIT License)",
@@ -478,6 +478,29 @@
     "cachedInput": 2,
     "output": 75
    },
+   "maxInputTokens": 922000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
+  },
+  {
+   "name": "gpt-6-astra-law",
+   "provider": "openai",
+   "source": "https://developers.openai.com/api/docs/pricing",
+   "standard": {
+    "input": 10,
+    "cachedInput": 1,
+    "output": 50
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   },
+   "cacheWrite": null,
+   "cacheWrite1h": null,
+   "longContext": null,
    "maxInputTokens": 922000,
    "maxOutputTokens": 128000,
    "vision": true,

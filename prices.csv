@@ -18,6 +18,7 @@ gpt-5.6-luna,GPT-5.6 Luna,OpenAI,0.2,0.02,1.2,0.1,0.6,922000,128000,https://apic
 gpt-5.6-sol,GPT-5.6 Sol,OpenAI,4,0.4,20,2,10,922000,128000,https://apicost.app/pricing/gpt-5.6/
 gpt-5.6-terra,GPT-5.6 Terra,OpenAI,2,0.2,12,1,6,922000,128000,https://apicost.app/pricing/gpt-5.6-terra/
 gpt-6-astra,GPT-6 Astra,OpenAI,10,1,50,5,25,922000,128000,https://apicost.app/pricing/gpt-6-astra/
+gpt-6-astra-law,GPT-6 Astra Law,OpenAI,10,1,50,,,922000,128000,https://apicost.app/pricing/gpt-6-astra-law/
 gpt-6-luna,GPT-6 Luna,OpenAI,0.1,0.01,0.5,0.05,0.25,922000,128000,https://apicost.app/pricing/gpt-6-luna/
 gpt-6-sol,GPT-6 Sol,OpenAI,2,0.2,10,1,5,922000,128000,https://apicost.app/pricing/gpt-6-sol/
 gpt-6.1-sol,GPT-6.1 Sol,OpenAI,2,0.1,10,1,5,922000,128000,https://apicost.app/pricing/gpt-6.1-sol/

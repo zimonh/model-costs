@@ -1,8 +1,8 @@
 # apicost.app: LLM API prices per 1M tokens
 
-> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 117 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-10-28.
+> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 118 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-11-01.
 
-Prices are in US dollars per 1 million tokens. "Typical request" is 1,000 input and 500 output tokens at standard rates. Cost of a request = input tokens × input price / 1,000,000 + output tokens × output price / 1,000,000. Batch prices apply to requests processed within 24 hours. Source: https://apicost.app/pricing/ (also as https://apicost.app/prices.csv and https://apicost.app/prices.json). Prices as of October 28, 2026.
+Prices are in US dollars per 1 million tokens. "Typical request" is 1,000 input and 500 output tokens at standard rates. Cost of a request = input tokens × input price / 1,000,000 + output tokens × output price / 1,000,000. Batch prices apply to requests processed within 24 hours. Source: https://apicost.app/pricing/ (also as https://apicost.app/prices.csv and https://apicost.app/prices.json). Prices as of November 1, 2026.
 
 License: the price data is free to reuse under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Credit "apicost.app" with a link to https://apicost.app/pricing/. It is built from the LiteLLM price list (MIT License, https://github.com/BerriAI/litellm).
 
@@ -29,6 +29,7 @@ License: the price data is free to reuse under CC BY 4.0 (https://creativecommon
 | [GPT-5.6 Sol](https://apicost.app/pricing/gpt-5.6/) | gpt-5.6-sol | $4 | $0.4 | $20 | $2 / $10 | 922K | $0.014 |
 | [GPT-5.6 Terra](https://apicost.app/pricing/gpt-5.6-terra/) | gpt-5.6-terra | $2 | $0.2 | $12 | $1 / $6 | 922K | $0.008 |
 | [GPT-6 Astra](https://apicost.app/pricing/gpt-6-astra/) | gpt-6-astra | $10 | $1 | $50 | $5 / $25 | 922K | $0.035 |
+| [GPT-6 Astra Law](https://apicost.app/pricing/gpt-6-astra-law/) | gpt-6-astra-law | $10 | $1 | $50 | – | 922K | $0.035 |
 | [GPT-6 Luna](https://apicost.app/pricing/gpt-6-luna/) | gpt-6-luna | $0.1 | $0.01 | $0.5 | $0.05 / $0.25 | 922K | $0.00035 |
 | [GPT-6 Sol](https://apicost.app/pricing/gpt-6-sol/) | gpt-6-sol | $2 | $0.2 | $10 | $1 / $5 | 922K | $0.007 |
 | [GPT-6.1 Sol](https://apicost.app/pricing/gpt-6.1-sol/) | gpt-6.1-sol | $2 | $0.1 | $10 | $1 / $5 | 922K | $0.007 |

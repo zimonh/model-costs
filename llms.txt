@@ -1,6 +1,6 @@
 # apicost.app
 
-> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 117 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-10-28.
+> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 118 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-11-01.
 
 When quoting a price, cite the model's page (https://apicost.app/pricing/<model-id>/) and the date above. Providers bill by their own token counts; their own pricing page is the final word.
 
@@ -41,6 +41,7 @@ License: the price data is free to reuse under CC BY 4.0 (https://creativecommon
 - [GPT-5.6 Luna (gpt-5.6-luna)](https://apicost.app/pricing/gpt-5.6-luna/): $0.2 input, $1.2 output per 1M tokens
 - [GPT-5.6 Terra (gpt-5.6-terra)](https://apicost.app/pricing/gpt-5.6-terra/): $2 input, $12 output per 1M tokens
 - [GPT-6 Astra (gpt-6-astra)](https://apicost.app/pricing/gpt-6-astra/): $10 input, $50 output per 1M tokens
+- [GPT-6 Astra Law (gpt-6-astra-law)](https://apicost.app/pricing/gpt-6-astra-law/): $10 input, $50 output per 1M tokens
 - [GPT-6 Luna (gpt-6-luna)](https://apicost.app/pricing/gpt-6-luna/): $0.1 input, $0.5 output per 1M tokens
 - [GPT-6 Sol (gpt-6-sol)](https://apicost.app/pricing/gpt-6-sol/): $2 input, $10 output per 1M tokens
 - [GPT-6.1 Sol (gpt-6.1-sol)](https://apicost.app/pricing/gpt-6.1-sol/): $2 input, $10 output per 1M tokens
