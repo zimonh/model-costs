@@ -79,8 +79,8 @@ mistral-code-agent-latest,Mistral Code Agent Latest,Mistral,0.4,0.04,2,,,256000,
 mistral-code-fim-latest,Mistral Code FIM Latest,Mistral,0.3,0.03,0.9,,,128000,128000,
 mistral-code-latest,Mistral Code Latest,Mistral,0.3,0.03,0.9,,,128000,128000,
 mistral-large-3,Mistral Large 3,Mistral,0.5,0.05,1.5,,,262144,262144,https://apicost.app/pricing/mistral-large-3/
-mistral-large-4,Mistral Large 4,Mistral,1.36,0.14,4.18,,,1048576,1048576,https://apicost.app/pricing/mistral-large-4/
-mistral-large-4-0,Mistral Large 4.0,Mistral,1.36,0.14,4.18,,,1048576,1048576,https://apicost.app/pricing/mistral-large-4/
+mistral-large-4,Mistral Large 4,Mistral,0.7,0.07,2.1,,,1048576,1048576,https://apicost.app/pricing/mistral-large-4/
+mistral-large-4-0,Mistral Large 4.0,Mistral,0.7,0.07,2.1,,,1048576,1048576,https://apicost.app/pricing/mistral-large-4/
 mistral-large-2512,Mistral Large 2512,Mistral,0.5,0.05,1.5,,,262144,262144,https://apicost.app/pricing/mistral-large-2512/
 mistral-large-latest,Mistral Large Latest,Mistral,0.5,0.05,1.5,,,262144,262144,
 mistral-medium,Mistral Medium,Mistral,1.5,0.15,7.5,,,262144,262144,https://apicost.app/pricing/mistral-medium/

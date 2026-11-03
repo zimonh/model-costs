@@ -1,6 +1,6 @@
 # apicost.app
 
-> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 118 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-11-01.
+> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 118 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-11-03.
 
 When quoting a price, cite the model's page (https://apicost.app/pricing/<model-id>/) and the date above. Providers bill by their own token counts; their own pricing page is the final word.
 
@@ -98,7 +98,7 @@ License: the price data is free to reuse under CC BY 4.0 (https://creativecommon
 - [Ministral 8B 2512 (ministral-8b-2512)](https://apicost.app/pricing/ministral-8b-2512/): $0.15 input, $0.15 output per 1M tokens
 - [Ministral 14B 2512 (ministral-14b-2512)](https://apicost.app/pricing/ministral-14b-2512/): $0.2 input, $0.2 output per 1M tokens
 - [Mistral Large 3 (mistral-large-3)](https://apicost.app/pricing/mistral-large-3/): $0.5 input, $1.5 output per 1M tokens
-- [Mistral Large 4 (mistral-large-4)](https://apicost.app/pricing/mistral-large-4/): $1.36 input, $4.18 output per 1M tokens
+- [Mistral Large 4 (mistral-large-4)](https://apicost.app/pricing/mistral-large-4/): $0.7 input, $2.1 output per 1M tokens
 - [Mistral Large 2512 (mistral-large-2512)](https://apicost.app/pricing/mistral-large-2512/): $0.5 input, $1.5 output per 1M tokens
 - [Mistral Medium (mistral-medium)](https://apicost.app/pricing/mistral-medium/): $1.5 input, $7.5 output per 1M tokens
 - [Mistral Small (mistral-small)](https://apicost.app/pricing/mistral-small/): $0.1 input, $0.3 output per 1M tokens

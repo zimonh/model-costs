@@ -1,8 +1,8 @@
 # apicost.app: LLM API prices per 1M tokens
 
-> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 118 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-11-01.
+> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 118 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-11-03.
 
-Prices are in US dollars per 1 million tokens. "Typical request" is 1,000 input and 500 output tokens at standard rates. Cost of a request = input tokens × input price / 1,000,000 + output tokens × output price / 1,000,000. Batch prices apply to requests processed within 24 hours. Source: https://apicost.app/pricing/ (also as https://apicost.app/prices.csv and https://apicost.app/prices.json). Prices as of November 1, 2026.
+Prices are in US dollars per 1 million tokens. "Typical request" is 1,000 input and 500 output tokens at standard rates. Cost of a request = input tokens × input price / 1,000,000 + output tokens × output price / 1,000,000. Batch prices apply to requests processed within 24 hours. Source: https://apicost.app/pricing/ (also as https://apicost.app/prices.csv and https://apicost.app/prices.json). Prices as of November 3, 2026.
 
 License: the price data is free to reuse under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Credit "apicost.app" with a link to https://apicost.app/pricing/. It is built from the LiteLLM price list (MIT License, https://github.com/BerriAI/litellm).
 
@@ -105,8 +105,8 @@ License: the price data is free to reuse under CC BY 4.0 (https://creativecommon
 | Mistral Code FIM Latest | mistral-code-fim-latest | $0.3 | $0.03 | $0.9 | – | 128K | $0.00075 |
 | Mistral Code Latest | mistral-code-latest | $0.3 | $0.03 | $0.9 | – | 128K | $0.00075 |
 | [Mistral Large 3](https://apicost.app/pricing/mistral-large-3/) | mistral-large-3 | $0.5 | $0.05 | $1.5 | – | 262K | $0.00125 |
-| [Mistral Large 4](https://apicost.app/pricing/mistral-large-4/) | mistral-large-4 | $1.36 | $0.14 | $4.18 | – | 1.05M | $0.00345 |
-| [Mistral Large 4.0](https://apicost.app/pricing/mistral-large-4/) | mistral-large-4-0 | $1.36 | $0.14 | $4.18 | – | 1.05M | $0.00345 |
+| [Mistral Large 4](https://apicost.app/pricing/mistral-large-4/) | mistral-large-4 | $0.7 | $0.07 | $2.1 | – | 1.05M | $0.00175 |
+| [Mistral Large 4.0](https://apicost.app/pricing/mistral-large-4/) | mistral-large-4-0 | $0.7 | $0.07 | $2.1 | – | 1.05M | $0.00175 |
 | [Mistral Large 2512](https://apicost.app/pricing/mistral-large-2512/) | mistral-large-2512 | $0.5 | $0.05 | $1.5 | – | 262K | $0.00125 |
 | Mistral Large Latest | mistral-large-latest | $0.5 | $0.05 | $1.5 | – | 262K | $0.00125 |
 | [Mistral Medium](https://apicost.app/pricing/mistral-medium/) | mistral-medium | $1.5 | $0.15 | $7.5 | – | 262K | $0.00525 |
