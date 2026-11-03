@@ -177,7 +177,7 @@ ${body}
       <div class="wrap">
         <p>Prices per 1 million tokens in US dollars, from the open <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list. Updated ${longDate}.</p>
         <p>Check the provider's own pricing page before relying on a number. Providers bill by their own token counts.</p>
-        <p>© ${updated.slice(0, 4)} apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a> · <a href="${TOPICS.privacy}">Privacy</a><span class="cookie-settings" hidden> · <a href="#cookie-settings">Cookie settings</a></span></p>
+        <p>© ${updated.slice(0, 4)} apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a> · Made by <a href="https://zimonh.nl">ZIMONH</a> · <a href="${TOPICS.privacy}">Privacy</a><span class="cookie-settings" hidden> · <a href="#cookie-settings">Cookie settings</a></span></p>
       </div>
     </footer>${script ? `\n    <script>${script}    </script>` : ""}
   </body>
