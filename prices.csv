@@ -26,10 +26,12 @@ gpt-6.1-terra,GPT-6.1 Terra,OpenAI,1,0.05,5,0.5,2.5,922000,128000,https://apicos
 o3,o3,OpenAI,2,0.5,8,1,4,200000,100000,https://apicost.app/pricing/o3/
 claude-fable-5,Claude Fable 5,Anthropic,10,1,50,5,25,1000000,128000,https://apicost.app/pricing/claude-fable-5/
 claude-fable-5-1,Claude Fable 5.1,Anthropic,10,0.25,50,5,25,1000000,128000,https://apicost.app/pricing/claude-fable-5-1/
+claude-fable-5-2,Claude Fable 5.2,Anthropic,8,0.2,40,4,20,1000000,128000,https://apicost.app/pricing/claude-fable-5-2/
 claude-haiku-4-5,Claude Haiku 4.5,Anthropic,1,0.1,5,0.5,2.5,200000,64000,https://apicost.app/pricing/claude-haiku-4-5/
 claude-haiku-5-5,Claude Haiku 5.5,Anthropic,0.1,0.01,0.5,0.05,0.25,1000000,128000,https://apicost.app/pricing/claude-haiku-5-5/
 claude-mythos-5,Claude Mythos 5,Anthropic,10,1,50,5,25,1000000,128000,https://apicost.app/pricing/claude-mythos-5/
 claude-mythos-5-1,Claude Mythos 5.1,Anthropic,10,0.25,50,5,25,1000000,128000,https://apicost.app/pricing/claude-mythos-5-1/
+claude-mythos-5-2,Claude Mythos 5.2,Anthropic,8,0.2,40,4,20,1000000,128000,https://apicost.app/pricing/claude-mythos-5-2/
 claude-opus-4-5,Claude Opus 4.5,Anthropic,5,0.5,25,2.5,12.5,200000,64000,https://apicost.app/pricing/claude-opus-4-5/
 claude-opus-4-6,Claude Opus 4.6,Anthropic,5,0.5,25,2.5,12.5,1000000,128000,https://apicost.app/pricing/claude-opus-4-6/
 claude-opus-4-7,Claude Opus 4.7,Anthropic,5,0.5,25,2.5,12.5,1000000,128000,https://apicost.app/pricing/claude-opus-4-7/
@@ -52,9 +54,12 @@ gemini-3.6-flash,Gemini 3.6 Flash,Google Gemini,0.75,0.075,3.75,0.375,1.875,1048
 gemini-3.7-flash,Gemini 3.7 Flash,Google Gemini,0.75,0.075,3.75,0.375,1.875,1048576,65536,https://apicost.app/pricing/gemini-3.7-flash/
 gemini-3.8-flash,Gemini 3.8 Flash,Google Gemini,0.75,0.075,3.75,0.375,1.875,1048576,65536,https://apicost.app/pricing/gemini-3.8-flash/
 gemini-4-argon,Gemini 4 Argon,Google Gemini,2,0.1,10,1,5,1048576,1048576,https://apicost.app/pricing/gemini-4-argon/
+gemini-4-carbon,Gemini 4 Carbon,Google Gemini,2,0.1,10,1,5,1048576,1048576,https://apicost.app/pricing/gemini-4-carbon/
+gemini-4-hydrogen,Gemini 4 Hydrogen,Google Gemini,1.5,0.075,7.5,0.75,3.75,1048576,1048576,https://apicost.app/pricing/gemini-4-hydrogen/
 gemini-flash-latest,Gemini Flash Latest,Google Gemini,0.75,0.075,3.75,0.375,1.875,1048576,65536,
 gemini-flash-lite-latest,Gemini Flash Lite Latest,Google Gemini,0.3,0.03,2.5,0.15,1.25,1048576,65536,
-gemini-omni-1.1-flash,Gemini Omni 1.1 Flash,Google Gemini,1.5,,9,,,1048576,65536,https://apicost.app/pricing/gemini-omni-1.1-flash/
+gemini-omni-1.1-flash,Gemini Omni 1.1 Flash,Google Gemini,1.5,,9,,,131072,65536,https://apicost.app/pricing/gemini-omni-1.1-flash/
+gemini-omni-1.2-flash,Gemini Omni 1.2 Flash,Google Gemini,1.5,,9,,,131072,65536,https://apicost.app/pricing/gemini-omni-1.2-flash/
 gemini-pro-latest,Gemini Pro Latest,Google Gemini,2,0.2,12,1,6,1048576,65536,
 codestral-2508,Codestral 2508,Mistral,0.3,0.03,0.9,,,128000,128000,https://apicost.app/pricing/codestral-2508/
 codestral-latest,Codestral Latest,Mistral,0.3,0.03,0.9,,,128000,128000,

@@ -11,6 +11,7 @@ The site is static files, with no build tool and no dependencies beyond Node 22.
 | Path | What it is | Written by |
 |---|---|---|
 | `index.html` | The calculator. Hand-written, except the blocks between `<!-- prices:start -->` / `<!-- examples:start -->` markers. | you + `build-site.mjs` |
+| `price-history.json` | Every price change, new and retired model since 2026-10-22, dated; rebuilt from the git history of `prices.json`. Shown on `/pricing/changes/` (plus an Atom feed), on each provider page and in each model's price history. | `price-history.mjs` |
 | `prices.json` | Every model's price per 1M tokens, read by the calculator, plus cache-write and long-context prices for the pages. | `update-prices.mjs` |
 | `pricing/` | One page per model and provider, plus an index. Models listed under several ids at the same price (snapshots, `-reasoning` variants) get one canonical page; the other ids' pages point at it. A provider page lives at the name people search for (`/pricing/claude/`, set by `slug` in `site.mjs`); its id's URL (`/pricing/anthropic/`) stays up as an alias. | `build-site.mjs` |
 | `404.html`, `sitemap.xml`, `llms.txt` | Not-found page, sitemap (canonical pages only, `lastmod` = the day that page last changed), and a site map for AI assistants. | `build-site.mjs` |
@@ -22,13 +23,14 @@ The site is static files, with no build tool and no dependencies beyond Node 22.
 The scripts in `scripts/`:
 
 - `update-prices.mjs` downloads the LiteLLM list and writes `prices.json`. It refuses to write if the list looks broken.
-- `build-site.mjs` renders everything else from `prices.json`.
+- `price-history.mjs` diffs every committed `prices.json` (and the working copy, dated today) into `price-history.json`. It needs the full git history.
+- `build-site.mjs` renders everything else from `prices.json` and `price-history.json`.
 - `check-site.mjs` fails when a link, sitemap URL or structured data block is broken, when the sitemap and the canonical pages disagree, when two pages share a title or description, when FAQ structured data isn't visible on the page, when a page doesn't load `analytics.js`, when structured data names a person, when the Dataset or llms files lose the data license, or when a provider page lacks its FAQ, breadcrumbs or date.
 - `indexnow.mjs` tells Bing and other IndexNow search engines which pages changed.
 - `site.mjs` holds what they share: the provider list and the price formatting.
 
 ```sh
-node scripts/update-prices.mjs && node scripts/build-site.mjs && node scripts/check-site.mjs
+node scripts/update-prices.mjs && node scripts/price-history.mjs && node scripts/build-site.mjs && node scripts/check-site.mjs
 python3 -m http.server   # then open http://localhost:8000
 ```
 

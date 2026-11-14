@@ -53,6 +53,86 @@ const priceDistance = (a, b) => Math.abs(Math.log((a + 1e-7) / (b + 1e-7)));
 
 const dot = (key) => `<span class="dot" style="--p:${PROVIDERS[key].color}"></span>`;
 
+// "an OpenAI request", "a Claude request".
+const an = (word) => (/^[AEIOU]/i.test(word) ? `an ${word}` : `a ${word}`);
+
+// ---------- Price history ----------
+
+// Price changes, new and retired models, newest first (see scripts/price-history.mjs).
+// Alias ids repeat their primary model's change, so only the primary's event is kept.
+const history = await readFile(new URL("price-history.json", root), "utf8").then(JSON.parse, () => ({ since: updated, events: [] }));
+const events = history.events.filter((e) => !aliasOf.has(e.model));
+const dateText = (d, month = "short") => new Date(d + "T00:00:00Z").toLocaleDateString("en-US", { year: "numeric", month, day: "numeric", timeZone: "UTC" });
+const since = dateText(history.since, "long");
+// Back to within 5% of the old input and output price counts as undone (a list fix rarely lands on the exact old number).
+const samePrices = (a, b) => a && b && ["input", "output"].every((f) => a[f] === b[f] || (a[f] > 0 && Math.abs(b[f] / a[f] - 1) <= 0.05));
+// A change undone within two weeks is usually a correction in the price list, not a real price move: say so.
+for (const e of events.filter((e) => e.type === "change")) {
+  const undo = events.find((o) => o.type === "change" && o.model === e.model && o.date > e.date && samePrices(o.after, e.before));
+  if (undo && (new Date(undo.date) - new Date(e.date)) / 864e5 <= 14) {
+    e.reversedOn = undo.date;
+    undo.reverts = e.date;
+  }
+}
+const eventsOf = (m) => events.filter((e) => e.model === m.name || aliasOf.get(e.model) === m);
+const pagedModel = (name) => allModels.find((m) => m.name === name);
+const typicalOf = (p) => cost(p, TYPICAL.input, TYPICAL.output);
+const signed = (before, after) => {
+  if (!(before > 0) || after == null) return "";
+  const p = Math.round((after / before - 1) * 100);
+  return ` (${p > 0 ? "+" : p < 0 ? "−" : "±"}${Math.abs(p)}%)`;
+};
+const move = (e) => (typicalOf(e.after) > typicalOf(e.before) ? "increase" : typicalOf(e.after) < typicalOf(e.before) ? "cut" : "change");
+const fromTo = (e, f) => `${rate(e.before[f])} → ${rate(e.after[f])}${signed(e.before[f], e.after[f])}`;
+
+// One event as a sentence. `linked` turns the model name into a link (HTML); otherwise plain text.
+function eventText(e, { linked = false, date = true } = {}) {
+  const name = displayName(e.model);
+  const page = pagedModel(e.model);
+  const label = linked ? (page ? `<a href="${modelPath(aliasOf.get(page.name) ?? page)}">${escape(name)}</a>` : escape(name)) : name;
+  const when = date ? `${dateText(e.date)}: ` : "";
+  const text =
+    e.type === "new"
+      ? ` added to the price list at ${rate(e.after.input)} input and ${rate(e.after.output)} output per 1M tokens.`
+      : e.type === "retired"
+        ? ` left the price list (it cost ${rate(e.before.input)} input and ${rate(e.before.output)} output per 1M tokens).`
+        : ` price ${move(e)}: input ${fromTo(e, "input")}, output ${fromTo(e, "output")} per 1M tokens.` +
+          (e.reversedOn ? ` Reversed on ${dateText(e.reversedOn)}, most likely a correction.` : e.reverts ? ` This undid the change of ${dateText(e.reverts)}.` : "");
+  return when + (linked ? label + escape(text) : label + text);
+}
+
+// "Did OpenAI raise its API prices?", answered from the history.
+function providerChangeAnswer(key) {
+  const { name } = PROVIDERS[key];
+  const own = events.filter((e) => e.provider === key);
+  const changes = own.filter((e) => e.type === "change");
+  const added = own.filter((e) => e.type === "new");
+  const retired = own.filter((e) => e.type === "retired");
+  const others =
+    (added.length ? ` ${added.length} new ${added.length === 1 ? "model was" : "models were"} added, most recently ${displayName(added[0].model)} on ${dateText(added[0].date)}.` : "") +
+    (retired.length ? ` ${retired.length} ${retired.length === 1 ? "model" : "models"} left the price list, most recently ${displayName(retired[0].model)} on ${dateText(retired[0].date)}.` : "");
+  if (!changes.length) return `No. Since ${since}, when apicost.app started tracking, no ${name} model has changed its standard API price.${others}`;
+  const real = changes.filter((e) => !e.reversedOn && !e.reverts);
+  if (!real.length) {
+    const first = changes.at(-1);
+    return (
+      `No. Since ${since}, no ${name} price change has stuck. ${displayName(first.model)}'s price went ${move(first) === "increase" ? "up" : "down"} on ${dateText(first.date)} ` +
+      `(input ${fromTo(first, "input")}, output ${fromTo(first, "output")} per 1M tokens) and went back on ${dateText(first.reversedOn ?? first.date)}, most likely a correction in the price list.${others}`
+    );
+  }
+  const increases = real.filter((e) => move(e) === "increase").length;
+  const cuts = real.filter((e) => move(e) === "cut").length;
+  return (
+    (increases ? "Yes. " : "Not lately. ") +
+    `Since ${since}, apicost.app has seen ${increases} price ${increases === 1 ? "increase" : "increases"} and ${cuts} price ${cuts === 1 ? "cut" : "cuts"} for ${name} models` +
+    (changes.length > real.length ? `, plus ${changes.length - real.length} ${changes.length - real.length === 1 ? "change" : "changes"} reversed within two weeks` : "") +
+    `. The latest, on ${dateText(changes[0].date)}: ${eventText(changes[0], { date: false })}${others}`
+  );
+}
+
+// A list of events for a page, newest first.
+const eventList = (list) => `<ul class="changes">${list.map((e) => `<li>${eventText(e, { linked: true })}</li>`).join("")}</ul>`;
+
 // ---------- Layout ----------
 
 const CSS = `
@@ -90,6 +170,7 @@ th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color:
 @media (prefers-color-scheme: dark) { .cta, .cta:hover { color: #0f1115; } }
 .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; background: var(--p); }
 .links { columns: 3 220px; padding: 0; list-style: none; margin: 0; } .links li { padding: 3px 0; break-inside: avoid; }
+.changes { max-width: 760px; padding-left: 1.2em; } .changes li { margin: 6px 0; }
 .providers { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
 .providers a { display: block; padding: 16px 18px; text-decoration: none; color: var(--text); } .providers a:hover { border-color: var(--accent); }
 .providers .muted { font-size: .88rem; }
@@ -117,7 +198,7 @@ const WEBSITE = { "@type": "WebSite", "@id": `${SITE}/#website`, name: "apicost.
 
 // `crumbs` is a list of [name, path]; the last one is this page. `canonical` is
 // another page's path when this one duplicates it (an alias model).
-function layout({ path, title, description, crumbs = [], body, script = "", jsonLd = [], index = true, canonical = path }) {
+function layout({ path, title, description, crumbs = [], body, script = "", jsonLd = [], index = true, canonical = path, head = "" }) {
   const url = SITE + path;
   const page = { "@type": "WebPage", "@id": url, name: title, description, url, inLanguage: "en", isPartOf: { "@id": WEBSITE["@id"] }, publisher: { "@id": PUBLISHER["@id"] }, dateModified: updated };
   const graph = [page, WEBSITE, PUBLISHER, ...jsonLd];
@@ -153,7 +234,7 @@ function layout({ path, title, description, crumbs = [], body, script = "", json
     <meta name="twitter:description" content="${escape(description)}" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />${head ? `\n    ${head}` : ""}
     <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>
     <style>${CSS}</style>
     <script src="/analytics.js" defer></script>
@@ -289,8 +370,20 @@ function modelPage(m) {
       ` Filling the whole context window once costs ${usd(cost(s, m.maxInputTokens, 0))} in input tokens.`
     : null;
 
+  // Price history: what changed since tracking started, or since the model was added.
+  const own = eventsOf(primary ?? m);
+  const changes = own.filter((e) => e.type === "change");
+  const added = own.find((e) => e.type === "new");
+  const start = added ? `it was added to the price list on ${dateText(added.date, "long")}` : `apicost.app started tracking prices on ${since}`;
+  const historyText = changes.length
+    ? `Yes. ${name}'s standard price changed ${changes.length === 1 ? "once" : changes.length === 2 ? "twice" : `${changes.length} times`} since ${start}. The latest, a price ${move(changes[0])} on ${dateText(changes[0].date, "long")}: input ${fromTo(changes[0], "input")}, output ${fromTo(changes[0], "output")} per 1M tokens` +
+      (changes[0].reverts ? `, which undid the change of ${dateText(changes[0].reverts)}` : changes[0].reversedOn ? `, reversed on ${dateText(changes[0].reversedOn)}` : "") +
+      `. It now costs ${rate(s.input)} input and ${rate(s.output)} output per 1M tokens.`
+    : `No. ${name} has cost ${rate(s.input)} per million input tokens and ${rate(s.output)} per million output tokens since ${start}.`;
+
   const faq = [
     [`How much does the ${name} API cost?`, intro],
+    [`Has the ${name} API price changed?`, historyText],
     ...(cheaper ? [[`Is there a cheaper way to use ${name}?`, cheaper]] : []),
     ...(context ? [[`What is the context window of ${name}?`, context]] : []),
     ...(rivals[0] ? [[`Is ${name} cheaper than ${displayName(rivals[0].name)}?`, verdict(rivals[0]) + compare(rivals[0])]] : []),
@@ -379,6 +472,11 @@ ${
       </ul>`
     : ""
 }
+
+      <h2>${escape(name)} price history</h2>
+      <p>${escape(historyText.replace(/^(Yes|No)\. /, ""))}</p>
+      ${changes.length ? eventList(changes) : ""}
+      <p class="note">Every LLM API price increase, cut, new and retired model, dated: <a href="${TOPICS.changes}">LLM API price changes</a>.</p>
 
       <h2>Models with a similar price</h2>
 ${priceTable(similar)}
@@ -560,10 +658,40 @@ function providerPage(key, { alias = false } = {}) {
     .join("\n");
   const aliasIds = rows.flatMap((m) => aliasesOf(m).map((a) => `<code>${escape(a.name)}</code> (same as ${escape(displayName(m.name))})`));
 
+  // What people ask next, from Google's "People also ask": is it free, is it cheaper than the app, why so expensive.
+  const fmt = (n) => Math.floor(n).toLocaleString("en-US");
+  // The newest top model people reach for: highest version, then the priciest of that version.
+  const top = [...headline].sort((a, b) => version(b) - version(a) || typicalCost(b) - typicalCost(a))[0] ?? flagship;
+  const month = (m) => typicalCost(m) * 30 * 30;
+  const app = ["openai", "anthropic", "gemini"].includes(key);
+  const budgetQ = app ? `Is the ${search} API cheaper than a ${brand} subscription?` : `How much ${search} API use does $20 buy?`;
+  const budgetText =
+    `It depends on how much you use it. $20 of ${search} API usage pays for about ${fmt(20 / typicalCost(top))} typical requests (1,000 input and 500 output tokens) on ${displayName(top.name)}, ` +
+    `or ${fmt(20 / typicalCost(cheapest))} on ${displayName(cheapest.name)}. At 30 typical requests a day, a month costs ${usd(month(top))} on ${displayName(top.name)} and ${usd(month(cheapest))} on ${displayName(cheapest.name)}. ` +
+    `Long chats cost more per message than that, because every turn sends the whole conversation again as input tokens.` +
+    (app ? ` The API is billed separately from any ${brand} app subscription.` : "");
+  const freeText = `You pay per token: the ${search} API is pay as you go, billed separately from any ${brand} subscription. The cheapest model, ${displayName(cheapest.name)}, costs ${rate(cheapest.standard.input)} per million input tokens and ${rate(cheapest.standard.output)} per million output tokens, so 1,000 typical requests cost ${usd(typicalCost(cheapest) * 1000)}.`;
+  const outputRatio = top.standard.input > 0 ? top.standard.output / top.standard.input : null;
+  const savings = [
+    typicalCost(cheapest) < 0.9 * typicalCost(top) && `${displayName(cheapest.name)} is ${shortRatio(top, cheapest)} per typical request than ${displayName(top.name)}`,
+    batched.length && `the batch API takes ${percent(median(batchSaving))} off`,
+    cached.length && `cached input costs ${percent(median(cacheDiscount))} less`,
+  ].filter(Boolean);
+  const expensiveText =
+    `Mostly because of output tokens and long prompts.` +
+    (outputRatio > 1 ? ` ${displayName(top.name)} charges ${Number(outputRatio.toPrecision(2))}× more for output (${rate(top.standard.output)} per million tokens) than for input (${rate(top.standard.input)}).` : "") +
+    (priced.some((m) => m.reasoning) ? ` Reasoning models bill their thinking as output tokens, even though you don't see it.` : "") +
+    ` And a chat sends the whole conversation again as input on every turn, so a long chat gets more expensive with each message.` +
+    (savings.length ? ` To pay less: ${list(savings)}.` : "");
+
   const faq = [
     [`How much does the ${search} API cost?`, intro],
+    [`Did ${name} raise its API prices?`, providerChangeAnswer(key)],
     [`What is the cheapest ${search} model?`, `${displayName(cheapest.name)} (${cheapest.name}), at ${rate(cheapest.standard.input)} per million input tokens and ${rate(cheapest.standard.output)} per million output tokens.`],
-    [`How much does a ${search} API request cost?`, requestText],
+    ...(key === "openai" || key === "anthropic" ? [[`Is the ${search} API free?`, freeText]] : []),
+    [budgetQ, budgetText],
+    ...(key === "openai" || key === "anthropic" ? [[`Why is the ${search} API so expensive?`, expensiveText]] : []),
+    [`How much does ${an(search)} API request cost?`, requestText],
     ...(batched.length ? [[`Is the ${search} batch API cheaper?`, `Yes. ${batchText}`]] : []),
     ...(cached.length ? [[`How much does prompt caching save on the ${search} API?`, cacheText]] : []),
     [`Does long context cost more on the ${search} API?`, (tiered.length ? "Yes, on some models. " : "No. ") + longText],
@@ -603,7 +731,7 @@ ${fullRows}
       <p class="note">US dollars per million tokens, sorted by the cost of a typical request of 1,000 input and 500 output tokens.${hasCacheWrite ? " Cache write is the standard (5-minute) cache." : ""}${aliasIds.length ? ` Also listed as ${list(aliasIds)}.` : ""}</p>
       <a class="cta" href="/#calculator">Calculate the cost of your own prompt →</a>
 
-      <h2>How much does a ${escape(search)} API request cost?</h2>
+      <h2>How much does ${escape(an(search))} API request cost?</h2>
       <p>${escape(requestText)}</p>
       <div class="card table-wrap"><table class="num">
         <thead><tr><th scope="col">Model</th>${scenarioHead}<th scope="col">1,000 typical requests</th></tr></thead>
@@ -617,6 +745,11 @@ ${scenarioRows}
       <p><strong>Batch API.</strong> ${escape(batchText)} See <a href="${TOPICS.batch}">batch API pricing</a>.</p>
       <p><strong>Prompt caching.</strong> ${escape(cacheText)} See <a href="${TOPICS.caching}">prompt caching pricing</a>.</p>
       <p><strong>Long context.</strong> ${escape(longText)}</p>
+
+      <h2>${escape(name)} API price changes</h2>
+      <p>${escape(providerChangeAnswer(key).replace(/^(Yes|No|Not lately)\. /, ""))}</p>
+      ${events.some((e) => e.provider === key) ? eventList(events.filter((e) => e.provider === key).slice(0, 6)) : ""}
+      <p class="note">Dated from the day a change reached the price list. Every provider: <a href="${TOPICS.changes}">LLM API price changes</a>.</p>
 
       <h2>${escape(search)} API vs ${escape(list(rivals.map((k) => PROVIDERS[k].search)))}</h2>
       <p>${escape(verdict)}</p>
@@ -713,6 +846,7 @@ const TOPICS = {
   cheapest: "/pricing/cheapest/",
   batch: "/pricing/batch-api/",
   caching: "/pricing/prompt-caching/",
+  changes: "/pricing/changes/",
   tokenCounter: "/token-counter/",
   privacy: "/privacy/",
 };
@@ -769,6 +903,115 @@ ${capabilityRows}
 ${faqSection([["What is the cheapest LLM API?", answer]])}
 `,
   });
+}
+
+const FEED = "/pricing/changes/feed.xml";
+
+function changesPage() {
+  const changes = events.filter((e) => e.type === "change");
+  const added = events.filter((e) => e.type === "new");
+  const retired = events.filter((e) => e.type === "retired");
+  const latest = events[0];
+  const latestChange = changes[0];
+  const answer =
+    (latestChange ? `The latest LLM API price change was on ${dateText(latestChange.date)}: ${eventText(latestChange, { date: false })} ` : `No LLM API price has changed since ${since}. `) +
+    (latest && latest !== latestChange ? `Most recent in the list, on ${dateText(latest.date)}: ${eventText(latest, { date: false })}` : "");
+  const modelCell = (e) => {
+    const page = pagedModel(e.model);
+    return `<td class="left">${page ? `<a href="${modelPath(aliasOf.get(page.name) ?? page)}"><strong>${escape(displayName(e.model))}</strong></a>` : `<strong>${escape(displayName(e.model))}</strong>`}<br><code class="muted">${escape(e.model)}</code></td>`;
+  };
+  const providerCell = (e) => `<td class="left">${dot(e.provider)}${escape(PROVIDERS[e.provider]?.name ?? e.provider)}</td>`;
+  const dateCell = (e) => `<td class="left"><time datetime="${e.date}">${dateText(e.date)}</time></td>`;
+  const changeRows = changes
+    .map(
+      (e) =>
+        `<tr>${dateCell(e)}${modelCell(e)}${providerCell(e)}<td class="left">${move(e)}${e.reversedOn ? `, reversed ${dateText(e.reversedOn)}` : e.reverts ? `, undoes ${dateText(e.reverts)}` : ""}</td>` +
+        `<td>${escape(fromTo(e, "input"))}</td><td>${escape(fromTo(e, "output"))}</td><td>${usd(typicalOf(e.before))} → ${usd(typicalOf(e.after))}</td></tr>`
+    )
+    .join("\n");
+  const addedRows = added.map((e) => `<tr>${dateCell(e)}${modelCell(e)}${providerCell(e)}<td>${rate(e.after.input)}</td><td>${rate(e.after.output)}</td><td>${usd(typicalOf(e.after))}</td></tr>`).join("\n");
+  const retiredRows = retired.map((e) => `<tr>${dateCell(e)}${modelCell(e)}${providerCell(e)}<td>${rate(e.before.input)}</td><td>${rate(e.before.output)}</td></tr>`).join("\n");
+  const last = (key, type) => events.find((e) => e.provider === key && e.type === type);
+  const count = (key, type) => events.filter((e) => e.provider === key && e.type === type).length;
+  const providerRows = providerKeys
+    .map((key) => {
+      const c = last(key, "change");
+      return `<tr><td class="left">${dot(key)}<a href="${providerPath(key)}"><strong>${escape(PROVIDERS[key].name)}</strong></a></td><td class="left">${c ? `${dateText(c.date)} (${escape(displayName(c.model))}, ${move(c)})` : "none"}</td><td>${count(key, "change")}</td><td>${count(key, "new")}</td><td>${count(key, "retired")}</td></tr>`;
+    })
+    .join("\n");
+  const faq = [
+    ["What was the latest LLM API price change?", answer.trim()],
+    ...providerKeys.map((key) => [`Did ${PROVIDERS[key].name} raise its API prices?`, providerChangeAnswer(key)]),
+    [
+      "How do I find out when an LLM API price changes?",
+      `apicost.app checks the LiteLLM price list every day and lists every change on this page. Follow the Atom feed at ${SITE}${FEED} in any feed reader, or download ${SITE}/price-history.json. The list can lag a provider's announcement by a few days, so for news from today, check the provider's own pricing page.`,
+    ],
+  ];
+  const table = (head, rows) =>
+    `<div class="card table-wrap"><table class="num">\n        <thead><tr>${head.map(([label, left]) => `<th scope="col"${left ? ' class="left"' : ""}>${label}</th>`).join("")}</tr></thead>\n        <tbody>\n${rows}\n        </tbody>\n      </table></div>`;
+
+  return layout({
+    path: TOPICS.changes,
+    title: "LLM API Price Changes – Every Increase, Cut and New Model, Dated",
+    description: `Every OpenAI, Claude, Gemini, Mistral, DeepSeek and Grok API price increase and cut, plus new and retired models, with dates. Updated ${shortDate}.`,
+    crumbs: [["Home", "/"], ["Pricing", "/pricing/"], ["Price changes", TOPICS.changes]],
+    head: `<link rel="alternate" type="application/atom+xml" title="LLM API price changes" href="${FEED}" />`,
+    jsonLd: [faqLd(faq)],
+    body: `
+      <h1>LLM API price changes</h1>
+      <p class="lead">${escape(answer)}</p>
+      <div class="badge">Checked daily, list last updated ${longDate}</div>
+      <p>Every price increase, price cut, new model and retired model in the price list since ${since}, newest first. <a href="${FEED}">Follow the feed</a> to hear about the next one.</p>
+
+      <h2>Did a provider change its prices?</h2>
+${table([["Provider", 1], ["Last price change", 1], ["Price changes"], ["New models"], ["Retired models"]], providerRows)}
+
+      <h2>Price increases and cuts</h2>
+${changes.length ? table([["Date", 1], ["Model", 1], ["Provider", 1], ["Change", 1], ["Input / 1M"], ["Output / 1M"], ["Typical request"]], changeRows) : `      <p>No standard price changed since ${since}.</p>`}
+      <p class="note">Standard rates. A change reversed within two weeks is most likely a correction in the price list rather than a real price move.</p>
+
+      <h2>New models</h2>
+${added.length ? table([["Date", 1], ["Model", 1], ["Provider", 1], ["Input / 1M"], ["Output / 1M"], ["Typical request"]], addedRows) : "      <p>No new models yet.</p>"}
+
+      <h2>Retired models</h2>
+${retired.length ? table([["Date", 1], ["Model", 1], ["Provider", 1], ["Last input / 1M"], ["Last output / 1M"]], retiredRows) : "      <p>No models retired yet.</p>"}
+      <p class="note">A model leaves the list when its provider retires it or LiteLLM drops it. Its last prices stay here.</p>
+${faqSection(faq)}
+      <p class="note">${escape(history.note)} Data: <a href="/price-history.json">price-history.json</a> (<a href="${DATA_LICENSE}" rel="license">CC BY 4.0</a>).</p>
+`,
+  });
+}
+
+// One Atom entry per day with events, newest first.
+function changesFeed() {
+  const days = [...new Set(events.map((e) => e.date))].slice(0, 50);
+  const xml = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
+  const entry = (day) => {
+    const list = events.filter((e) => e.date === day);
+    const counts = ["change", "new", "retired"]
+      .map((type) => [type, list.filter((e) => e.type === type).length])
+      .filter(([, n]) => n)
+      .map(([type, n]) => (type === "change" ? `${n} price ${n === 1 ? "change" : "changes"}` : type === "new" ? `${n} new ${n === 1 ? "model" : "models"}` : `${n} retired`));
+    return `  <entry>
+    <id>tag:apicost.app,${day}:changes</id>
+    <title>${xml(`${dateText(day)}: ${counts.join(", ")}`)}</title>
+    <updated>${day}T06:00:00Z</updated>
+    <link href="${SITE}${TOPICS.changes}" />
+    <content type="html">${xml(eventList(list).replace(/href="\//g, `href="${SITE}/`))}</content>
+  </entry>`;
+  };
+  return `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>${SITE}${TOPICS.changes}</id>
+  <title>LLM API price changes – apicost.app</title>
+  <subtitle>Every LLM API price increase, cut, new and retired model, dated.</subtitle>
+  <link href="${SITE}${TOPICS.changes}" />
+  <link rel="self" href="${SITE}${FEED}" />
+  <updated>${days[0] ?? updated}T06:00:00Z</updated>
+  <author><name>apicost.app</name></author>
+${days.map(entry).join("\n")}
+</feed>
+`;
 }
 
 function batchPage() {
@@ -978,6 +1221,7 @@ const guideLinks = `
         <a class="card" href="${TOPICS.cheapest}"><strong>Cheapest LLM APIs</strong><div class="muted">Lowest-cost models overall and per provider</div></a>
         <a class="card" href="${TOPICS.batch}"><strong>Batch API pricing</strong><div class="muted">Batch discounts for every model</div></a>
         <a class="card" href="${TOPICS.caching}"><strong>Prompt caching pricing</strong><div class="muted">Cached input prices and discounts</div></a>
+        <a class="card" href="${TOPICS.changes}"><strong>Price changes</strong><div class="muted">Every increase, cut and new model, dated</div></a>
         <a class="card" href="${TOPICS.tokenCounter}"><strong>Token counter</strong><div class="muted">Count tokens with OpenAI's tokenizer</div></a>
       </div>`;
 
@@ -1095,6 +1339,7 @@ ${LICENSE_LINE}
 - [Cheapest LLM APIs](${SITE}${TOPICS.cheapest}): the lowest-cost models overall, per provider and per feature
 - [Batch API pricing](${SITE}${TOPICS.batch}): batch prices and savings for every model that offers a batch API
 - [Prompt caching pricing](${SITE}${TOPICS.caching}): cached input prices and discounts
+- [LLM API price changes](${SITE}${TOPICS.changes}): every price increase, cut, new and retired model since ${history.since}, dated ([JSON](${SITE}/price-history.json), [Atom feed](${SITE}${FEED}))
 
 ${providerKeys.map(section).join("\n\n")}
 
@@ -1156,6 +1401,7 @@ const pages = new Map([
   [TOPICS.cheapest, cheapestPage()],
   [TOPICS.batch, batchPage()],
   [TOPICS.caching, cachingPage()],
+  [TOPICS.changes, changesPage()],
   [TOPICS.tokenCounter, tokenCounterPage()],
   [TOPICS.privacy, privacyPage()],
   ...providerKeys.map((key) => [providerPath(key), providerPage(key)]),
@@ -1189,6 +1435,7 @@ for (const [path, html] of pages) {
   await writeFile(file(path), html);
 }
 
+await writeFile(new URL("." + FEED, root), changesFeed());
 await writeFile(home, homeHtml);
 await writeFile(new URL("404.html", root), notFoundPage());
 await writeFile(new URL("llms.txt", root), llmsTxt());

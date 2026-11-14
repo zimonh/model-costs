@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://apicost.app/pricing/changes/</id>
+  <title>LLM API price changes – apicost.app</title>
+  <subtitle>Every LLM API price increase, cut, new and retired model, dated.</subtitle>
+  <link href="https://apicost.app/pricing/changes/" />
+  <link rel="self" href="https://apicost.app/pricing/changes/feed.xml" />
+  <updated>2026-11-14T06:00:00Z</updated>
+  <author><name>apicost.app</name></author>
+  <entry>
+    <id>tag:apicost.app,2026-11-14:changes</id>
+    <title>Nov 14, 2026: 5 new models</title>
+    <updated>2026-11-14T06:00:00Z</updated>
+    <link href="https://apicost.app/pricing/changes/" />
+    <content type="html">&lt;ul class="changes"&gt;&lt;li&gt;Nov 14, 2026: &lt;a href="https://apicost.app/pricing/claude-fable-5-2/"&gt;Claude Fable 5.2&lt;/a&gt; added to the price list at $8 input and $40 output per 1M tokens.&lt;/li&gt;&lt;li&gt;Nov 14, 2026: &lt;a href="https://apicost.app/pricing/claude-mythos-5-2/"&gt;Claude Mythos 5.2&lt;/a&gt; added to the price list at $8 input and $40 output per 1M tokens.&lt;/li&gt;&lt;li&gt;Nov 14, 2026: &lt;a href="https://apicost.app/pricing/gemini-4-carbon/"&gt;Gemini 4 Carbon&lt;/a&gt; added to the price list at $2 input and $10 output per 1M tokens.&lt;/li&gt;&lt;li&gt;Nov 14, 2026: &lt;a href="https://apicost.app/pricing/gemini-4-hydrogen/"&gt;Gemini 4 Hydrogen&lt;/a&gt; added to the price list at $1.5 input and $7.5 output per 1M tokens.&lt;/li&gt;&lt;li&gt;Nov 14, 2026: &lt;a href="https://apicost.app/pricing/gemini-omni-1.2-flash/"&gt;Gemini Omni 1.2 Flash&lt;/a&gt; added to the price list at $1.5 input and $9 output per 1M tokens.&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>tag:apicost.app,2026-11-03:changes</id>
+    <title>Nov 3, 2026: 1 price change</title>
+    <updated>2026-11-03T06:00:00Z</updated>
+    <link href="https://apicost.app/pricing/changes/" />
+    <content type="html">&lt;ul class="changes"&gt;&lt;li&gt;Nov 3, 2026: &lt;a href="https://apicost.app/pricing/mistral-large-4/"&gt;Mistral Large 4&lt;/a&gt; price cut: input $1.36 → $0.7 (−49%), output $4.18 → $2.1 (−50%) per 1M tokens. This undid the change of Oct 28, 2026.&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>tag:apicost.app,2026-11-01:changes</id>
+    <title>Nov 1, 2026: 1 new model</title>
+    <updated>2026-11-01T06:00:00Z</updated>
+    <link href="https://apicost.app/pricing/changes/" />
+    <content type="html">&lt;ul class="changes"&gt;&lt;li&gt;Nov 1, 2026: &lt;a href="https://apicost.app/pricing/gpt-6-astra-law/"&gt;GPT-6 Astra Law&lt;/a&gt; added to the price list at $10 input and $50 output per 1M tokens.&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>tag:apicost.app,2026-10-28:changes</id>
+    <title>Oct 28, 2026: 1 price change, 1 new model, 1 retired</title>
+    <updated>2026-10-28T06:00:00Z</updated>
+    <link href="https://apicost.app/pricing/changes/" />
+    <content type="html">&lt;ul class="changes"&gt;&lt;li&gt;Oct 28, 2026: &lt;a href="https://apicost.app/pricing/deepseek-v4-1-flash-1017/"&gt;DeepSeek V4 1 Flash 1017&lt;/a&gt; added to the price list at $0.3 input and $1.2 output per 1M tokens.&lt;/li&gt;&lt;li&gt;Oct 28, 2026: &lt;a href="https://apicost.app/pricing/mistral-large-4/"&gt;Mistral Large 4&lt;/a&gt; price increase: input $0.68 → $1.36 (+100%), output $2.09 → $4.18 (+100%) per 1M tokens. Reversed on Nov 3, 2026, most likely a correction.&lt;/li&gt;&lt;li&gt;Oct 28, 2026: Grok Code Fast 1 left the price list (it cost $1 input and $2 output per 1M tokens).&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>tag:apicost.app,2026-10-27:changes</id>
+    <title>Oct 27, 2026: 1 new model</title>
+    <updated>2026-10-27T06:00:00Z</updated>
+    <link href="https://apicost.app/pricing/changes/" />
+    <content type="html">&lt;ul class="changes"&gt;&lt;li&gt;Oct 27, 2026: &lt;a href="https://apicost.app/pricing/gpt-6.1-terra/"&gt;GPT-6.1 Terra&lt;/a&gt; added to the price list at $1 input and $5 output per 1M tokens.&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>tag:apicost.app,2026-10-24:changes</id>
+    <title>Oct 24, 2026: 9 retired</title>
+    <updated>2026-10-24T06:00:00Z</updated>
+    <link href="https://apicost.app/pricing/changes/" />
+    <content type="html">&lt;ul class="changes"&gt;&lt;li&gt;Oct 24, 2026: GPT-3.5 Turbo left the price list (it cost $0.5 input and $1.5 output per 1M tokens).&lt;/li&gt;&lt;li&gt;Oct 24, 2026: GPT-3.5 Turbo 16k left the price list (it cost $3 input and $4 output per 1M tokens).&lt;/li&gt;&lt;li&gt;Oct 24, 2026: GPT-4 left the price list (it cost $30 input and $60 output per 1M tokens).&lt;/li&gt;&lt;li&gt;Oct 24, 2026: GPT-4 1106 Preview left the price list (it cost $10 input and $30 output per 1M tokens).&lt;/li&gt;&lt;li&gt;Oct 24, 2026: GPT-4 Turbo left the price list (it cost $10 input and $30 output per 1M tokens).&lt;/li&gt;&lt;li&gt;Oct 24, 2026: GPT-4.1 nano left the price list (it cost $0.1 input and $0.4 output per 1M tokens).&lt;/li&gt;&lt;li&gt;Oct 24, 2026: o1 left the price list (it cost $15 input and $60 output per 1M tokens).&lt;/li&gt;&lt;li&gt;Oct 24, 2026: o3-mini left the price list (it cost $1.1 input and $4.4 output per 1M tokens).&lt;/li&gt;&lt;li&gt;Oct 24, 2026: o4-mini left the price list (it cost $1.1 input and $4.4 output per 1M tokens).&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>tag:apicost.app,2026-10-23:changes</id>
+    <title>Oct 23, 2026: 1 retired</title>
+    <updated>2026-10-23T06:00:00Z</updated>
+    <link href="https://apicost.app/pricing/changes/" />
+    <content type="html">&lt;ul class="changes"&gt;&lt;li&gt;Oct 23, 2026: Gemini Omni Flash Preview left the price list (it cost $1.5 input and $9 output per 1M tokens).&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+</feed>

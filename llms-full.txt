@@ -1,8 +1,8 @@
 # apicost.app: LLM API prices per 1M tokens
 
-> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 118 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-11-03.
+> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 123 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-11-14.
 
-Prices are in US dollars per 1 million tokens. "Typical request" is 1,000 input and 500 output tokens at standard rates. Cost of a request = input tokens × input price / 1,000,000 + output tokens × output price / 1,000,000. Batch prices apply to requests processed within 24 hours. Source: https://apicost.app/pricing/ (also as https://apicost.app/prices.csv and https://apicost.app/prices.json). Prices as of November 3, 2026.
+Prices are in US dollars per 1 million tokens. "Typical request" is 1,000 input and 500 output tokens at standard rates. Cost of a request = input tokens × input price / 1,000,000 + output tokens × output price / 1,000,000. Batch prices apply to requests processed within 24 hours. Source: https://apicost.app/pricing/ (also as https://apicost.app/prices.csv and https://apicost.app/prices.json). Prices as of November 14, 2026.
 
 License: the price data is free to reuse under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Credit "apicost.app" with a link to https://apicost.app/pricing/. It is built from the LiteLLM price list (MIT License, https://github.com/BerriAI/litellm).
 
@@ -42,10 +42,12 @@ License: the price data is free to reuse under CC BY 4.0 (https://creativecommon
 |---|---|---|---|---|---|---|---|
 | [Claude Fable 5](https://apicost.app/pricing/claude-fable-5/) | claude-fable-5 | $10 | $1 | $50 | $5 / $25 | 1M | $0.035 |
 | [Claude Fable 5.1](https://apicost.app/pricing/claude-fable-5-1/) | claude-fable-5-1 | $10 | $0.25 | $50 | $5 / $25 | 1M | $0.035 |
+| [Claude Fable 5.2](https://apicost.app/pricing/claude-fable-5-2/) | claude-fable-5-2 | $8 | $0.2 | $40 | $4 / $20 | 1M | $0.028 |
 | [Claude Haiku 4.5](https://apicost.app/pricing/claude-haiku-4-5/) | claude-haiku-4-5 | $1 | $0.1 | $5 | $0.5 / $2.5 | 200K | $0.0035 |
 | [Claude Haiku 5.5](https://apicost.app/pricing/claude-haiku-5-5/) | claude-haiku-5-5 | $0.1 | $0.01 | $0.5 | $0.05 / $0.25 | 1M | $0.00035 |
 | [Claude Mythos 5](https://apicost.app/pricing/claude-mythos-5/) | claude-mythos-5 | $10 | $1 | $50 | $5 / $25 | 1M | $0.035 |
 | [Claude Mythos 5.1](https://apicost.app/pricing/claude-mythos-5-1/) | claude-mythos-5-1 | $10 | $0.25 | $50 | $5 / $25 | 1M | $0.035 |
+| [Claude Mythos 5.2](https://apicost.app/pricing/claude-mythos-5-2/) | claude-mythos-5-2 | $8 | $0.2 | $40 | $4 / $20 | 1M | $0.028 |
 | [Claude Opus 4.5](https://apicost.app/pricing/claude-opus-4-5/) | claude-opus-4-5 | $5 | $0.5 | $25 | $2.5 / $12.5 | 200K | $0.0175 |
 | [Claude Opus 4.6](https://apicost.app/pricing/claude-opus-4-6/) | claude-opus-4-6 | $5 | $0.5 | $25 | $2.5 / $12.5 | 1M | $0.0175 |
 | [Claude Opus 4.7](https://apicost.app/pricing/claude-opus-4-7/) | claude-opus-4-7 | $5 | $0.5 | $25 | $2.5 / $12.5 | 1M | $0.0175 |
@@ -73,9 +75,12 @@ License: the price data is free to reuse under CC BY 4.0 (https://creativecommon
 | [Gemini 3.7 Flash](https://apicost.app/pricing/gemini-3.7-flash/) | gemini-3.7-flash | $0.75 | $0.075 | $3.75 | $0.375 / $1.875 | 1.05M | $0.00263 |
 | [Gemini 3.8 Flash](https://apicost.app/pricing/gemini-3.8-flash/) | gemini-3.8-flash | $0.75 | $0.075 | $3.75 | $0.375 / $1.875 | 1.05M | $0.00263 |
 | [Gemini 4 Argon](https://apicost.app/pricing/gemini-4-argon/) | gemini-4-argon | $2 | $0.1 | $10 | $1 / $5 | 1.05M | $0.007 |
+| [Gemini 4 Carbon](https://apicost.app/pricing/gemini-4-carbon/) | gemini-4-carbon | $2 | $0.1 | $10 | $1 / $5 | 1.05M | $0.007 |
+| [Gemini 4 Hydrogen](https://apicost.app/pricing/gemini-4-hydrogen/) | gemini-4-hydrogen | $1.5 | $0.075 | $7.5 | $0.75 / $3.75 | 1.05M | $0.00525 |
 | Gemini Flash Latest | gemini-flash-latest | $0.75 | $0.075 | $3.75 | $0.375 / $1.875 | 1.05M | $0.00263 |
 | Gemini Flash Lite Latest | gemini-flash-lite-latest | $0.3 | $0.03 | $2.5 | $0.15 / $1.25 | 1.05M | $0.00155 |
-| [Gemini Omni 1.1 Flash](https://apicost.app/pricing/gemini-omni-1.1-flash/) | gemini-omni-1.1-flash | $1.5 | – | $9 | – | 1.05M | $0.006 |
+| [Gemini Omni 1.1 Flash](https://apicost.app/pricing/gemini-omni-1.1-flash/) | gemini-omni-1.1-flash | $1.5 | – | $9 | – | 131K | $0.006 |
+| [Gemini Omni 1.2 Flash](https://apicost.app/pricing/gemini-omni-1.2-flash/) | gemini-omni-1.2-flash | $1.5 | – | $9 | – | 131K | $0.006 |
 | Gemini Pro Latest | gemini-pro-latest | $2 | $0.2 | $12 | $1 / $6 | 1.05M | $0.008 |
 
 ## Mistral

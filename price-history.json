@@ -1,0 +1,310 @@
+{
+ "since": "2026-10-22",
+ "note": "Changes to the LiteLLM price list as apicost.app saw them, per 1M tokens in USD (standard rates). The date is the day the change reached the list, which can be a few days after the provider announced it.",
+ "events": [
+  {
+   "date": "2026-11-14",
+   "model": "claude-fable-5-2",
+   "provider": "anthropic",
+   "type": "new",
+   "before": null,
+   "after": {
+    "input": 8,
+    "cachedInput": 0.2,
+    "output": 40
+   }
+  },
+  {
+   "date": "2026-11-14",
+   "model": "claude-mythos-5-2",
+   "provider": "anthropic",
+   "type": "new",
+   "before": null,
+   "after": {
+    "input": 8,
+    "cachedInput": 0.2,
+    "output": 40
+   }
+  },
+  {
+   "date": "2026-11-14",
+   "model": "gemini-4-carbon",
+   "provider": "gemini",
+   "type": "new",
+   "before": null,
+   "after": {
+    "input": 2,
+    "cachedInput": 0.1,
+    "output": 10
+   }
+  },
+  {
+   "date": "2026-11-14",
+   "model": "gemini-4-hydrogen",
+   "provider": "gemini",
+   "type": "new",
+   "before": null,
+   "after": {
+    "input": 1.5,
+    "cachedInput": 0.075,
+    "output": 7.5
+   }
+  },
+  {
+   "date": "2026-11-14",
+   "model": "gemini-omni-1.2-flash",
+   "provider": "gemini",
+   "type": "new",
+   "before": null,
+   "after": {
+    "input": 1.5,
+    "cachedInput": null,
+    "output": 9
+   }
+  },
+  {
+   "date": "2026-11-03",
+   "model": "mistral-large-4",
+   "provider": "mistral",
+   "type": "change",
+   "before": {
+    "input": 1.36,
+    "cachedInput": 0.14,
+    "output": 4.18
+   },
+   "after": {
+    "input": 0.7,
+    "cachedInput": 0.07,
+    "output": 2.1
+   }
+  },
+  {
+   "date": "2026-11-03",
+   "model": "mistral-large-4-0",
+   "provider": "mistral",
+   "type": "change",
+   "before": {
+    "input": 1.36,
+    "cachedInput": 0.14,
+    "output": 4.18
+   },
+   "after": {
+    "input": 0.7,
+    "cachedInput": 0.07,
+    "output": 2.1
+   }
+  },
+  {
+   "date": "2026-11-01",
+   "model": "gpt-6-astra-law",
+   "provider": "openai",
+   "type": "new",
+   "before": null,
+   "after": {
+    "input": 10,
+    "cachedInput": 1,
+    "output": 50
+   }
+  },
+  {
+   "date": "2026-10-28",
+   "model": "deepseek-v4-1-flash-1017",
+   "provider": "mistral",
+   "type": "new",
+   "before": null,
+   "after": {
+    "input": 0.3,
+    "cachedInput": 0.007,
+    "output": 1.2
+   }
+  },
+  {
+   "date": "2026-10-28",
+   "model": "mistral-large-4",
+   "provider": "mistral",
+   "type": "change",
+   "before": {
+    "input": 0.68,
+    "cachedInput": 0.068,
+    "output": 2.09
+   },
+   "after": {
+    "input": 1.36,
+    "cachedInput": 0.14,
+    "output": 4.18
+   }
+  },
+  {
+   "date": "2026-10-28",
+   "model": "mistral-large-4-0",
+   "provider": "mistral",
+   "type": "change",
+   "before": {
+    "input": 0.68,
+    "cachedInput": 0.068,
+    "output": 2.09
+   },
+   "after": {
+    "input": 1.36,
+    "cachedInput": 0.14,
+    "output": 4.18
+   }
+  },
+  {
+   "date": "2026-10-28",
+   "model": "grok-code-fast-1",
+   "provider": "xai",
+   "type": "retired",
+   "before": {
+    "input": 1,
+    "cachedInput": 0.2,
+    "output": 2
+   },
+   "after": null
+  },
+  {
+   "date": "2026-10-28",
+   "model": "grok-code-fast-1-0825",
+   "provider": "xai",
+   "type": "new",
+   "before": null,
+   "after": {
+    "input": 1,
+    "cachedInput": 0.2,
+    "output": 2
+   }
+  },
+  {
+   "date": "2026-10-27",
+   "model": "gpt-6.1-terra",
+   "provider": "openai",
+   "type": "new",
+   "before": null,
+   "after": {
+    "input": 1,
+    "cachedInput": 0.05,
+    "output": 5
+   }
+  },
+  {
+   "date": "2026-10-24",
+   "model": "gpt-3.5-turbo",
+   "provider": "openai",
+   "type": "retired",
+   "before": {
+    "input": 0.5,
+    "cachedInput": null,
+    "output": 1.5
+   },
+   "after": null
+  },
+  {
+   "date": "2026-10-24",
+   "model": "gpt-3.5-turbo-16k",
+   "provider": "openai",
+   "type": "retired",
+   "before": {
+    "input": 3,
+    "cachedInput": null,
+    "output": 4
+   },
+   "after": null
+  },
+  {
+   "date": "2026-10-24",
+   "model": "gpt-4",
+   "provider": "openai",
+   "type": "retired",
+   "before": {
+    "input": 30,
+    "cachedInput": null,
+    "output": 60
+   },
+   "after": null
+  },
+  {
+   "date": "2026-10-24",
+   "model": "gpt-4-1106-preview",
+   "provider": "openai",
+   "type": "retired",
+   "before": {
+    "input": 10,
+    "cachedInput": null,
+    "output": 30
+   },
+   "after": null
+  },
+  {
+   "date": "2026-10-24",
+   "model": "gpt-4-turbo",
+   "provider": "openai",
+   "type": "retired",
+   "before": {
+    "input": 10,
+    "cachedInput": null,
+    "output": 30
+   },
+   "after": null
+  },
+  {
+   "date": "2026-10-24",
+   "model": "gpt-4.1-nano",
+   "provider": "openai",
+   "type": "retired",
+   "before": {
+    "input": 0.1,
+    "cachedInput": 0.025,
+    "output": 0.4
+   },
+   "after": null
+  },
+  {
+   "date": "2026-10-24",
+   "model": "o1",
+   "provider": "openai",
+   "type": "retired",
+   "before": {
+    "input": 15,
+    "cachedInput": 7.5,
+    "output": 60
+   },
+   "after": null
+  },
+  {
+   "date": "2026-10-24",
+   "model": "o3-mini",
+   "provider": "openai",
+   "type": "retired",
+   "before": {
+    "input": 1.1,
+    "cachedInput": 0.55,
+    "output": 4.4
+   },
+   "after": null
+  },
+  {
+   "date": "2026-10-24",
+   "model": "o4-mini",
+   "provider": "openai",
+   "type": "retired",
+   "before": {
+    "input": 1.1,
+    "cachedInput": 0.275,
+    "output": 4.4
+   },
+   "after": null
+  },
+  {
+   "date": "2026-10-23",
+   "model": "gemini-omni-flash-preview",
+   "provider": "gemini",
+   "type": "retired",
+   "before": {
+    "input": 1.5,
+    "cachedInput": null,
+    "output": 9
+   },
+   "after": null
+  }
+ ]
+}

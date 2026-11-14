@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-03",
+ "updated": "2026-11-14",
  "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
  "license": "https://creativecommons.org/licenses/by/4.0/",
  "attribution": "apicost.app (https://apicost.app/pricing/), from the LiteLLM price list (MIT License)",
@@ -689,6 +689,29 @@
    "reasoning": true
   },
   {
+   "name": "claude-fable-5-2",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 8,
+    "cachedInput": 0.2,
+    "output": 40
+   },
+   "batch": {
+    "input": 4,
+    "cachedInput": 0.1,
+    "output": 20
+   },
+   "cacheWrite": 10,
+   "cacheWrite1h": 16,
+   "longContext": null,
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
+  },
+  {
    "name": "claude-haiku-4-5",
    "provider": "anthropic",
    "source": "https://platform.claude.com/docs/en/about-claude/pricing",
@@ -778,6 +801,29 @@
    },
    "cacheWrite": 12.5,
    "cacheWrite1h": 20,
+   "longContext": null,
+   "maxInputTokens": 1000000,
+   "maxOutputTokens": 128000,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
+  },
+  {
+   "name": "claude-mythos-5-2",
+   "provider": "anthropic",
+   "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "standard": {
+    "input": 8,
+    "cachedInput": 0.2,
+    "output": 40
+   },
+   "batch": {
+    "input": 4,
+    "cachedInput": 0.1,
+    "output": 20
+   },
+   "cacheWrite": 10,
+   "cacheWrite1h": 16,
    "longContext": null,
    "maxInputTokens": 1000000,
    "maxOutputTokens": 128000,
@@ -1092,7 +1138,7 @@
   {
    "name": "gemini-3-flash-preview",
    "provider": "gemini",
-   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "source": "https://ai.google.dev/gemini-api/docs/deprecations",
    "standard": {
     "input": 0.5,
     "cachedInput": 0.05,
@@ -1166,7 +1212,7 @@
   {
    "name": "gemini-3.5-flash",
    "provider": "gemini",
-   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "source": "https://ai.google.dev/gemini-api/docs/deprecations",
    "standard": {
     "input": 1.5,
     "cachedInput": 0.15,
@@ -1197,7 +1243,7 @@
    },
    "batch": {
     "input": 0.15,
-    "cachedInput": 0.02,
+    "cachedInput": 0.015,
     "output": 1.25
    },
    "cacheWrite": null,
@@ -1235,7 +1281,7 @@
   {
    "name": "gemini-3.7-flash",
    "provider": "gemini",
-   "source": "https://ai.google.dev/gemini-api/docs/pricing",
+   "source": "https://ai.google.dev/gemini-api/docs/deprecations",
    "standard": {
     "input": 0.75,
     "cachedInput": 0.075,
@@ -1302,6 +1348,52 @@
    "reasoning": true
   },
   {
+   "name": "gemini-4-carbon",
+   "provider": "gemini",
+   "source": "https://aistudio.google.com/docs/pricing#gemini-4-carbon",
+   "standard": {
+    "input": 2,
+    "cachedInput": 0.1,
+    "output": 10
+   },
+   "batch": {
+    "input": 1,
+    "cachedInput": 0.05,
+    "output": 5
+   },
+   "cacheWrite": null,
+   "cacheWrite1h": null,
+   "longContext": null,
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 1048576,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
+  },
+  {
+   "name": "gemini-4-hydrogen",
+   "provider": "gemini",
+   "source": "https://aistudio.google.com/docs/pricing#gemini-4-hydrogen",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": 0.075,
+    "output": 7.5
+   },
+   "batch": {
+    "input": 0.75,
+    "cachedInput": 0.0375,
+    "output": 3.75
+   },
+   "cacheWrite": null,
+   "cacheWrite1h": null,
+   "longContext": null,
+   "maxInputTokens": 1048576,
+   "maxOutputTokens": 1048576,
+   "vision": true,
+   "tools": true,
+   "reasoning": true
+  },
+  {
    "name": "gemini-flash-latest",
    "provider": "gemini",
    "source": "https://ai.google.dev/gemini-api/docs/pricing",
@@ -1312,7 +1404,7 @@
    },
    "batch": {
     "input": 0.375,
-    "cachedInput": null,
+    "cachedInput": 0.0375,
     "output": 1.875
    },
    "cacheWrite": null,
@@ -1335,7 +1427,7 @@
    },
    "batch": {
     "input": 0.15,
-    "cachedInput": null,
+    "cachedInput": 0.015,
     "output": 1.25
    },
    "cacheWrite": null,
@@ -1349,6 +1441,29 @@
   },
   {
    "name": "gemini-omni-1.1-flash",
+   "provider": "gemini",
+   "source": "https://ai.google.dev/gemini-api/docs/models/gemini-omni-flash",
+   "standard": {
+    "input": 1.5,
+    "cachedInput": null,
+    "output": 9
+   },
+   "batch": {
+    "input": null,
+    "cachedInput": null,
+    "output": null
+   },
+   "cacheWrite": null,
+   "cacheWrite1h": null,
+   "longContext": null,
+   "maxInputTokens": 131072,
+   "maxOutputTokens": 65536,
+   "vision": true,
+   "tools": false,
+   "reasoning": true
+  },
+  {
+   "name": "gemini-omni-1.2-flash",
    "provider": "gemini",
    "source": "https://ai.google.dev/gemini-api/docs/pricing",
    "standard": {
@@ -1364,7 +1479,7 @@
    "cacheWrite": null,
    "cacheWrite1h": null,
    "longContext": null,
-   "maxInputTokens": 1048576,
+   "maxInputTokens": 131072,
    "maxOutputTokens": 65536,
    "vision": true,
    "tools": false,
@@ -1381,7 +1496,7 @@
    },
    "batch": {
     "input": 1,
-    "cachedInput": null,
+    "cachedInput": 0.2,
     "output": 6
    },
    "cacheWrite": null,
@@ -1486,7 +1601,7 @@
    "longContext": null,
    "maxInputTokens": 1048576,
    "maxOutputTokens": 131072,
-   "vision": false,
+   "vision": true,
    "tools": true,
    "reasoning": true
   },
@@ -1578,9 +1693,9 @@
    "longContext": null,
    "maxInputTokens": 262144,
    "maxOutputTokens": 131072,
-   "vision": false,
+   "vision": true,
    "tools": true,
-   "reasoning": false
+   "reasoning": true
   },
   {
    "name": "magistral-medium-latest",
