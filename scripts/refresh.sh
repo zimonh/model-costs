@@ -18,9 +18,11 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 git pull -q --ff-only
 
-bytes=$(curl -sS -o /dev/null -w '%{size_download}' https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json)
+src=$(mktemp -t litellm-prices)
+trap 'rm -f "$src" .refresh-time.txt' EXIT
+bytes=$(curl -fsS -o "$src" -w '%{size_download}' https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json)
 start=$(date +%s)
-/usr/bin/time -l bash -c 'node scripts/update-prices.mjs && node scripts/price-history.mjs && node scripts/build-site.mjs && node scripts/check-site.mjs' 2> .refresh-time.txt \
+/usr/bin/time -l bash -c 'node scripts/update-prices.mjs "$0" && node scripts/price-history.mjs && node scripts/build-site.mjs && node scripts/check-site.mjs' "$src" 2> .refresh-time.txt \
 	|| { cat .refresh-time.txt >&2; rm -f .refresh-time.txt; exit 1; }
 secs=$(( $(date +%s) - start ))
 rss=$(awk '/maximum resident set size/ {print int($1 / 1048576)}' .refresh-time.txt)
