@@ -28,8 +28,10 @@ The scripts in `scripts/`:
 - `check-site.mjs` fails when a link, sitemap URL or structured data block is broken, when the sitemap and the canonical pages disagree, when two pages share a title or description, when FAQ structured data isn't visible on the page, when a page doesn't load `analytics.js`, when structured data names a person, when the Dataset or llms files lose the data license, or when a provider page lacks its FAQ, breadcrumbs or date.
 - `indexnow.mjs` tells Bing and other IndexNow search engines which pages changed.
 - `site.mjs` holds what they share: the provider list and the price formatting.
+- The footer's shared line (credit, KvK, privacy, cookie settings, copyright) comes from the private submodule `packages/common` (zimonh/common), the same on all of Simon's sites. The GitHub workflows would need `submodules: true` and a token with access to that repo before they are switched back on.
 
 ```sh
+git submodule update --init packages/common   # once after a clone: the footer's shared links and wording (zimonh/common)
 node scripts/update-prices.mjs && node scripts/price-history.mjs && node scripts/build-site.mjs && node scripts/check-site.mjs
 python3 -m http.server   # then open http://localhost:8000
 ```

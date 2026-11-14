@@ -11,6 +11,9 @@ import {
   SITE, PROVIDERS, TYPICAL, providerTitle, providerHeading, hasPage, modelPath, providerPath, providerAliasPath,
   cost, typicalCost, escape, rate, usd, tokens, list, displayName, findAliases, withoutDates,
 } from "./site.mjs";
+// The footer's shared links and wording (credit, KvK, privacy, cookie settings, copyright), the same on every one of
+// Simon's sites: the git submodule packages/common (zimonh/common). Run `git submodule update --init` after a clone.
+import { footerLinks, VERSION as FOOTER_VERSION } from "../packages/common/js/index.js";
 
 const root = new URL("../", import.meta.url);
 const data = JSON.parse(await readFile(new URL("prices.json", root), "utf8"));
@@ -196,6 +199,19 @@ const PUBLISHER = {
 };
 const WEBSITE = { "@type": "WebSite", "@id": `${SITE}/#website`, name: "apicost.app", url: `${SITE}/`, inLanguage: "en", publisher: { "@id": PUBLISHER["@id"] } };
 
+// The shared footer line from zimonh/common: copyright, then this site's own GitHub link, then the shared links.
+// The cookie link stays hidden until analytics.js has set up the banner.
+function sharedFooter() {
+  const items = footerLinks("en", { hrefs: { privacy: "/privacy/" }, year: Number(updated.slice(0, 4)) });
+  const by = Object.fromEntries(items.map((item) => [item.key, item]));
+  const link = (item) => `<a href="${escape(item.href)}">${escape(item.label)}</a>`;
+  return (
+    `<p data-footer="${FOOTER_VERSION}">${escape(by.copyright.label)} · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a>` +
+    ["credit", "kvk", "privacy"].map((key) => ` · ${link(by[key])}`).join("") +
+    `<span class="cookie-settings" hidden> · ${link(by.cookies)}</span></p>`
+  );
+}
+
 // `crumbs` is a list of [name, path]; the last one is this page. `canonical` is
 // another page's path when this one duplicates it (an alias model).
 function layout({ path, title, description, crumbs = [], body, script = "", jsonLd = [], index = true, canonical = path, head = "" }) {
@@ -258,7 +274,7 @@ ${body}
       <div class="wrap">
         <p>Prices per 1 million tokens in US dollars, from the open <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list. Updated ${longDate}.</p>
         <p>Check the provider's own pricing page before relying on a number. Providers bill by their own token counts.</p>
-        <p>© ${updated.slice(0, 4)} apicost.app · <a href="https://github.com/zimonh/model-costs">Open source on GitHub</a> · Made by <a href="https://zimonh.nl">ZIMONH</a> · <a href="${TOPICS.privacy}">Privacy</a><span class="cookie-settings" hidden> · <a href="#cookie-settings">Cookie settings</a></span></p>
+        ${sharedFooter()}
       </div>
     </footer>${script ? `\n    <script>${script}    </script>` : ""}
   </body>
@@ -1291,7 +1307,7 @@ function renderHome(html) {
     (s) => s.replace(/(<span id="updated-badge">)[^<]*/, `$1${data.models.length} models · prices updated ${longDate}`),
     (s) => s.replace(/(<p id="footer-updated">)[\s\S]*?(<\/p>)/, `$1Prices from the <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, last changed ${longDate}. Refreshed daily.$2`),
     (s) => s.replace(/"dateModified": "[^"]*"/, `"dateModified": "${updated}"`),
-    (s) => s.replace(/© \d{4} apicost\.app/, `© ${updated.slice(0, 4)} apicost.app`),
+    (s) => s.replace(/<p(?: data-footer="\d+")?>© \d{4} (?:apicost\.app|ZIMONH) ·[\s\S]*?<\/p>/, sharedFooter()),
   ].reduce((s, step) => step(s), html);
 }
 

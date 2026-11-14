@@ -17,6 +17,7 @@ if [ -n "$(git status --porcelain)" ]; then
 	exit 1
 fi
 git pull -q --ff-only
+git submodule update -q --init packages/common   # the footer's shared links and wording (zimonh/common)
 
 src=$(mktemp -t litellm-prices)
 trap 'rm -f "$src" .refresh-time.txt' EXIT
