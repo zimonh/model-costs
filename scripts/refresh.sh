@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The daily price refresh, run by hand for now (the GitHub workflows are off).
+# The price refresh, run by hand for now (the GitHub workflows are off).
 # Same steps as .github/workflows/update-prices.yml: fetch the LiteLLM list,
 # rebuild the price history and the site, check it. Prints what changed and
 # what the run cost (time, CPU, memory, download), so we can tell when it is

@@ -1,6 +1,6 @@
 # apicost.app
 
-A free LLM API cost calculator and price list: paste a prompt, pick a model, see what it costs. It covers OpenAI, Anthropic, Google Gemini, Mistral, DeepSeek and xAI, with prices updated daily from the [LiteLLM](https://github.com/BerriAI/litellm) price list.
+A free LLM API cost calculator and price list: paste a prompt, pick a model, see what it costs. It covers OpenAI, Anthropic, Google Gemini, Mistral, DeepSeek and xAI, with prices from the [LiteLLM](https://github.com/BerriAI/litellm) price list.
 
 Live at **https://apicost.app**.
 
@@ -38,7 +38,7 @@ python3 -m http.server   # then open http://localhost:8000
 
 ## Publishing
 
-1. Every day, `.github/workflows/update-prices.yml` runs the three scripts above and commits when a price changed.
+1. `.github/workflows/update-prices.yml` (switched off for now; `scripts/refresh.sh` does the same by hand) runs the three scripts above and commits when a price changed.
 2. The zimonh.nl server has a checkout of this repo and runs `git pull` every hour, at :07. nginx serves it at apicost.app.
 3. The next run first checks that apicost.app serves the same `prices.json` as `main`. If it doesn't, the job fails and GitHub emails the owner, so a stuck server gets noticed. Once the check passes, it submits the pages that changed to IndexNow.
 

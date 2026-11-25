@@ -798,7 +798,7 @@ function indexPage() {
   const dataset = {
     "@type": "Dataset",
     name: "LLM API prices per 1M tokens",
-    description: `Input, cached input and output prices per million tokens, standard and batch, with context window sizes, for ${models.length} models from ${companies}. Updated daily from the LiteLLM price list.`,
+    description: `Input, cached input and output prices per million tokens, standard and batch, with context window sizes, for ${models.length} models from ${companies}. From the LiteLLM price list, last checked ${longDate}.`,
     url: SITE + "/pricing/",
     creator: { "@id": PUBLISHER["@id"] },
     dateModified: updated,
@@ -821,7 +821,7 @@ function indexPage() {
     jsonLd: [dataset],
     body: `
       <h1>LLM API pricing by model</h1>
-      <p class="lead">Prices per million tokens for ${models.length} models from ${escape(companies)}, updated daily.</p>
+      <p class="lead">Prices per million tokens for ${models.length} models from ${escape(companies)}, last checked ${longDate}.</p>
       <div class="badge">Prices updated ${longDate}</div>
       <h2>By provider</h2>
       <div class="providers">${providerCards(true)}</div>
@@ -960,7 +960,7 @@ function changesPage() {
     ...providerKeys.map((key) => [`Did ${PROVIDERS[key].name} raise its API prices?`, providerChangeAnswer(key)]),
     [
       "How do I find out when an LLM API price changes?",
-      `apicost.app checks the LiteLLM price list every day and lists every change on this page. Follow the Atom feed at ${SITE}${FEED} in any feed reader, or download ${SITE}/price-history.json. The list can lag a provider's announcement by a few days, so for news from today, check the provider's own pricing page.`,
+      `apicost.app lists every change in the LiteLLM price list on this page, with its date. Follow the Atom feed at ${SITE}${FEED} in any feed reader, or download ${SITE}/price-history.json. The list can lag a provider's announcement by a few days, so for news from today, check the provider's own pricing page.`,
     ],
   ];
   const table = (head, rows) =>
@@ -976,7 +976,8 @@ function changesPage() {
     body: `
       <h1>LLM API price changes</h1>
       <p class="lead">${escape(answer)}</p>
-      <div class="badge">Checked daily, list last updated ${longDate}</div>
+      <div class="badge">Last checked ${longDate}</div>
+      <p class="note">Every price change since ${since} is logged here with its date.</p>
       <p>Every price increase, price cut, new model and retired model in the price list since ${since}, newest first. <a href="${FEED}">Follow the feed</a> to hear about the next one.</p>
 
       <h2>Did a provider change its prices?</h2>
@@ -1289,6 +1290,14 @@ function renderHome(html) {
     })
     .join("\n");
 
+  // The FAQ answer on how fresh the prices are; the visible one links the list and the change log.
+  const freshness = (links) =>
+    `Prices were last checked on ${longDate}. They come from the open ` +
+    (links ? `<a href="https://github.com/BerriAI/litellm">LiteLLM</a> list` : "LiteLLM list") +
+    `, each model links to its provider's pricing page, and every change is ` +
+    (links ? `<a href="${TOPICS.changes}">logged with its date</a>` : "logged with its date") +
+    ".";
+
   const description =
     `Paste a prompt and see what it costs on the ChatGPT API. Free token counter and prices for ${data.models.length} GPT, Claude, Gemini and Grok models. Updated ${shortDate}.`;
 
@@ -1304,8 +1313,12 @@ function renderHome(html) {
     (s) => s.replace(/<!-- chatgpt-cost:start -->[\s\S]*?<!-- chatgpt-cost:end -->/, `<!-- chatgpt-cost:start -->${escape(chatgptCost)}<!-- chatgpt-cost:end -->`),
     (s) => s.replace(/("name": "How much does the ChatGPT API cost\?",\s*"acceptedAnswer": \{ "@type": "Answer", "text": )"[^"]*"/, (_, head) => head + JSON.stringify(chatgptCost)),
     (s) => s.replace(/(name="description"\s+content=")[^"]*"/, (_, head) => head + escape(description) + '"'),
-    (s) => s.replace(/(<span id="updated-badge">)[^<]*/, `$1${data.models.length} models · prices updated ${longDate}`),
-    (s) => s.replace(/(<p id="footer-updated">)[\s\S]*?(<\/p>)/, `$1Prices from the <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, last changed ${longDate}. Refreshed daily.$2`),
+    (s) => s.replace(/(<span id="updated-badge">)[^<]*/, `$1${data.models.length} models from ${Object.keys(data.providers).length} providers. Prices last checked on ${longDate}.`),
+    (s) => s.replace(/(<title>)[^<]*/, `$1ChatGPT API Cost Calculator – Free, Prices Checked ${shortDate}`),
+    (s) => s.replace(/(name="twitter:title" content=")[^"]*/, `$1ChatGPT API Cost Calculator – Free, Prices Checked ${shortDate}`),
+    (s) => s.replace(/(<summary>How often are the prices updated\?<\/summary>\s*<p>)[\s\S]*?(<\/p>)/, `$1${freshness(true)}$2`),
+    (s) => s.replace(/("name": "How often are the prices updated\?",\s*"acceptedAnswer": \{ "@type": "Answer", "text": )"[^"]*"/, (_, head) => head + JSON.stringify(freshness(false))),
+    (s) => s.replace(/(<p id="footer-updated">)[\s\S]*?(<\/p>)/, `$1Prices from the <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, last changed ${longDate}.$2`),
     (s) => s.replace(/"dateModified": "[^"]*"/, `"dateModified": "${updated}"`),
     (s) => s.replace(/<p(?: data-footer="\d+")?>© \d{4} (?:apicost\.app|ZIMONH) ·[\s\S]*?<\/p>/, sharedFooter()),
   ].reduce((s, step) => step(s), html);
@@ -1323,7 +1336,7 @@ const LICENSE_LINE =
 // the site, llms-full.txt holds every price as a Markdown table they can quote.
 const SUMMARY =
   `Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for ${data.models.length} OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, ` +
-  `standard and batch, updated daily from the open LiteLLM price list. Last price change: ${updated}.`;
+  `standard and batch, from the open LiteLLM price list, last checked ${longDate}. Last price change: ${updated}.`;
 
 function llmsTxt() {
   const section = (key) =>

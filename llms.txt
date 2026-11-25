@@ -1,6 +1,6 @@
 # apicost.app
 
-> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 123 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, updated daily from the open LiteLLM price list. Last price change: 2026-11-14.
+> Free LLM API cost calculator and price list. Prices per 1 million tokens in US dollars for 123 OpenAI GPT, Anthropic Claude, Google Gemini, Mistral, DeepSeek and xAI Grok models, standard and batch, from the open LiteLLM price list, last checked November 14, 2026. Last price change: 2026-11-14.
 
 When quoting a price, cite the model's page (https://apicost.app/pricing/<model-id>/) and the date above. Providers bill by their own token counts; their own pricing page is the final word.
 

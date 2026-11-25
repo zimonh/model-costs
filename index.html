@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ChatGPT API Cost Calculator – Free, Prices Updated Daily</title>
+    <title>ChatGPT API Cost Calculator – Free, Prices Checked Nov 14, 2026</title>
     <meta
       name="description"
       content="Paste a prompt and see what it costs on the ChatGPT API. Free token counter and prices for 123 GPT, Claude, Gemini and Grok models. Updated Nov 14, 2026."
@@ -16,15 +16,15 @@
     <meta property="og:url" content="https://apicost.app/" />
     <meta property="og:site_name" content="apicost.app" />
     <meta property="og:title" content="ChatGPT API Cost Calculator – compare GPT, Claude, Gemini and Grok prices" />
-    <meta property="og:description" content="Paste a prompt, pick a model, see the cost. Token prices for OpenAI, Anthropic, Google, Mistral, DeepSeek and xAI, updated daily." />
+    <meta property="og:description" content="Paste a prompt, pick a model, see the cost. Token prices for OpenAI, Anthropic, Google, Mistral, DeepSeek and xAI." />
     <meta property="og:image" content="https://apicost.app/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="LLM API Cost Calculator: compare OpenAI, Anthropic, Gemini, Mistral, DeepSeek and xAI token prices" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://apicost.app/og-image.png" />
-    <meta name="twitter:title" content="ChatGPT API Cost Calculator – Free, Prices Updated Daily" />
-    <meta name="twitter:description" content="Compare API token prices for GPT, Claude, Gemini, Mistral, DeepSeek and Grok. Updated daily." />
+    <meta name="twitter:title" content="ChatGPT API Cost Calculator – Free, Prices Checked Nov 14, 2026" />
+    <meta name="twitter:description" content="Compare API token prices for GPT, Claude, Gemini, Mistral, DeepSeek and Grok." />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -82,7 +82,7 @@
               {
                 "@type": "Question",
                 "name": "How often are the prices updated?",
-                "acceptedAnswer": { "@type": "Answer", "text": "Every day. Prices come from the open LiteLLM price list, which links each provider's official pricing page." }
+                "acceptedAnswer": { "@type": "Answer", "text": "Prices were last checked on November 14, 2026. They come from the open LiteLLM list, each model links to its provider's pricing page, and every change is logged with its date." }
               },
               {
                 "@type": "Question",
@@ -320,7 +320,7 @@
 
     <main class="wrap">
       <div class="hero">
-        <div class="badge"><span aria-hidden="true">●</span> <span id="updated-badge">123 models · prices updated November 14, 2026</span></div>
+        <div class="badge"><span aria-hidden="true">●</span> <span id="updated-badge">123 models from 6 providers. Prices last checked on November 14, 2026.</span></div>
         <h1>ChatGPT &amp; LLM API Cost Calculator</h1>
         <p>
           Paste a prompt, pick a model and see what it costs. Count tokens and compare API prices for OpenAI GPT, Anthropic Claude,
@@ -421,6 +421,7 @@
         <p class="section-intro">
           Prices per 1 million tokens in US dollars. The last column shows the cost of your prompt on each model. Click a row to use that model.
         </p>
+        <p class="note">Prices come from the open LiteLLM list, and every model links to the provider's own pricing page so you can check. <a href="/pricing/changes/">Price changes</a></p>
         <div class="table-tools">
           <label for="table-search" class="visually-hidden">Filter models</label>
           <input type="search" id="table-search" placeholder="Filter models…" autocomplete="off" />
@@ -635,7 +636,7 @@
         </details>
         <details>
           <summary>How often are the prices updated?</summary>
-          <p>Every day. Prices come from the open <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, which links each provider's official pricing page. Each model links to its source.</p>
+          <p>Prices were last checked on November 14, 2026. They come from the open <a href="https://github.com/BerriAI/litellm">LiteLLM</a> list, each model links to its provider's pricing page, and every change is <a href="/pricing/changes/">logged with its date</a>.</p>
         </details>
         <details>
           <summary>What is batch pricing?</summary>
@@ -658,7 +659,8 @@
 
     <footer>
       <div class="wrap">
-        <p id="footer-updated">Prices from the <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, last changed November 14, 2026. Refreshed daily.</p>
+        <p id="footer-updated">Prices from the <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, last changed November 14, 2026.</p>
+        <p>Your text never leaves your browser. The code is <a href="https://github.com/zimonh/model-costs">open source</a> and the price data is free to download as <a href="/prices.json">JSON</a> or <a href="/prices.csv">CSV</a> (CC BY 4.0).</p>
         <p>
           Disclaimer: this calculator is for general information only. Prices and token counts may differ from what a provider bills,
           so check the provider's own pricing page before relying on a number.
@@ -677,8 +679,7 @@
     </footer>
 
     <script>
-      // prices.json is refreshed daily by a GitHub Action, and the server pulls
-      // it within the hour, so the copy next to this page is current.
+      // prices.json sits next to this page; the server pulls the repo every hour.
       const PRICE_URL = "prices.json";
       const PROVIDER_COLORS = {
         openai: "#10a37f",
@@ -1153,8 +1154,8 @@
           $("picker-name").textContent = "Prices could not be loaded, try again later.";
           return;
         }
-        $("updated-badge").textContent = `${state.data.models.length} models · prices updated ${state.data.updated}`;
-        $("footer-updated").innerHTML = `Prices from the <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, last changed ${escapeHtml(state.data.updated)}. Refreshed daily.`;
+        $("updated-badge").textContent = `${state.data.models.length} models from ${Object.keys(state.data.providers).length} providers. Prices last checked on ${state.data.updated}.`;
+        $("footer-updated").innerHTML = `Prices from the <a href="https://github.com/BerriAI/litellm">LiteLLM</a> price list, last changed ${escapeHtml(state.data.updated)}.`;
         loadFromUrl();
         setupPicker();
         setupTable();
